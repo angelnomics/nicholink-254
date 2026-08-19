@@ -1,0 +1,722 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register | NichoLink 254</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        /* =========================================
+           NICHO LINK 254 REGISTRATION PAGE
+        ========================================= */
+
+        .register-page {
+    min-height: calc(100vh - 75px);
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 60px 20px;
+
+    overflow: hidden;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.45),
+            rgba(255, 255, 255, 0.45)
+        ),
+        url("images/Nicholink_254_logo.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+        /* =========================================
+           REGISTRATION CARD
+        ========================================= */
+
+        .register-card {
+
+            width: 100%;
+
+            max-width: 500px;
+
+            position: relative;
+
+            z-index: 2;
+
+            background:
+                rgba(255, 255, 255, 0.96);
+
+            padding: 38px;
+
+            border-radius: 20px;
+
+            border: 1px solid
+                rgba(255, 255, 255, 0.8);
+
+            box-shadow:
+                0 25px 70px
+                rgba(0, 0, 0, 0.18);
+
+            backdrop-filter: blur(8px);
+
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+
+        .register-card h1 {
+
+            margin-top: 0;
+
+            margin-bottom: 8px;
+
+            color: #172033;
+
+            font-size: 32px;
+
+            line-height: 1.2;
+        }
+
+
+        .register-intro {
+
+            color: #718096;
+
+            margin-bottom: 30px;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================================
+           FORM
+        ========================================= */
+
+        .register-card label {
+
+            display: block;
+
+            color: #27352e;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+
+        .register-card input,
+        .register-card select {
+
+            width: 100%;
+
+            padding: 14px;
+
+            margin-bottom: 18px;
+
+            border: 1px solid #d9e0dc;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            color: #172033;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition: 0.2s ease;
+
+            box-sizing: border-box;
+        }
+
+
+        .register-card input:focus,
+        .register-card select:focus {
+
+            border-color: #00843d;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(0, 132, 61, 0.10);
+        }
+
+
+        .register-card select {
+
+            margin-bottom: 25px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================================
+           REGISTER BUTTON
+        ========================================= */
+
+        #register-button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #00843d;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+
+        #register-button:hover {
+
+            background: #006b31;
+
+            transform: translateY(-1px);
+        }
+
+
+        #register-button:disabled {
+
+            opacity: 0.65;
+
+            cursor: not-allowed;
+
+            transform: none;
+        }
+
+
+        /* =========================================
+           MESSAGE
+        ========================================= */
+
+        #register-message {
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           LOGIN LINK
+        ========================================= */
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #66736c;
+
+            font-size: 14px;
+        }
+
+
+        .login-link a {
+
+            color: #00843d;
+
+            font-weight: 800;
+
+            text-decoration: none;
+        }
+
+
+        .login-link a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .register-page {
+
+                min-height: calc(100vh - 65px);
+
+                padding: 35px 15px;
+
+                background-size: 600px auto;
+
+                background-attachment: scroll;
+            }
+
+
+            .register-card {
+
+                padding: 28px 22px;
+
+                border-radius: 16px;
+            }
+
+
+            .register-card h1 {
+
+                font-size: 28px;
+            }
+
+        }
+
+
+        @media (max-width: 420px) {
+
+            .register-page {
+
+                background-size: 480px auto;
+            }
+
+
+            .register-card {
+
+                padding: 24px 18px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVIGATION
+========================================= -->
+
+<header class="navbar">
+
+    <a href="index.html" class="logo">
+
+        <img
+            src="images/Nicholink_254_logo.png"
+            alt="NichoLink 254 Logo"
+        >
+
+    </a>
+
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+        <a href="login.html">
+            Login
+        </a>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =========================================
+     REGISTRATION AREA
+========================================= -->
+
+<main class="register-page">
+
+
+    <section class="register-card">
+
+
+        <h1>
+            Create Account
+        </h1>
+
+
+        <p class="register-intro">
+            Join NichoLink 254 as a tenant or landlord.
+        </p>
+
+
+
+        <form id="register-form">
+
+
+            <!-- FULL NAME -->
+
+            <label for="full_name">
+                Full Name
+            </label>
+
+            <input
+                type="text"
+                id="full_name"
+                required
+                placeholder="Enter your full name"
+                autocomplete="name"
+            >
+
+
+
+            <!-- PHONE -->
+
+            <label for="phone">
+                Phone Number
+            </label>
+
+            <input
+                type="tel"
+                id="phone"
+                required
+                placeholder="07XXXXXXXX"
+                autocomplete="tel"
+            >
+
+
+
+            <!-- EMAIL -->
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                required
+                placeholder="Enter your email"
+                autocomplete="email"
+            >
+
+
+
+            <!-- PASSWORD -->
+
+            <label for="password">
+                Password
+            </label>
+
+            <input
+                type="password"
+                id="password"
+                required
+                minlength="6"
+                placeholder="Create a password"
+                autocomplete="new-password"
+            >
+
+
+
+            <!-- ACCOUNT TYPE -->
+
+            <label for="account_type">
+                Account Type
+            </label>
+
+            <select
+                id="account_type"
+                required
+            >
+
+                <option value="">
+                    Select account type
+                </option>
+
+                <option value="tenant">
+                    Tenant
+                </option>
+
+                <option value="landlord">
+                    Landlord
+                </option>
+
+            </select>
+
+
+
+            <!-- REGISTER BUTTON -->
+
+            <button
+                type="submit"
+                id="register-button"
+            >
+                Create Account
+            </button>
+
+
+        </form>
+
+
+
+        <!-- MESSAGE -->
+
+        <p id="register-message"></p>
+
+
+
+        <!-- LOGIN -->
+
+        <p class="login-link">
+
+            Already have an account?
+
+            <a href="login.html">
+                Login
+            </a>
+
+        </p>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+const registerForm =
+    document.getElementById(
+        "register-form"
+    );
+
+
+const registerButton =
+    document.getElementById(
+        "register-button"
+    );
+
+
+const registerMessage =
+    document.getElementById(
+        "register-message"
+    );
+
+
+
+registerForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const fullName =
+            document
+                .getElementById("full_name")
+                .value
+                .trim();
+
+
+        const phone =
+            document
+                .getElementById("phone")
+                .value
+                .trim();
+
+
+        const email =
+            document
+                .getElementById("email")
+                .value
+                .trim();
+
+
+        const password =
+            document
+                .getElementById("password")
+                .value;
+
+
+        const accountType =
+            document
+                .getElementById("account_type")
+                .value;
+
+
+        if (!accountType) {
+
+            registerMessage.style.color =
+                "#b91c1c";
+
+            registerMessage.textContent =
+                "Please select an account type.";
+
+            return;
+
+        }
+
+
+        registerButton.disabled =
+            true;
+
+
+        registerButton.textContent =
+            "Creating account...";
+
+
+        registerMessage.textContent =
+            "";
+
+
+
+        try {
+
+
+            /*
+             * CREATE SUPABASE AUTH USER
+             */
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient.auth.signUp({
+
+                    email: email,
+
+                    password: password,
+
+                    options: {
+
+                        data: {
+
+                            full_name:
+                                fullName,
+
+                            phone:
+                                phone,
+
+                            account_type:
+                                accountType
+
+                        }
+
+                    }
+
+                });
+
+
+            if (error) {
+
+                throw error;
+
+            }
+
+
+            if (!data.user) {
+
+                throw new Error(
+                    "Unable to create account."
+                );
+
+            }
+
+
+
+            /*
+             * ACCOUNT CREATED
+             */
+
+            registerMessage.style.color =
+                "#15803d";
+
+
+            registerMessage.textContent =
+                "Account created successfully. Please check your email to confirm your account.";
+
+
+            registerForm.reset();
+
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "Registration error:",
+                error
+            );
+
+
+            registerMessage.style.color =
+                "#b91c1c";
+
+
+            registerMessage.textContent =
+                error.message ||
+                "Unable to create account.";
+
+        }
+
+
+        finally {
+
+            registerButton.disabled =
+                false;
+
+
+            registerButton.textContent =
+                "Create Account";
+
+        }
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
+```

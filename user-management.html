@@ -1,0 +1,1585 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>User Management | NichoLink 254</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .admin-page {
+            max-width: 1400px;
+            margin: auto;
+            padding: 35px 25px 60px;
+        }
+
+        .page-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .page-top h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .page-top p {
+            margin: 0;
+            color: #718096;
+        }
+
+        .back-button {
+            text-decoration: none;
+            background: #172033;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+        }
+
+        /* STATISTICS */
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.06);
+            border: 1px solid #edf0f5;
+        }
+
+        .stat-card span {
+            display: block;
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .stat-card strong {
+            font-size: 34px;
+        }
+
+        /* SEARCH / FILTER */
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,.05);
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 15px;
+        }
+
+        .control-panel input,
+        .control-panel select {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dfe4ec;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .control-panel input:focus,
+        .control-panel select:focus {
+            border-color: #2563eb;
+        }
+
+        /* USER GRID */
+
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid #edf0f5;
+            box-shadow: 0 8px 25px rgba(0,0,0,.05);
+            transition: .2s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 30px rgba(0,0,0,.08);
+        }
+
+        .user-top {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #e8eefc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 21px;
+            font-weight: bold;
+            color: #2563eb;
+            flex-shrink: 0;
+        }
+
+        .user-name {
+            margin: 0 0 5px;
+            font-size: 18px;
+        }
+
+        .account-type {
+            font-size: 13px;
+            color: #667085;
+            text-transform: capitalize;
+        }
+
+        .user-details {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            font-size: 14px;
+        }
+
+        .detail span:first-child {
+            color: #718096;
+        }
+
+        .detail span:last-child {
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status.active {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status.inactive {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .user-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .user-actions button {
+            border: none;
+            border-radius: 9px;
+            padding: 10px 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .activate-button {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .deactivate-button {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .edit-button {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .delete-button {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .loading,
+        .empty {
+            grid-column: 1 / -1;
+            background: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 18px;
+            color: #718096;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .65);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,.2);
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #dfe4ec;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2563eb;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 22px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            border: none;
+            border-radius: 9px;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .save-button {
+            background: #2563eb;
+            color: white;
+        }
+
+        .cancel-button {
+            background: #e5e7eb;
+            color: #172033;
+        }
+
+        @media (max-width: 1000px) {
+            .users-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .users-grid,
+            .stats-grid,
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .page-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .user-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        <span>NichoLink</span>
+        <strong>254</strong>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="properties.html">Properties</a>
+        <a href="admin-dashboard.html">Admin Dashboard</a>
+    </nav>
+
+    <a href="admin-dashboard.html" class="nav-button">
+        Dashboard
+    </a>
+<a href="#"
+   onclick="logoutAdmin(); return false;"
+   class="nav-button">
+
+    Logout
+
+</a>
+</header>
+
+
+<main class="admin-page">
+
+    <section class="page-top">
+
+        <div>
+            <h1>User Management</h1>
+            <p>Manage tenants, landlords and platform accounts.</p>
+        </div>
+
+        <a href="admin-dashboard.html" class="back-button">
+            ← Admin Dashboard
+        </a>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+
+    <section class="stats-grid">
+
+        <div class="stat-card">
+            <span>Total Users</span>
+            <strong id="total-users">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Tenants</span>
+            <strong id="total-tenants">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Landlords</span>
+            <strong id="total-landlords">0</strong>
+        </div>
+
+        <div class="stat-card">
+            <span>Active Users</span>
+            <strong id="active-users">0</strong>
+        </div>
+
+    </section>
+
+
+    <!-- SEARCH / FILTER -->
+
+    <section class="control-panel">
+
+        <input
+            type="search"
+            id="user-search"
+            placeholder="Search by name, phone or email..."
+            oninput="filterUsers()"
+        >
+
+        <select id="account-filter" onchange="filterUsers()">
+
+            <option value="all">All Accounts</option>
+            <option value="tenant">Tenants</option>
+            <option value="landlord">Landlords</option>
+
+        </select>
+
+    </section>
+
+
+    <!-- USER GRID -->
+
+    <section id="users-grid" class="users-grid">
+
+        <div class="loading">
+            Loading users...
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- EDIT USER MODAL -->
+
+<div id="edit-user-modal" class="modal">
+
+    <div class="modal-content">
+
+        <h2>Edit User</h2>
+
+        <form id="edit-user-form">
+
+            <input
+                type="hidden"
+                id="edit-user-id"
+            >
+
+            <div class="form-group">
+
+                <label for="edit-full-name">
+                    Full Name
+                </label>
+
+                <input
+                    type="text"
+                    id="edit-full-name"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="edit-phone">
+                    Phone
+                </label>
+
+                <input
+                    type="text"
+                    id="edit-phone"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="edit-email">
+                    Email
+                </label>
+
+                <input
+                    type="email"
+                    id="edit-email"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="edit-account-type">
+                    Account Type
+                </label>
+
+                <select id="edit-account-type">
+
+                    <option value="tenant">
+                        Tenant
+                    </option>
+
+                    <option value="landlord">
+                        Landlord
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="edit-active">
+                    Account Status
+                </label>
+
+                <select id="edit-active">
+
+                    <option value="true">
+                        Active
+                    </option>
+
+                    <option value="false">
+                        Inactive
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="cancel-button"
+                    onclick="closeEditModal()">
+
+                    Cancel
+
+                </button>
+
+                <button
+                    type="submit"
+                    class="save-button">
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script src="supabase.js"></script>
+<script src="admin-auth.js"></script>
+
+<script>
+async function logoutAdmin() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href = "login.html";
+}
+</script>
+<script>
+
+let allUsers = [];
+
+
+/* ==============================
+   LOAD USERS
+============================== */
+
+async function loadUsers() {
+
+    const container =
+        document.getElementById("users-grid");
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("profiles")
+
+            .select(`
+                id,
+                full_name,
+                phone,
+                email,
+                account_type,
+                created_at,
+                updated_at,
+                is_active
+            `)
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        allUsers =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        updateStatistics();
+
+        renderUsers(allUsers);
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "User loading error:",
+            error
+        );
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <h3>
+                    Unable to load users
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Unknown error"
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ==============================
+   STATISTICS
+============================== */
+
+function updateStatistics() {
+
+    const total =
+        allUsers.length;
+
+    const tenants =
+        allUsers.filter(
+            user =>
+                normalizeAccount(
+                    user.account_type
+                ) === "tenant"
+        ).length;
+
+    const landlords =
+        allUsers.filter(
+            user =>
+                normalizeAccount(
+                    user.account_type
+                ) === "landlord"
+        ).length;
+
+    const active =
+        allUsers.filter(
+            user =>
+                user.is_active === true
+        ).length;
+
+
+    document.getElementById(
+        "total-users"
+    ).textContent = total;
+
+    document.getElementById(
+        "total-tenants"
+    ).textContent = tenants;
+
+    document.getElementById(
+        "total-landlords"
+    ).textContent = landlords;
+
+    document.getElementById(
+        "active-users"
+    ).textContent = active;
+
+}
+
+
+/* ==============================
+   FILTER
+============================== */
+
+function filterUsers() {
+
+    const search =
+        document.getElementById(
+            "user-search"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    const account =
+        document.getElementById(
+            "account-filter"
+        )
+        .value;
+
+
+    const filtered =
+        allUsers.filter(
+            user => {
+
+                const name =
+                    String(
+                        user.full_name || ""
+                    ).toLowerCase();
+
+                const phone =
+                    String(
+                        user.phone || ""
+                    ).toLowerCase();
+
+                const email =
+                    String(
+                        user.email || ""
+                    ).toLowerCase();
+
+                const type =
+                    normalizeAccount(
+                        user.account_type
+                    );
+
+
+                const matchesSearch =
+                    !search ||
+                    name.includes(search) ||
+                    phone.includes(search) ||
+                    email.includes(search);
+
+
+                const matchesAccount =
+                    account === "all" ||
+                    type === account;
+
+
+                return (
+                    matchesSearch &&
+                    matchesAccount
+                );
+
+            }
+        );
+
+
+    renderUsers(filtered);
+
+}
+
+
+/* ==============================
+   RENDER USER GRID
+============================== */
+
+function renderUsers(users) {
+
+    const container =
+        document.getElementById(
+            "users-grid"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!users.length) {
+
+        container.innerHTML = `
+
+            <div class="empty">
+
+                <h3>
+                    No users found
+                </h3>
+
+                <p>
+                    Try changing your search
+                    or account filter.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    users.forEach(
+        user => {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "user-card";
+
+
+            const name =
+                user.full_name ||
+                "Unnamed User";
+
+
+            const initials =
+                getInitials(name);
+
+
+            const account =
+                normalizeAccount(
+                    user.account_type
+                ) || "unknown";
+
+
+            const active =
+                user.is_active === true;
+
+
+            const created =
+                formatDate(
+                    user.created_at
+                );
+
+
+            card.innerHTML = `
+
+                <div class="user-top">
+
+                    <div class="avatar">
+                        ${escapeHtml(initials)}
+                    </div>
+
+                    <div>
+
+                        <h3 class="user-name">
+                            ${escapeHtml(name)}
+                        </h3>
+
+                        <div class="account-type">
+                            ${escapeHtml(account)}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-details">
+
+                    <div class="detail">
+
+                        <span>Email</span>
+
+                        <span>
+                            ${escapeHtml(
+                                user.email ||
+                                "Not provided"
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Phone</span>
+
+                        <span>
+                            ${escapeHtml(
+                                user.phone ||
+                                "Not provided"
+                            )}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Joined</span>
+
+                        <span>
+                            ${escapeHtml(created)}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail">
+
+                        <span>Status</span>
+
+                        <span>
+
+                            <span class="status ${
+                                active
+                                    ? "active"
+                                    : "inactive"
+                            }">
+
+                                ${
+                                    active
+                                        ? "Active"
+                                        : "Inactive"
+                                }
+
+                            </span>
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-actions">
+
+                    <button
+                        type="button"
+                        class="edit-button"
+                        onclick="openEditModal('${escapeHtml(user.id)}')">
+
+                        Edit
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="${
+                            active
+                                ? "deactivate-button"
+                                : "activate-button"
+                        }"
+                        onclick="changeUserStatus(
+                            '${escapeHtml(user.id)}',
+                            ${!active}
+                        )">
+
+                        ${
+                            active
+                                ? "Deactivate"
+                                : "Activate"
+                        }
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="delete-button"
+                        onclick="deleteUser('${escapeHtml(user.id)}')">
+
+                        Delete
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* ==============================
+   OPEN EDIT MODAL
+============================== */
+
+function openEditModal(userId) {
+
+    const user =
+        allUsers.find(
+            item =>
+                String(item.id) ===
+                String(userId)
+        );
+
+
+    if (!user) {
+
+        alert("User not found.");
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "edit-user-id"
+    ).value = user.id;
+
+
+    document.getElementById(
+        "edit-full-name"
+    ).value =
+        user.full_name || "";
+
+
+    document.getElementById(
+        "edit-phone"
+    ).value =
+        user.phone || "";
+
+
+    document.getElementById(
+        "edit-email"
+    ).value =
+        user.email || "";
+
+
+    document.getElementById(
+        "edit-account-type"
+    ).value =
+        normalizeAccount(
+            user.account_type
+        );
+
+
+    document.getElementById(
+        "edit-active"
+    ).value =
+        user.is_active === true
+            ? "true"
+            : "false";
+
+
+    document.getElementById(
+        "edit-user-modal"
+    ).classList.add("show");
+
+}
+
+
+/* ==============================
+   CLOSE EDIT MODAL
+============================== */
+
+function closeEditModal() {
+
+    document.getElementById(
+        "edit-user-modal"
+    ).classList.remove("show");
+
+}
+
+
+/* ==============================
+   SAVE EDITED USER
+============================== */
+
+document.getElementById(
+    "edit-user-form"
+).addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        const userId =
+            document.getElementById(
+                "edit-user-id"
+            ).value;
+
+
+        const fullName =
+            document.getElementById(
+                "edit-full-name"
+            ).value.trim();
+
+
+        const phone =
+            document.getElementById(
+                "edit-phone"
+            ).value.trim();
+
+
+        const email =
+            document.getElementById(
+                "edit-email"
+            ).value.trim();
+
+
+        const accountType =
+            document.getElementById(
+                "edit-account-type"
+            ).value;
+
+
+        const isActive =
+            document.getElementById(
+                "edit-active"
+            ).value === "true";
+
+
+        if (!userId || !fullName) {
+
+            alert(
+                "Full name is required."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient
+
+                .from("profiles")
+
+                .update({
+                    full_name: fullName,
+                    phone: phone || null,
+                    email: email || null,
+                    account_type: accountType,
+                    is_active: isActive,
+                    updated_at:
+                        new Date().toISOString()
+                })
+
+                .eq(
+                    "id",
+                    userId
+                )
+
+                .select();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            if (
+                !data ||
+                data.length === 0
+            ) {
+
+                throw new Error(
+                    "User was not updated. Check your Supabase UPDATE policy."
+                );
+
+            }
+
+
+            closeEditModal();
+
+            requireAdmin().then(function(isAdmin) {
+
+    if (isAdmin) {
+        loadUsers();
+    }
+
+});
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Edit user error:",
+                error
+            );
+
+
+            alert(
+                "Unable to update user.\n\n" +
+                (
+                    error.message ||
+                    "Unknown error"
+                )
+            );
+
+        }
+
+    }
+);
+
+
+/* ==============================
+   CHANGE USER STATUS
+============================== */
+
+async function changeUserStatus(
+    userId,
+    newStatus
+) {
+
+    if (!userId) {
+        return;
+    }
+
+
+    const action =
+        newStatus
+            ? "activate"
+            : "deactivate";
+
+
+    const confirmed =
+        confirm(
+            `Are you sure you want to ${action} this user?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("profiles")
+
+            .update({
+                is_active: newStatus,
+                updated_at:
+                    new Date().toISOString()
+            })
+
+            .eq(
+                "id",
+                userId
+            )
+
+            .select();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            throw new Error(
+                "User status was not updated. Check your Supabase UPDATE policy."
+            );
+
+        }
+
+
+        await loadUsers();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "User status error:",
+            error
+        );
+
+
+        alert(
+            "Unable to change user status.\n\n" +
+            (
+                error.message ||
+                "Unknown error"
+            )
+        );
+
+    }
+
+}
+
+
+/* ==============================
+   DELETE USER
+============================== */
+
+async function deleteUser(userId) {
+
+    if (!userId) {
+        return;
+    }
+
+
+    const user =
+        allUsers.find(
+            item =>
+                String(item.id) ===
+                String(userId)
+        );
+
+
+    const userName =
+        user &&
+        user.full_name
+            ? user.full_name
+            : "this user";
+
+
+    const confirmed =
+        confirm(
+            `Delete ${userName} permanently?\n\nThis action cannot be undone.`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+
+            .from("profiles")
+
+            .delete()
+
+            .eq(
+                "id",
+                userId
+            )
+
+            .select();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            throw new Error(
+                "User was not deleted. Check your Supabase DELETE policy."
+            );
+
+        }
+
+
+        await loadUsers();
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Delete user error:",
+            error
+        );
+
+
+        alert(
+            "Unable to delete user.\n\n" +
+            (
+                error.message ||
+                "Unknown error"
+            )
+        );
+
+    }
+
+}
+
+
+/* ==============================
+   MODAL CLICK OUTSIDE
+============================== */
+
+document.getElementById(
+    "edit-user-modal"
+).addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            this
+        ) {
+
+            closeEditModal();
+
+        }
+
+    }
+);
+
+
+/* ==============================
+   HELPERS
+============================== */
+
+function normalizeAccount(value) {
+
+    return String(
+        value || ""
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+function getInitials(name) {
+
+    const parts =
+        String(name)
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+
+    if (!parts.length) {
+        return "?";
+    }
+
+
+    if (parts.length === 1) {
+
+        return parts[0]
+            .substring(0, 2)
+            .toUpperCase();
+
+    }
+
+
+    return (
+        parts[0][0] +
+        parts[parts.length - 1][0]
+    ).toUpperCase();
+
+}
+
+
+function formatDate(value) {
+
+    if (!value) {
+        return "Unknown";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "Unknown";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-KE",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* ==============================
+   START
+============================== */
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
+```

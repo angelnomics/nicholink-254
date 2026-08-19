@@ -1,0 +1,2333 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title id="page-title">
+        Add Property | NichoLink 254
+    </title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+
+        <span>NichoLink</span>
+        <strong>254</strong>
+
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+        <a href="landlord-dashboard.html">
+            Dashboard
+        </a>
+
+    </nav>
+
+
+    <a href="#"
+       onclick="logoutLandlord(); return false;"
+       class="nav-button">
+
+        Logout
+
+    </a>
+
+</header>
+
+
+
+<!-- =========================
+     ADD PROPERTY
+========================= -->
+
+<main class="add-property-page">
+
+
+    <div class="add-property-header">
+
+        <p class="property-label">
+            LANDLORD PORTAL
+        </p>
+
+        <h1 id="form-title">
+            Add a Property
+        </h1>
+
+        <p id="form-subtitle">
+            Enter the details of the property you want to list on NichoLink 254.
+        </p>
+
+    </div>
+
+
+
+    <form id="property-form">
+
+
+        <!-- PROPERTY TITLE -->
+
+        <div class="form-group">
+
+            <label for="title">
+                Property Title
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                name="title"
+                placeholder="e.g. Modern 2 Bedroom Apartment"
+                required>
+
+        </div>
+
+
+
+        <!-- LOCATION -->
+
+        <div class="form-group">
+
+            <label for="location">
+                Location
+            </label>
+
+            <input
+                type="text"
+                id="location"
+                name="location"
+                placeholder="e.g. Milimani, Kisumu"
+                required>
+
+        </div>
+
+
+
+        <!-- RENT -->
+
+        <div class="form-group">
+
+            <label for="rent">
+                Monthly Rent (KSh)
+            </label>
+
+            <input
+                type="number"
+                id="rent"
+                name="rent"
+                placeholder="e.g. 25000"
+                min="0"
+                required>
+
+        </div>
+
+
+
+        <!-- BEDROOMS -->
+
+        <div class="form-group">
+
+            <label for="bedrooms">
+                Bedrooms
+            </label>
+
+            <input
+                type="number"
+                id="bedrooms"
+                name="bedrooms"
+                min="0"
+                placeholder="e.g. 2"
+                required>
+
+        </div>
+
+
+
+        <!-- BATHROOMS -->
+
+        <div class="form-group">
+
+            <label for="bathrooms">
+                Bathrooms
+            </label>
+
+            <input
+                type="number"
+                id="bathrooms"
+                name="bathrooms"
+                min="0"
+                placeholder="e.g. 2"
+                required>
+
+        </div>
+
+
+
+        <!-- DESCRIPTION -->
+
+        <div class="form-group">
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                name="description"
+                rows="6"
+                placeholder="Describe the property..."
+                required></textarea>
+
+        </div>
+
+
+
+        <!-- AMENITIES -->
+
+        <div class="form-group">
+
+            <label for="amenities">
+                Amenities
+            </label>
+
+            <input
+                type="text"
+                id="amenities"
+                name="amenities"
+                placeholder="e.g. Parking, WiFi, Security, Water">
+
+            <small>
+                Separate amenities with commas.
+            </small>
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="form-group">
+
+            <label for="status">
+                Property Status
+            </label>
+
+            <select
+                id="status"
+                name="status">
+
+                <option value="Available">
+                    Available
+                </option>
+
+                <option value="Occupied">
+                    Occupied
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- EXISTING PHOTOS -->
+
+        <div
+            class="form-group"
+            id="existing-photos-section"
+            style="display:none;">
+
+            <label>
+                Existing Property Photos
+            </label>
+
+            <div
+                id="existing-photo-preview"
+                class="photo-preview">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- NEW PHOTOS -->
+
+        <div class="form-group">
+
+            <label for="property-photos">
+                Add Property Photos
+            </label>
+
+            <input
+                type="file"
+                id="property-photos"
+                name="property-photos"
+                accept="image/*"
+                multiple>
+
+            <small>
+                Select one or more new photos.
+            </small>
+
+            <div
+                id="photo-preview"
+                class="photo-preview">
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SAVE -->
+
+        <button
+            type="submit"
+            class="dashboard-add-button"
+            id="save-property-button">
+
+            Save Property
+
+        </button>
+
+
+
+        <!-- MESSAGE -->
+
+        <div
+            id="form-message"
+            style="margin-top:20px;">
+
+        </div>
+
+
+    </form>
+
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="footer-content">
+
+
+        <div>
+
+            <h2>
+                NichoLink <strong>254</strong>
+            </h2>
+
+            <p>
+                Connecting tenants with properties across Kenya.
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Quick Links
+            </h3>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="properties.html">
+                Properties
+            </a>
+
+            <a href="landlord-dashboard.html">
+                Dashboard
+            </a>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Contact
+            </h3>
+
+            <p>
+                📞 0795629436
+            </p>
+
+            <p>
+                💬 WhatsApp: 0795629432
+            </p>
+
+            <p>
+                ✉️ nicholink254@gmail.com
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 NichoLink 254.
+        All Rights Reserved.
+
+    </div>
+
+</footer>
+
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="supabase.js"></script>
+
+
+
+<script>
+
+/* =================================
+   URL / EDIT MODE
+================================= */
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const propertyId =
+    urlParams.get("id");
+
+
+const editMode =
+    Boolean(propertyId);
+
+
+
+/* =================================
+   FORM ELEMENTS
+================================= */
+
+const form =
+    document.getElementById(
+        "property-form"
+    );
+
+
+const message =
+    document.getElementById(
+        "form-message"
+    );
+
+
+const saveButton =
+    document.getElementById(
+        "save-property-button"
+    );
+
+
+const photoInput =
+    document.getElementById(
+        "property-photos"
+    );
+
+
+const photoPreview =
+    document.getElementById(
+        "photo-preview"
+    );
+
+
+const existingSection =
+    document.getElementById(
+        "existing-photos-section"
+    );
+
+
+const existingPreview =
+    document.getElementById(
+        "existing-photo-preview"
+    );
+
+
+
+/* =================================
+   CURRENT USER
+================================= */
+
+let currentUser = null;
+
+
+
+/* =================================
+   MPESA EDGE FUNCTION
+================================= */
+
+const MPESA_FUNCTION_URL =
+    "https://babkxqqtepxvgdwvvwse.supabase.co/functions/v1/mpesa-stk-push";
+
+
+
+/* =================================
+   GET CURRENT LANDLORD
+================================= */
+
+async function getCurrentLandlord() {
+
+    const {
+        data: {
+            user
+        },
+        error
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (error) {
+
+        console.error(
+            "Authentication error:",
+            error
+        );
+
+        throw new Error(
+            "Unable to verify your login session. Please log in again."
+        );
+
+    }
+
+
+    if (!user) {
+
+        throw new Error(
+            "You are not logged in. Please log in as a landlord."
+        );
+
+    }
+
+
+    currentUser =
+        user;
+
+
+    return user;
+
+}
+
+
+
+/* =================================
+   VERIFY LANDLORD
+================================= */
+
+async function verifyLandlord(user) {
+
+    const {
+        data: profile,
+        error
+    } =
+        await supabaseClient
+
+            .from("profiles")
+
+            .select(`
+                id,
+                account_type,
+                is_active
+            `)
+
+            .eq(
+                "id",
+                user.id
+            )
+
+            .maybeSingle();
+
+
+    if (error) {
+
+        throw error;
+
+    }
+
+
+    if (!profile) {
+
+        throw new Error(
+            "Your landlord profile could not be found."
+        );
+
+    }
+
+
+    const accountType =
+        String(
+            profile.account_type || ""
+        )
+        .trim()
+        .toLowerCase();
+
+
+    if (
+        accountType !==
+        "landlord"
+    ) {
+
+        throw new Error(
+            "This page is only available to landlord accounts."
+        );
+
+    }
+
+
+    if (
+        profile.is_active === false
+    ) {
+
+        throw new Error(
+            "Your landlord account has been deactivated."
+        );
+
+    }
+
+
+    return profile;
+
+}
+
+
+
+/* =================================
+   EDIT MODE
+================================= */
+
+if (editMode) {
+
+    document.getElementById(
+        "page-title"
+    ).textContent =
+        "Edit Property | NichoLink 254";
+
+
+    document.getElementById(
+        "form-title"
+    ).textContent =
+        "Edit Property";
+
+
+    document.getElementById(
+        "form-subtitle"
+    ).textContent =
+        "Update your property information.";
+
+
+    saveButton.textContent =
+        "Update Property";
+
+}
+
+
+
+/* =================================
+   PHOTO PREVIEW
+================================= */
+
+photoInput.addEventListener(
+    "change",
+    function() {
+
+        photoPreview.innerHTML =
+            "";
+
+        const files =
+            Array.from(
+                photoInput.files
+            );
+
+
+        files.forEach(
+            function(file) {
+
+                const reader =
+                    new FileReader();
+
+
+                reader.onload =
+                    function(event) {
+
+                        const image =
+                            document.createElement(
+                                "img"
+                            );
+
+
+                        image.src =
+                            event.target.result;
+
+
+                        image.alt =
+                            "Selected property photo";
+
+
+                        image.className =
+                            "selected-property-photo";
+
+
+                        photoPreview.appendChild(
+                            image
+                        );
+
+                    };
+
+
+                reader.readAsDataURL(
+                    file
+                );
+
+            }
+        );
+
+    }
+);
+
+
+
+/* =================================
+   LOAD PROPERTY FOR EDIT
+================================= */
+
+async function loadPropertyForEdit() {
+
+    if (!editMode) {
+
+        return;
+
+    }
+
+
+    message.innerHTML = `
+
+        <p>
+            Loading property...
+        </p>
+
+    `;
+
+
+    try {
+
+        const user =
+            await getCurrentLandlord();
+
+
+        await verifyLandlord(
+            user
+        );
+
+
+        const {
+            data: property,
+            error
+        } =
+            await supabaseClient
+
+                .from("properties")
+
+                .select("*")
+
+                .eq(
+                    "id",
+                    propertyId
+                )
+
+                .eq(
+                    "landlord_id",
+                    user.id
+                )
+
+                .single();
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        if (!property) {
+
+            throw new Error(
+                "Property not found or you do not have permission to edit it."
+            );
+
+        }
+
+
+        document.getElementById(
+            "title"
+        ).value =
+            property.title || "";
+
+
+        document.getElementById(
+            "location"
+        ).value =
+            property.location || "";
+
+
+        document.getElementById(
+            "rent"
+        ).value =
+            property.rent || "";
+
+
+        document.getElementById(
+            "bedrooms"
+        ).value =
+            property.bedrooms || "";
+
+
+        document.getElementById(
+            "bathrooms"
+        ).value =
+            property.bathrooms || "";
+
+
+        document.getElementById(
+            "description"
+        ).value =
+            property.description || "";
+
+
+        document.getElementById(
+            "amenities"
+        ).value =
+            Array.isArray(
+                property.amenities
+            )
+            ?
+            property.amenities.join(", ")
+            :
+            (
+                property.amenities || ""
+            );
+
+
+        document.getElementById(
+            "status"
+        ).value =
+            property.status ||
+            "Available";
+
+
+        await loadExistingPhotos();
+
+
+        message.innerHTML =
+            "";
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Edit property error:",
+            error
+        );
+
+
+        message.innerHTML = `
+
+            <p style="color:red;font-weight:bold;">
+
+                ❌ ${escapeHtml(
+                    error.message ||
+                    String(error)
+                )}
+
+            </p>
+
+        `;
+
+
+        saveButton.disabled =
+            true;
+
+    }
+
+}
+
+
+
+/* =================================
+   LOAD EXISTING PHOTOS
+================================= */
+
+async function loadExistingPhotos() {
+
+    const {
+        data: images,
+        error
+    } =
+        await supabaseClient
+
+            .from("property_images")
+
+            .select("*")
+
+            .eq(
+                "property_id",
+                propertyId
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Existing photos error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !images ||
+        images.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    existingSection.style.display =
+        "block";
+
+
+    existingPreview.innerHTML =
+        "";
+
+
+    images.forEach(
+        function(image) {
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.style.position =
+                "relative";
+
+
+            const photo =
+                document.createElement(
+                    "img"
+                );
+
+
+            photo.src =
+                image.image_url;
+
+
+            photo.alt =
+                "Existing property photo";
+
+
+            photo.className =
+                "selected-property-photo";
+
+
+            wrapper.appendChild(
+                photo
+            );
+
+
+            existingPreview.appendChild(
+                wrapper
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =================================
+   UPLOAD NEW PHOTOS
+================================= */
+
+async function uploadNewPhotos(
+    propertyId
+) {
+
+    const selectedFiles =
+        Array.from(
+            photoInput.files
+        );
+
+
+    let firstNewImageUrl =
+        null;
+
+
+    if (
+        selectedFiles.length === 0
+    ) {
+
+        return null;
+
+    }
+
+
+    for (
+        let i = 0;
+        i < selectedFiles.length;
+        i++
+    ) {
+
+        const file =
+            selectedFiles[i];
+
+
+        message.innerHTML = `
+
+            <p>
+
+                Uploading photo
+                ${i + 1}
+                of
+                ${selectedFiles.length}...
+
+            </p>
+
+        `;
+
+
+        const fileExtension =
+            file.name
+                .split(".")
+                .pop()
+                .toLowerCase();
+
+
+        const uniqueFileName =
+            propertyId +
+            "_" +
+            Date.now() +
+            "_" +
+            i +
+            "." +
+            fileExtension;
+
+
+        const filePath =
+            propertyId +
+            "/" +
+            uniqueFileName;
+
+
+        const {
+            error: uploadError
+        } =
+            await supabaseClient
+
+                .storage
+
+                .from(
+                    "property-images"
+                )
+
+                .upload(
+                    filePath,
+                    file,
+                    {
+                        cacheControl:
+                            "3600",
+
+                        upsert:
+                            false
+                    }
+                );
+
+
+        if (uploadError) {
+
+            throw uploadError;
+
+        }
+
+
+        const {
+            data: publicUrlData
+        } =
+            supabaseClient
+
+                .storage
+
+                .from(
+                    "property-images"
+                )
+
+                .getPublicUrl(
+                    filePath
+                );
+
+
+        const imageUrl =
+            publicUrlData.publicUrl;
+
+
+        if (!firstNewImageUrl) {
+
+            firstNewImageUrl =
+                imageUrl;
+
+        }
+
+
+        const {
+            error: imageError
+        } =
+            await supabaseClient
+
+                .from(
+                    "property_images"
+                )
+
+                .insert({
+
+                    property_id:
+                        propertyId,
+
+                    image_url:
+                        imageUrl
+
+                });
+
+
+        if (imageError) {
+
+            throw imageError;
+
+        }
+
+    }
+
+
+    return firstNewImageUrl;
+
+}
+
+
+
+/* =================================
+   ASK FOR MPESA PHONE
+================================= */
+
+function askForMpesaPhone() {
+
+    let phone =
+        prompt(
+            "Enter the M-Pesa phone number that will pay KSh 250.\n\nExample: 0712345678"
+        );
+
+
+    if (phone === null) {
+
+        throw new Error(
+            "Payment cancelled."
+        );
+
+    }
+
+
+    phone =
+        phone.trim();
+
+
+    if (!phone) {
+
+        throw new Error(
+            "Please enter your M-Pesa phone number."
+        );
+
+    }
+
+
+    /*
+       Convert 07XXXXXXXX
+       to 2547XXXXXXXX
+    */
+
+    if (
+        /^07\d{8}$/.test(phone)
+    ) {
+
+        phone =
+            "254" +
+            phone.substring(1);
+
+    }
+
+
+    /*
+       Accept 2547XXXXXXXX
+    */
+
+    if (
+        !/^2547\d{8}$/.test(phone)
+    ) {
+
+        throw new Error(
+            "Please enter a valid Kenyan M-Pesa number, for example 0712345678."
+        );
+
+    }
+
+
+    return phone;
+
+}
+
+
+
+/* =================================
+   START MPESA PAYMENT
+================================= */
+
+async function startPropertyPayment(
+    phone,
+    propertyId
+) {
+
+    message.innerHTML = `
+
+        <p style="font-weight:bold;">
+
+            Sending KSh 250 M-Pesa payment request...
+
+        </p>
+
+        <p>
+
+            Check your phone and enter your M-Pesa PIN.
+
+        </p>
+
+    `;
+
+
+    const {
+        data: {
+            session
+        },
+        error: sessionError
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (sessionError) {
+
+        throw sessionError;
+
+    }
+
+
+    if (!session) {
+
+        throw new Error(
+            "Your login session has expired. Please log in again."
+        );
+
+    }
+
+
+    const response =
+        await fetch(
+            MPESA_FUNCTION_URL,
+            {
+                method:
+                    "POST",
+
+                headers: {
+
+                    "Authorization":
+                        "Bearer " +
+                        session.access_token,
+
+                    "apikey":
+                        session.access_token,
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body:
+                    JSON.stringify({
+
+                        phone:
+                            phone,
+
+                        payment_type:
+                            "property_listing",
+
+                        property_id:
+                            propertyId
+
+                    })
+
+            }
+        );
+
+
+    let data;
+
+
+    try {
+
+        data =
+            await response.json();
+
+    }
+
+    catch (jsonError) {
+
+        throw new Error(
+            "The M-Pesa server returned an invalid response."
+        );
+
+    }
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            data.error ||
+            "Unable to start M-Pesa payment."
+        );
+
+    }
+
+
+    if (
+        !data.success ||
+        !data.payment_id
+    ) {
+
+        throw new Error(
+            data.error ||
+            "M-Pesa payment could not be started."
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+
+/* =================================
+   WAIT FOR PAYMENT
+================================= */
+
+async function waitForPayment(
+    paymentId
+) {
+
+    const maximumAttempts =
+        60;
+
+
+    const interval =
+        3000;
+
+
+    for (
+        let attempt = 1;
+        attempt <= maximumAttempts;
+        attempt++
+    ) {
+
+
+        message.innerHTML = `
+
+            <p>
+
+                Waiting for M-Pesa confirmation...
+
+            </p>
+
+            <p>
+
+                Attempt
+                ${attempt}
+                of
+                ${maximumAttempts}
+
+            </p>
+
+            <p>
+
+                Complete the payment on your phone.
+
+            </p>
+
+        `;
+
+
+        await new Promise(
+            function(resolve) {
+
+                setTimeout(
+                    resolve,
+                    interval
+                );
+
+            }
+        );
+
+
+        const {
+            data: payment,
+            error
+        } =
+            await supabaseClient
+
+                .from("payments")
+
+                .select(`
+                    id,
+                    status,
+                    result_code,
+                    result_description
+                `)
+
+                .eq(
+                    "id",
+                    paymentId
+                )
+
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                "Payment status error:",
+                error
+            );
+
+            continue;
+
+        }
+
+
+        if (!payment) {
+
+            continue;
+
+        }
+
+
+        const paymentStatus =
+            String(
+                payment.status || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (
+            paymentStatus ===
+            "success"
+        ) {
+
+            return true;
+
+        }
+
+
+        if (
+            paymentStatus ===
+                "failed" ||
+            paymentStatus ===
+                "cancelled"
+        ) {
+
+            throw new Error(
+                payment.result_description ||
+                "M-Pesa payment was not successful."
+            );
+
+        }
+
+    }
+
+
+    throw new Error(
+        "Payment confirmation timed out. If you completed the payment, check your dashboard before trying again."
+    );
+
+}
+
+
+
+/* =================================
+   SAVE / UPDATE PROPERTY
+================================= */
+
+form.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        saveButton.disabled =
+            true;
+
+
+        saveButton.textContent =
+            editMode
+            ?
+            "Updating..."
+            :
+            "Saving...";
+
+
+        message.innerHTML =
+            "";
+
+
+        try {
+
+
+            /* =========================
+               LOGIN
+            ========================= */
+
+            const user =
+                await getCurrentLandlord();
+
+
+            /* =========================
+               VERIFY LANDLORD
+            ========================= */
+
+            await verifyLandlord(
+                user
+            );
+
+
+            const landlordId =
+                user.id;
+
+
+
+            /* =========================
+               FORM VALUES
+            ========================= */
+
+            const title =
+                document
+                    .getElementById(
+                        "title"
+                    )
+                    .value
+                    .trim();
+
+
+            const location =
+                document
+                    .getElementById(
+                        "location"
+                    )
+                    .value
+                    .trim();
+
+
+            const rent =
+                Number(
+                    document
+                        .getElementById(
+                            "rent"
+                        )
+                        .value
+                );
+
+
+            const bedrooms =
+                Number(
+                    document
+                        .getElementById(
+                            "bedrooms"
+                        )
+                        .value
+                );
+
+
+            const bathrooms =
+                Number(
+                    document
+                        .getElementById(
+                            "bathrooms"
+                        )
+                        .value
+                );
+
+
+            const description =
+                document
+                    .getElementById(
+                        "description"
+                    )
+                    .value
+                    .trim();
+
+
+            const amenities =
+                document
+                    .getElementById(
+                        "amenities"
+                    )
+                    .value
+                    .trim();
+
+
+            const status =
+                document
+                    .getElementById(
+                        "status"
+                    )
+                    .value;
+
+
+
+            /* =========================
+               VALIDATION
+            ========================= */
+
+            if (!title) {
+
+                throw new Error(
+                    "Please enter the property title."
+                );
+
+            }
+
+
+            if (!location) {
+
+                throw new Error(
+                    "Please enter the property location."
+                );
+
+            }
+
+
+            if (
+                Number.isNaN(rent) ||
+                rent < 0
+            ) {
+
+                throw new Error(
+                    "Please enter a valid monthly rent."
+                );
+
+            }
+
+
+            if (
+                Number.isNaN(bedrooms) ||
+                bedrooms < 0
+            ) {
+
+                throw new Error(
+                    "Please enter a valid number of bedrooms."
+                );
+
+            }
+
+
+            if (
+                Number.isNaN(bathrooms) ||
+                bathrooms < 0
+            ) {
+
+                throw new Error(
+                    "Please enter a valid number of bathrooms."
+                );
+
+            }
+
+
+
+            /* =========================
+               EDIT EXISTING PROPERTY
+            ========================= */
+
+            if (editMode) {
+
+
+                message.innerHTML = `
+
+                    <p>
+
+                        Updating property...
+
+                    </p>
+
+                `;
+
+
+                const {
+                    error: updateError
+                } =
+                    await supabaseClient
+
+                        .from(
+                            "properties"
+                        )
+
+                        .update({
+
+                            title:
+                                title,
+
+                            location:
+                                location,
+
+                            rent:
+                                rent,
+
+                            bedrooms:
+                                bedrooms,
+
+                            bathrooms:
+                                bathrooms,
+
+                            description:
+                                description,
+
+                            amenities:
+                                amenities,
+
+                            status:
+                                status
+
+                        })
+
+                        .eq(
+                            "id",
+                            propertyId
+                        )
+
+                        .eq(
+                            "landlord_id",
+                            landlordId
+                        );
+
+
+                if (updateError) {
+
+                    throw updateError;
+
+                }
+
+
+
+                /* =========================
+                   UPLOAD NEW PHOTOS
+                ========================= */
+
+                const firstNewImageUrl =
+                    await uploadNewPhotos(
+                        propertyId
+                    );
+
+
+                if (
+                    firstNewImageUrl
+                ) {
+
+                    const {
+                        error:
+                            imageUpdateError
+                    } =
+                        await supabaseClient
+
+                            .from(
+                                "properties"
+                            )
+
+                            .update({
+
+                                image_url:
+                                    firstNewImageUrl
+
+                            })
+
+                            .eq(
+                                "id",
+                                propertyId
+                            )
+
+                            .eq(
+                                "landlord_id",
+                                landlordId
+                            );
+
+
+                    if (
+                        imageUpdateError
+                    ) {
+
+                        throw imageUpdateError;
+
+                    }
+
+                }
+
+
+                message.innerHTML = `
+
+                    <p
+                        style="
+                            color:green;
+                            font-weight:bold;
+                        "
+                    >
+
+                        ✅ Property updated successfully!
+
+                    </p>
+
+                `;
+
+
+                saveButton.textContent =
+                    "Updated ✓";
+
+
+                setTimeout(
+                    function() {
+
+                        window.location.href =
+                            "landlord-dashboard.html";
+
+                    },
+                    1500
+                );
+
+
+                return;
+
+            }
+
+
+
+            /* =========================
+               CREATE NEW PROPERTY
+            ========================= */
+
+            message.innerHTML = `
+
+                <p>
+
+                    Creating property...
+
+                </p>
+
+            `;
+
+
+            /*
+             * IMPORTANT:
+             *
+             * New property starts unpublished.
+             * It becomes published only after
+             * KSh 250 payment succeeds.
+             */
+
+            const {
+                data: property,
+                error: propertyError
+            } =
+                await supabaseClient
+
+                    .from(
+                        "properties"
+                    )
+
+                    .insert({
+
+                        landlord_id:
+                            landlordId,
+
+                        title:
+                            title,
+
+                        location:
+                            location,
+
+                        rent:
+                            rent,
+
+                        bedrooms:
+                            bedrooms,
+
+                        bathrooms:
+                            bathrooms,
+
+                        description:
+                            description,
+
+                        amenities:
+                            amenities,
+
+                        status:
+                            status,
+
+                        is_published:
+                            false
+
+                    })
+
+                    .select()
+
+                    .single();
+
+
+            if (propertyError) {
+
+                console.error(
+                    "Property creation error:",
+                    propertyError
+                );
+
+                throw propertyError;
+
+            }
+
+
+            if (!property) {
+
+                throw new Error(
+                    "Property was not created."
+                );
+
+            }
+
+
+            const newPropertyId =
+                property.id;
+
+
+
+            /* =========================
+               ASK FOR MPESA PHONE
+            ========================= */
+
+            const phone =
+                askForMpesaPhone();
+
+
+            saveButton.textContent =
+                "Sending Payment...";
+
+
+
+            /* =========================
+               START MPESA STK PUSH
+            ========================= */
+
+            const payment =
+                await startPropertyPayment(
+                    phone,
+                    newPropertyId
+                );
+
+
+            saveButton.textContent =
+                "Waiting for Payment...";
+
+
+
+            /* =========================
+               WAIT FOR MPESA CALLBACK
+            ========================= */
+
+            const successful =
+                await waitForPayment(
+                    payment.payment_id
+                );
+
+
+            if (!successful) {
+
+                throw new Error(
+                    "M-Pesa payment was not confirmed."
+                );
+
+            }
+
+
+
+            /* =========================
+               PUBLISH PROPERTY
+            ========================= */
+
+            message.innerHTML = `
+
+                <p>
+
+                    Payment successful.
+
+                </p>
+
+                <p>
+
+                    Publishing your property...
+
+                </p>
+
+            `;
+
+
+            const {
+                error: publishError
+            } =
+                await supabaseClient
+
+                    .from(
+                        "properties"
+                    )
+
+                    .update({
+
+                        is_published:
+                            true
+
+                    })
+
+                    .eq(
+                        "id",
+                        newPropertyId
+                    )
+
+                    .eq(
+                        "landlord_id",
+                        landlordId
+                    );
+
+
+            if (publishError) {
+
+                throw publishError;
+
+            }
+
+
+
+            /* =========================
+               UPLOAD PHOTOS
+            ========================= */
+
+            const firstImageUrl =
+                await uploadNewPhotos(
+                    newPropertyId
+                );
+
+
+
+            /* =========================
+               SAVE MAIN IMAGE
+            ========================= */
+
+            if (
+                firstImageUrl
+            ) {
+
+                const {
+                    error:
+                        imageUpdateError
+                } =
+                    await supabaseClient
+
+                        .from(
+                            "properties"
+                        )
+
+                        .update({
+
+                            image_url:
+                                firstImageUrl
+
+                        })
+
+                        .eq(
+                            "id",
+                            newPropertyId
+                        )
+
+                        .eq(
+                            "landlord_id",
+                            landlordId
+                        );
+
+
+                if (
+                    imageUpdateError
+                ) {
+
+                    throw imageUpdateError;
+
+                }
+
+            }
+
+
+
+            /* =========================
+               PAYMENT SUCCESS
+            ========================= */
+
+            message.innerHTML = `
+
+                <p
+                    style="
+                        color:green;
+                        font-weight:bold;
+                        font-size:18px;
+                    "
+                >
+
+                    ✅ KSh 250 payment successful!
+
+                </p>
+
+                <p>
+
+                    Your property has been published
+                    successfully.
+
+                </p>
+
+            `;
+
+
+            saveButton.textContent =
+                "Published ✓";
+
+
+            /* =========================
+               DASHBOARD
+            ========================= */
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "landlord-dashboard.html";
+
+                },
+                1800
+            );
+
+
+        }
+
+
+        catch (error) {
+
+            console.error(
+                "Property save/payment error:",
+                error
+            );
+
+
+            message.innerHTML = `
+
+                <p
+                    style="
+                        color:red;
+                        font-weight:bold;
+                    "
+                >
+
+                    ❌ Operation failed.
+
+                </p>
+
+                <p style="color:red;">
+
+                    ${escapeHtml(
+                        error.message ||
+                        String(error)
+                    )}
+
+                </p>
+
+            `;
+
+
+            saveButton.disabled =
+                false;
+
+
+            saveButton.textContent =
+                editMode
+                ?
+                "Update Property"
+                :
+                "Save Property";
+
+        }
+
+    }
+);
+
+
+
+/* =================================
+   LOGOUT
+================================= */
+
+async function logoutLandlord() {
+
+    try {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+
+/* =================================
+   ESCAPE HTML
+================================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+/* =================================
+   START
+================================= */
+
+loadPropertyForEdit();
+
+</script>
+
+
+</body>
+
+</html>
+```

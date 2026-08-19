@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Tenant Dashboard | NichoLink 254</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =================================
+     TOP NAVIGATION
+================================= -->
+
+<header class="tenant-topbar">
+
+    <div class="tenant-brand">
+
+        <span>NichoLink</span>
+        <strong>254</strong>
+
+    </div>
+
+
+    <nav class="top-navigation">
+
+        <a href="index.html">
+            🏠 Home
+        </a>
+
+        <a href="properties.html">
+            🔎 Properties
+        </a>
+
+        <a href="tenant-dashboard.html"
+           class="active">
+            📊 Dashboard
+        </a>
+
+    </nav>
+
+
+    <div class="tenant-user-area">
+
+        <div class="tenant-user-mini">
+
+            <div class="tenant-avatar"
+                 id="top-avatar">
+
+                T
+
+            </div>
+
+            <div class="tenant-user-info">
+
+                <strong id="top-user-name">
+                    Tenant
+                </strong>
+
+                <span>
+                    Tenant
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="logout-button"
+            onclick="logoutTenant()">
+
+            🚪 Logout
+
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- =================================
+     MAIN DASHBOARD
+================================= -->
+
+<main class="tenant-dashboard">
+
+
+    <!-- =================================
+         WELCOME HEADER
+    ================================= -->
+
+    <section class="tenant-welcome">
+
+        <div>
+
+            <span class="dashboard-label">
+                TENANT PORTAL
+            </span>
+
+            <h1 id="welcome-name">
+                Welcome, Tenant 👋
+            </h1>
+
+            <p>
+                Find your next home, manage your viewing
+                requests and keep your rental journey organized.
+            </p>
+
+        </div>
+
+
+        <a href="properties.html"
+           class="find-home-button">
+
+            🔎 Find a Home
+
+        </a>
+
+    </section>
+
+
+
+    <!-- =================================
+         STATISTICS
+    ================================= -->
+
+    <section class="tenant-stat-grid">
+
+
+        <div class="tenant-stat-card stat-green">
+
+            <div class="stat-icon">
+                🏠
+            </div>
+
+            <div>
+
+                <span>
+                    Available Properties
+                </span>
+
+                <strong id="available-properties">
+                    ...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="tenant-stat-card stat-blue">
+
+            <div class="stat-icon">
+                📅
+            </div>
+
+            <div>
+
+                <span>
+                    My Viewing Requests
+                </span>
+
+                <strong id="my-requests">
+                    ...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="tenant-stat-card stat-orange">
+
+            <div class="stat-icon">
+                ⏳
+            </div>
+
+            <div>
+
+                <span>
+                    Pending Requests
+                </span>
+
+                <strong id="pending-requests">
+                    ...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="tenant-stat-card stat-teal">
+
+            <div class="stat-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <span>
+                    Approved Requests
+                </span>
+
+                <strong id="approved-requests">
+                    ...
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         QUICK NAVIGATION
+    ================================= -->
+
+    <section class="tenant-navigation-section">
+
+
+        <div class="section-heading">
+
+            <span>
+                QUICK NAVIGATION
+            </span>
+
+            <h2>
+                What would you like to do?
+            </h2>
+
+            <p>
+                Choose an option below to manage your rental journey.
+            </p>
+
+        </div>
+
+
+
+        <div class="tenant-navigation-grid">
+
+
+            <!-- FIND PROPERTIES -->
+
+            <a href="properties.html"
+               class="tenant-navigation-card navigation-green">
+
+                <div class="navigation-icon">
+                    🔎
+                </div>
+
+                <div class="navigation-content">
+
+                    <h3>
+                        Find Properties
+                    </h3>
+
+                    <p>
+                        Browse available rental properties
+                        in Kisumu and surrounding areas.
+                    </p>
+
+                    <span class="navigation-link">
+                        Browse Properties →
+                    </span>
+
+                </div>
+
+            </a>
+
+
+
+            <!-- VIEWING REQUESTS -->
+
+            <button
+                type="button"
+                onclick="showRequests()"
+                class="tenant-navigation-card navigation-blue">
+
+                <div class="navigation-icon">
+                    📅
+                </div>
+
+                <div class="navigation-content">
+
+                    <h3>
+                        Viewing Requests
+                    </h3>
+
+                    <p>
+                        Track the properties you have
+                        requested to view.
+                    </p>
+
+                    <span class="navigation-link">
+                        View Requests →
+                    </span>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- SAVED PROPERTIES -->
+
+            <button
+                type="button"
+                onclick="showSaved()"
+                class="tenant-navigation-card navigation-red">
+
+                <div class="navigation-icon">
+                    ❤️
+                </div>
+
+                <div class="navigation-content">
+
+                    <h3>
+                        Saved Properties
+                    </h3>
+
+                    <p>
+                        Quickly access properties
+                        you have saved for later.
+                    </p>
+
+                    <span class="navigation-link">
+                        View Saved →
+                    </span>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- MESSAGES -->
+
+            <button
+                type="button"
+                onclick="showMessages()"
+                class="tenant-navigation-card navigation-purple">
+
+                <div class="navigation-icon">
+                    💬
+                </div>
+
+                <div class="navigation-content">
+
+                    <h3>
+                        Messages
+                    </h3>
+
+                    <p>
+                        Communicate with landlords
+                        about properties.
+                    </p>
+
+                    <span class="navigation-link">
+                        Open Messages →
+                    </span>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- PROFILE -->
+
+            <button
+                type="button"
+                onclick="showProfile()"
+                class="tenant-navigation-card navigation-teal">
+
+                <div class="navigation-icon">
+                    👤
+                </div>
+
+                <div class="navigation-content">
+
+                    <h3>
+                        My Profile
+                    </h3>
+
+                    <p>
+                        View your account and
+                        personal information.
+                    </p>
+
+                    <span class="navigation-link">
+                        View Profile →
+                    </span>
+
+                </div>
+
+            </button>
+
+
+
+            <!-- SETTINGS -->
+
+            <button
+                type="button"
+                onclick="showSettings()"
+                class="tenant-navigation-card navigation-dark">
+
+                <div class="navigation-icon">
+                    ⚙️
+                </div>
+
+                <div class="navigation-content">
+
+                    <h3>
+                        Settings
+                    </h3>
+
+                    <p>
+                        Manage your account
+                        preferences.
+                    </p>
+
+                    <span class="navigation-link">
+                        Open Settings →
+                    </span>
+
+                </div>
+
+            </button>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         VIEWING REQUESTS
+    ================================= -->
+
+    <section class="tenant-content-section"
+             id="requests-section">
+
+
+        <div class="content-section-header">
+
+            <div>
+
+                <span>
+                    ACTIVITY
+                </span>
+
+                <h2>
+                    My Viewing Requests
+                </h2>
+
+                <p>
+                    Track the viewing requests you have submitted.
+                </p>
+
+            </div>
+
+
+            <a href="properties.html"
+               class="small-action-button">
+
+                + New Request
+
+            </a>
+
+        </div>
+
+
+        <div id="requests-list"
+             class="tenant-request-list">
+
+            <div class="dashboard-loading">
+
+                Loading requests...
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         PROFILE
+    ================================= -->
+
+    <section class="tenant-content-section"
+             id="profile-section"
+             style="display:none;">
+
+
+        <div class="content-section-header">
+
+            <div>
+
+                <span>
+                    ACCOUNT
+                </span>
+
+                <h2>
+                    My Profile
+                </h2>
+
+                <p>
+                    Your NichoLink 254 account information.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div id="profile-card"
+             class="tenant-profile-container">
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         SAVED PROPERTIES
+    ================================= -->
+
+    <section class="tenant-content-section"
+             id="saved-section"
+             style="display:none;">
+
+
+        <div class="content-section-header">
+
+            <div>
+
+                <span>
+                    SAVED HOMES
+                </span>
+
+                <h2>
+                    Saved Properties
+                </h2>
+
+                <p>
+                    Properties you have saved for later.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="tenant-empty-card">
+
+            <div class="empty-icon">
+                ❤️
+            </div>
+
+            <h3>
+                No Saved Properties Yet
+            </h3>
+
+            <p>
+                Saved properties will appear here.
+            </p>
+
+            <a href="properties.html"
+               class="find-home-button">
+
+                🔎 Browse Properties
+
+            </a>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         MESSAGES
+    ================================= -->
+
+    <section class="tenant-content-section"
+             id="messages-section"
+             style="display:none;">
+
+
+        <div class="content-section-header">
+
+            <div>
+
+                <span>
+                    COMMUNICATION
+                </span>
+
+                <h2>
+                    Messages
+                </h2>
+
+                <p>
+                    Communicate with property owners.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="tenant-empty-card">
+
+            <div class="empty-icon">
+                💬
+            </div>
+
+            <h3>
+                No Messages Yet
+            </h3>
+
+            <p>
+                Your conversations with landlords
+                will appear here.
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         SETTINGS
+    ================================= -->
+
+    <section class="tenant-content-section"
+             id="settings-section"
+             style="display:none;">
+
+
+        <div class="content-section-header">
+
+            <div>
+
+                <span>
+                    ACCOUNT
+                </span>
+
+                <h2>
+                    Settings
+                </h2>
+
+                <p>
+                    Manage your NichoLink 254 preferences.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="tenant-empty-card">
+
+            <div class="empty-icon">
+                ⚙️
+            </div>
+
+            <h3>
+                Account Settings
+            </h3>
+
+            <p>
+                Additional account settings will be
+                available here.
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================
+         FOOTER
+    ================================= -->
+
+    <footer class="tenant-footer">
+
+        <div>
+
+            <strong>
+                NichoLink
+                <span>254</span>
+            </strong>
+
+            <p>
+                Find your next home with confidence.
+            </p>
+
+        </div>
+
+
+        <p>
+            © 2026 NichoLink 254.
+            All rights reserved.
+        </p>
+
+    </footer>
+
+
+</main>
+
+
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+
+let currentUser = null;
+
+let currentProfile = null;
+
+
+
+/* =================================
+   LOAD TENANT DASHBOARD
+================================= */
+
+async function loadTenantDashboard() {
+
+    try {
+
+
+        const {
+            data: {
+                user
+            },
+            error: authError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (authError) {
+            throw authError;
+        }
+
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        currentUser = user;
+
+
+
+        /* =============================
+           GET PROFILE
+        ============================= */
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+
+                .from("profiles")
+
+                .select(`
+                    id,
+                    full_name,
+                    phone,
+                    email,
+                    account_type,
+                    created_at,
+                    is_active
+                `)
+
+                .eq(
+                    "id",
+                    user.id
+                )
+
+                .maybeSingle();
+
+
+        if (profileError) {
+            throw profileError;
+        }
+
+
+        if (!profile) {
+
+            throw new Error(
+                "Tenant profile not found."
+            );
+
+        }
+
+
+        currentProfile = profile;
+
+
+
+        /* =============================
+           VERIFY TENANT
+        ============================= */
+
+        const accountType =
+            String(
+                profile.account_type || ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        if (accountType !== "tenant") {
+
+            alert(
+                "This dashboard is for tenant accounts."
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        if (profile.is_active === false) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+
+        /* =============================
+           WELCOME
+        ============================= */
+
+        const fullName =
+            profile.full_name ||
+            "Tenant";
+
+
+        document.getElementById(
+            "welcome-name"
+        ).textContent =
+            "Welcome, " +
+            fullName +
+            " 👋";
+
+
+        document.getElementById(
+            "top-user-name"
+        ).textContent =
+            fullName;
+
+
+        const firstLetter =
+            String(fullName)
+                .trim()
+                .charAt(0)
+                .toUpperCase() ||
+            "T";
+
+
+        document.getElementById(
+            "top-avatar"
+        ).textContent =
+            firstLetter;
+
+
+
+        /* =============================
+           LOAD PROPERTIES
+        ============================= */
+
+        const {
+            data: properties,
+            error: propertiesError
+        } =
+            await supabaseClient
+
+                .from("properties")
+
+                .select(`
+                    id,
+                    title,
+                    status
+                `);
+
+
+        if (propertiesError) {
+            throw propertiesError;
+        }
+
+
+        const propertyList =
+            Array.isArray(properties)
+                ? properties
+                : [];
+
+
+        const available =
+            propertyList.filter(
+                property =>
+                    String(
+                        property.status ||
+                        "available"
+                    )
+                    .trim()
+                    .toLowerCase()
+                    ===
+                    "available"
+            ).length;
+
+
+        document.getElementById(
+            "available-properties"
+        ).textContent =
+            available;
+
+
+
+        /* =============================
+           LOAD MY REQUESTS
+        ============================= */
+
+        const {
+            data: requests,
+            error: requestsError
+        } =
+            await supabaseClient
+
+                .from("viewing_requests")
+
+                .select(`
+                    id,
+                    property_id,
+                    tenant_name,
+                    tenant_phone,
+                    viewing_date,
+                    message,
+                    status,
+                    created_at
+                `)
+
+                .eq(
+                    "tenant_phone",
+                    profile.phone
+                )
+
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (requestsError) {
+            throw requestsError;
+        }
+
+
+        const requestList =
+            Array.isArray(requests)
+                ? requests
+                : [];
+
+
+        const pending =
+            requestList.filter(
+                request =>
+                    normalizeStatus(
+                        request.status
+                    ) === "pending"
+            ).length;
+
+
+        const approved =
+            requestList.filter(
+                request =>
+                    normalizeStatus(
+                        request.status
+                    ) === "approved"
+            ).length;
+
+
+        document.getElementById(
+            "my-requests"
+        ).textContent =
+            requestList.length;
+
+
+        document.getElementById(
+            "pending-requests"
+        ).textContent =
+            pending;
+
+
+        document.getElementById(
+            "approved-requests"
+        ).textContent =
+            approved;
+
+
+        displayRequests(
+            requestList,
+            propertyList
+        );
+
+
+        displayProfile(profile);
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Tenant dashboard error:",
+            error
+        );
+
+
+        document.getElementById(
+            "requests-list"
+        ).innerHTML = `
+
+            <div class="tenant-empty-card">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to Load Dashboard
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Unknown error"
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =================================
+   DISPLAY REQUESTS
+================================= */
+
+function displayRequests(
+    requests,
+    properties
+) {
+
+    const container =
+        document.getElementById(
+            "requests-list"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (!requests.length) {
+
+        container.innerHTML = `
+
+            <div class="tenant-empty-card">
+
+                <div class="empty-icon">
+                    📅
+                </div>
+
+                <h3>
+                    No Viewing Requests
+                </h3>
+
+                <p>
+                    You have not submitted
+                    any viewing requests yet.
+                </p>
+
+                <a href="properties.html"
+                   class="find-home-button">
+
+                    🔎 Find a Property
+
+                </a>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    requests.forEach(
+        request => {
+
+
+            const property =
+                properties.find(
+                    item =>
+                        String(item.id)
+                        ===
+                        String(
+                            request.property_id
+                        )
+                );
+
+
+            const propertyTitle =
+                property &&
+                property.title
+                    ? property.title
+                    : "Property";
+
+
+            const status =
+                normalizeStatus(
+                    request.status
+                );
+
+
+            const statusClass =
+                status === "approved"
+                    ? "approved"
+                    : status === "rejected"
+                        ? "rejected"
+                        : "pending";
+
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "tenant-request-card";
+
+
+            card.innerHTML = `
+
+                <div class="request-icon">
+                    🏠
+                </div>
+
+
+                <div class="request-information">
+
+                    <h3>
+                        ${escapeHtml(
+                            propertyTitle
+                        )}
+                    </h3>
+
+
+                    <p>
+
+                        <strong>
+                            Viewing Date:
+                        </strong>
+
+                        ${escapeHtml(
+                            formatDate(
+                                request.viewing_date
+                            )
+                        )}
+
+                    </p>
+
+
+                    <p>
+
+                        <strong>
+                            Message:
+                        </strong>
+
+                        ${escapeHtml(
+                            request.message ||
+                            "No message"
+                        )}
+
+                    </p>
+
+                </div>
+
+
+                <div class="request-status ${statusClass}">
+
+                    ${escapeHtml(
+                        formatStatus(status)
+                    )}
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+        }
+    );
+
+}
+
+
+
+/* =================================
+   DISPLAY PROFILE
+================================= */
+
+function displayProfile(profile) {
+
+    const container =
+        document.getElementById(
+            "profile-card"
+        );
+
+
+    container.innerHTML = `
+
+        <div class="tenant-profile-card">
+
+            <div class="profile-avatar">
+
+                ${escapeHtml(
+                    (
+                        profile.full_name ||
+                        "T"
+                    )
+                    .charAt(0)
+                    .toUpperCase()
+                )}
+
+            </div>
+
+
+            <div class="profile-information">
+
+                <h3>
+                    Account Information
+                </h3>
+
+
+                <div class="profile-row">
+
+                    <span>
+                        Full Name
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            profile.full_name ||
+                            "Not provided"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span>
+                        Phone
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            profile.phone ||
+                            "Not provided"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span>
+                        Email
+                    </span>
+
+                    <strong>
+                        ${escapeHtml(
+                            profile.email ||
+                            "Not provided"
+                        )}
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span>
+                        Account Type
+                    </span>
+
+                    <strong>
+                        Tenant
+                    </strong>
+
+                </div>
+
+
+                <div class="profile-row">
+
+                    <span>
+                        Account Status
+                    </span>
+
+                    <strong class="active-status">
+                        Active
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+
+/* =================================
+   NAVIGATION FUNCTIONS
+================================= */
+
+function showRequests() {
+
+    const section =
+        document.getElementById(
+            "requests-section"
+        );
+
+
+    section.style.display =
+        "block";
+
+
+    section.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+
+function showProfile() {
+
+    const section =
+        document.getElementById(
+            "profile-section"
+        );
+
+
+    section.style.display =
+        "block";
+
+
+    section.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+
+function showSaved() {
+
+    const section =
+        document.getElementById(
+            "saved-section"
+        );
+
+
+    section.style.display =
+        "block";
+
+
+    section.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+
+function showMessages() {
+
+    const section =
+        document.getElementById(
+            "messages-section"
+        );
+
+
+    section.style.display =
+        "block";
+
+
+    section.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+
+function showSettings() {
+
+    const section =
+        document.getElementById(
+            "settings-section"
+        );
+
+
+    section.style.display =
+        "block";
+
+
+    section.scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+
+/* =================================
+   LOGOUT
+================================= */
+
+async function logoutTenant() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+        "login.html";
+
+}
+
+
+
+/* =================================
+   HELPERS
+================================= */
+
+function normalizeStatus(value) {
+
+    return String(
+        value ||
+        "pending"
+    )
+    .trim()
+    .toLowerCase();
+
+}
+
+
+
+function formatStatus(status) {
+
+    const normalized =
+        normalizeStatus(status);
+
+
+    if (normalized === "approved") {
+        return "Approved";
+    }
+
+
+    if (normalized === "rejected") {
+        return "Rejected";
+    }
+
+
+    return "Pending";
+
+}
+
+
+
+function formatDate(value) {
+
+    if (!value) {
+        return "Not specified";
+    }
+
+
+    const date =
+        new Date(
+            value +
+            (
+                String(value).includes("T")
+                    ? ""
+                    : "T00:00:00"
+            )
+        );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "Not specified";
+
+    }
+
+
+    return date.toLocaleDateString(
+        "en-KE",
+        {
+            day: "numeric",
+            month: "short",
+            year: "numeric"
+        }
+    );
+
+}
+
+
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+/* =================================
+   START
+================================= */
+
+loadTenantDashboard();
+
+</script>
+
+
+</body>
+
+</html>

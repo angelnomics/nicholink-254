@@ -1,0 +1,1252 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Property Details | NichoLink 254</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<header class="navbar">
+
+    <div class="logo">
+
+        <span>NichoLink</span>
+        <strong>254</strong>
+
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+        <a href="index.html#how-it-works">
+            How It Works
+        </a>
+
+        <a href="index.html#contact">
+            Contact
+        </a>
+
+    </nav>
+
+
+    <a href="properties.html"
+       class="nav-button">
+
+        Property Search
+
+    </a>
+
+</header>
+
+
+
+<!-- =========================
+     PROPERTY DETAILS
+========================= -->
+
+<main class="property-details-page">
+
+
+    <a href="properties.html"
+       class="back-link">
+
+        ← Back to Properties
+
+    </a>
+
+
+
+    <!-- LOADING -->
+
+    <div id="loading-property"
+         class="property-loading">
+
+        <h2>
+            Loading property...
+        </h2>
+
+        <p>
+            Please wait.
+        </p>
+
+    </div>
+
+
+
+    <!-- ERROR -->
+
+    <div id="property-error"
+         class="property-error"
+         style="display:none;">
+
+        <h2>
+            Property Not Found
+        </h2>
+
+        <p>
+            We couldn't find the property you're looking for.
+        </p>
+
+        <a href="properties.html"
+           class="details-button">
+
+            Browse Properties
+
+        </a>
+
+    </div>
+
+
+
+    <!-- PROPERTY CONTENT -->
+
+    <section id="property-content"
+             style="display:none;">
+
+
+        <!-- =========================
+             IMAGE GALLERY
+        ========================= -->
+
+        <div class="property-gallery">
+
+
+            <div class="property-main-image">
+
+                <img id="property-image"
+                     src=""
+                     alt="Property image">
+
+                <span id="property-status"
+                      class="property-status">
+
+                    Available
+
+                </span>
+
+            </div>
+
+
+            <div id="property-gallery"
+                 class="property-gallery-thumbnails">
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =========================
+             PROPERTY INFORMATION
+        ========================= -->
+
+        <div class="property-information">
+
+
+            <div class="property-heading">
+
+
+                <div>
+
+                    <p class="property-label">
+                        PROPERTY FOR RENT
+                    </p>
+
+
+                    <h1 id="property-title">
+                        Property
+                    </h1>
+
+
+                    <p id="property-location"
+                       class="property-location">
+
+                    </p>
+
+                </div>
+
+
+
+                <div class="property-rent">
+
+                    <strong id="property-rent">
+                        KSh 0
+                    </strong>
+
+                    <span>
+                        / month
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- FEATURES -->
+
+            <div class="property-features">
+
+
+                <div>
+
+                    <strong id="property-bedrooms">
+                        0
+                    </strong>
+
+                    <span>
+                        Bedrooms
+                    </span>
+
+                </div>
+
+
+
+                <div>
+
+                    <strong id="property-bathrooms">
+                        0
+                    </strong>
+
+                    <span>
+                        Bathrooms
+                    </span>
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- DESCRIPTION -->
+
+            <div class="property-section">
+
+                <h2>
+                    About this property
+                </h2>
+
+
+                <p id="property-description">
+                    No description available.
+                </p>
+
+            </div>
+
+
+
+            <!-- AMENITIES -->
+
+            <div class="property-section">
+
+                <h2>
+                    Amenities
+                </h2>
+
+
+                <div id="property-amenities"
+                     class="amenities-list">
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 CONTACT
+            ========================= -->
+
+            <div class="property-contact">
+
+
+                <h2>
+                    Interested in this property?
+                </h2>
+
+
+                <p>
+                    Contact the property owner for more
+                    information or to arrange a viewing.
+                </p>
+
+
+
+                <div class="contact-buttons">
+
+
+                    <a id="whatsapp-button"
+                       href="#"
+                       target="_blank"
+                       class="whatsapp-button">
+
+                        💬 WhatsApp Landlord
+
+                    </a>
+
+
+
+                    <button
+                        class="contact-button"
+                        onclick="contactLandlord()">
+
+                        📞 Contact Landlord
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =========================
+                 REQUEST VIEWING
+            ========================= -->
+
+            <div class="property-section"
+                 id="viewing-request-section">
+
+
+                <h2>
+                    Request a Viewing
+                </h2>
+
+
+                <p>
+                    Interested in viewing this property?
+                    Fill in the form below and the landlord
+                    can contact you.
+                </p>
+
+
+
+                <form
+                    id="viewing-request-form"
+                    onsubmit="submitViewingRequest(event)">
+
+
+                    <!-- NAME -->
+
+                    <div class="search-field">
+
+                        <label for="tenant-name">
+                            Full Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="tenant-name"
+                            placeholder="Enter your full name"
+                            required>
+
+                    </div>
+
+
+
+                    <!-- PHONE -->
+
+                    <div class="search-field">
+
+                        <label for="tenant-phone">
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="tenant-phone"
+                            placeholder="e.g. 0795629432"
+                            required>
+
+                    </div>
+
+
+
+                    <!-- DATE -->
+
+                    <div class="search-field">
+
+                        <label for="viewing-date">
+                            Preferred Viewing Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="viewing-date">
+
+                    </div>
+
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="search-field">
+
+                        <label for="viewing-message">
+                            Message
+                        </label>
+
+                        <textarea
+                            id="viewing-message"
+                            rows="4"
+                            placeholder="Add any information for the landlord..."></textarea>
+
+                    </div>
+
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        type="submit"
+                        class="details-button">
+
+                        📅 Request Viewing
+
+                    </button>
+
+
+                </form>
+
+
+
+                <!-- SUCCESS -->
+
+                <div
+                    id="viewing-success"
+                    style="display:none;">
+
+                    <h3>
+                        ✅ Viewing Request Sent
+                    </h3>
+
+                    <p>
+                        Your viewing request has been
+                        submitted successfully.
+                    </p>
+
+                </div>
+
+
+
+                <!-- ERROR -->
+
+                <div
+                    id="viewing-error"
+                    style="display:none;">
+
+                    <p>
+                        ❌ Unable to submit your request.
+                        Please try again.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer id="contact">
+
+
+    <div class="footer-content">
+
+
+        <div>
+
+            <h2>
+                NichoLink
+                <strong>254</strong>
+            </h2>
+
+
+            <p>
+                Connecting tenants with properties
+                across Kenya.
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Quick Links
+            </h3>
+
+
+            <a href="index.html">
+                Home
+            </a>
+
+
+            <a href="properties.html">
+                Properties
+            </a>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Contact
+            </h3>
+
+
+            <p>
+                📞 0795629436
+            </p>
+
+
+            <p>
+                💬 WhatsApp: 0795629432
+            </p>
+
+
+            <p>
+                ✉️ nicholink254@gmail.com
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="copyright">
+
+        © 2026 NichoLink 254.
+        All Rights Reserved.
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =========================
+     SUPABASE
+========================= -->
+
+<script src="supabase.js"></script>
+
+
+
+<!-- =========================
+     PROPERTY DETAILS SCRIPT
+========================= -->
+
+<script>
+
+
+/* =================================
+   GET PROPERTY ID
+================================= */
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+
+const propertyId =
+    urlParams.get("id");
+
+
+
+/* =================================
+   LOAD PROPERTY
+================================= */
+
+async function loadProperty() {
+
+
+    const loading =
+        document.getElementById(
+            "loading-property"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "property-error"
+        );
+
+
+    const content =
+        document.getElementById(
+            "property-content"
+        );
+
+
+    if (!propertyId) {
+
+        loading.style.display =
+            "none";
+
+        errorBox.style.display =
+            "block";
+
+        return;
+
+    }
+
+
+
+    /* GET PROPERTY */
+
+    const {
+
+        data: property,
+        error
+
+    } = await supabaseClient
+
+        .from("properties")
+
+        .select("*")
+
+        .eq(
+            "id",
+            propertyId
+        )
+
+        .single();
+
+
+
+    /* ERROR */
+
+    if (error || !property) {
+
+        console.error(
+            "Property error:",
+            error
+        );
+
+
+        loading.style.display =
+            "none";
+
+
+        errorBox.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    /* SHOW CONTENT */
+
+    loading.style.display =
+        "none";
+
+
+    content.style.display =
+        "block";
+
+
+
+    /* =================================
+       BASIC INFORMATION
+    ================================= */
+
+    document.getElementById(
+        "property-title"
+    ).textContent =
+
+        property.title ||
+        "Property";
+
+
+
+    document.getElementById(
+        "property-location"
+    ).textContent =
+
+        "📍 " +
+
+        (
+            property.location ||
+            "Location not specified"
+        );
+
+
+
+    document.getElementById(
+        "property-rent"
+    ).textContent =
+
+        "KSh " +
+
+        Number(
+            property.rent || 0
+        ).toLocaleString();
+
+
+
+    document.getElementById(
+        "property-bedrooms"
+    ).textContent =
+
+        property.bedrooms || 0;
+
+
+
+    document.getElementById(
+        "property-bathrooms"
+    ).textContent =
+
+        property.bathrooms || 0;
+
+
+
+    document.getElementById(
+        "property-description"
+    ).textContent =
+
+        property.description ||
+
+        "No description available.";
+
+
+
+    /* =================================
+       STATUS
+    ================================= */
+
+    document.getElementById(
+        "property-status"
+    ).textContent =
+
+        property.status ||
+
+        "Available";
+
+
+
+    /* =================================
+       MAIN IMAGE
+    ================================= */
+
+    const mainImage =
+        document.getElementById(
+            "property-image"
+        );
+
+
+    if (property.image_url) {
+
+        mainImage.src =
+            property.image_url;
+
+
+        mainImage.alt =
+            property.title ||
+            "Property image";
+
+    }
+
+
+
+    /* =================================
+       GALLERY
+    ================================= */
+
+    await loadPropertyGallery();
+
+
+
+    /* =================================
+       AMENITIES
+    ================================= */
+
+    const amenitiesBox =
+        document.getElementById(
+            "property-amenities"
+        );
+
+
+    amenitiesBox.innerHTML =
+        "";
+
+
+    if (property.amenities) {
+
+
+        let amenities =
+            property.amenities;
+
+
+        if (
+            typeof amenities ===
+            "string"
+        ) {
+
+            amenities =
+
+                amenities
+                    .split(",")
+                    .map(
+                        item =>
+                            item.trim()
+                    )
+                    .filter(
+                        item =>
+                            item.length > 0
+                    );
+
+        }
+
+
+
+        if (
+            Array.isArray(
+                amenities
+            )
+        ) {
+
+            amenities.forEach(
+                function(amenity) {
+
+
+                    const item =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    item.className =
+                        "amenity-item";
+
+
+                    item.textContent =
+                        "✓ " +
+                        amenity;
+
+
+                    amenitiesBox.appendChild(
+                        item
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+
+    if (
+        amenitiesBox.children.length ===
+        0
+    ) {
+
+        amenitiesBox.innerHTML =
+            "<span>No amenities listed.</span>";
+
+    }
+
+
+
+    /* =================================
+       WHATSAPP
+    ================================= */
+
+    const whatsapp =
+        document.getElementById(
+            "whatsapp-button"
+        );
+
+
+    const phone =
+
+        property.landlord_phone ||
+
+        property.phone ||
+
+        "254795629432";
+
+
+    const cleanPhone =
+
+        phone
+            .toString()
+            .replace(
+                /[^0-9]/g,
+                ""
+            );
+
+
+    whatsapp.href =
+
+        "https://wa.me/" +
+        cleanPhone +
+        "?text=" +
+
+        encodeURIComponent(
+
+            "Hello, I am interested in the property: " +
+
+            (
+                property.title ||
+                "Property"
+            ) +
+
+            " in " +
+
+            (
+                property.location ||
+                ""
+            )
+
+        );
+
+
+}
+
+
+
+/* =================================
+   PROPERTY IMAGE GALLERY
+================================= */
+
+async function loadPropertyGallery() {
+
+
+    const gallery =
+        document.getElementById(
+            "property-gallery"
+        );
+
+
+    const mainImage =
+        document.getElementById(
+            "property-image"
+        );
+
+
+    const {
+
+        data: images,
+        error
+
+    } = await supabaseClient
+
+        .from("property_images")
+
+        .select("*")
+
+        .eq(
+            "property_id",
+            propertyId
+        )
+
+        .order(
+            "created_at",
+            {
+                ascending: true
+            }
+        );
+
+
+
+    if (error) {
+
+        console.error(
+            "Gallery error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+
+    if (
+        !images ||
+        images.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+
+    mainImage.src =
+        images[0].image_url;
+
+
+    gallery.innerHTML =
+        "";
+
+
+
+    images.forEach(
+        function(image) {
+
+
+            const thumbnail =
+                document.createElement(
+                    "img"
+                );
+
+
+            thumbnail.src =
+                image.image_url;
+
+
+            thumbnail.alt =
+                "Property photo";
+
+
+            thumbnail.className =
+                "gallery-thumbnail";
+
+
+            thumbnail.onclick =
+                function() {
+
+                    mainImage.src =
+                        image.image_url;
+
+                };
+
+
+            gallery.appendChild(
+                thumbnail
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =================================
+   SUBMIT VIEWING REQUEST
+================================= */
+
+async function submitViewingRequest(event) {
+
+    event.preventDefault();
+
+
+    const form =
+        document.getElementById(
+            "viewing-request-form"
+        );
+
+
+    const success =
+        document.getElementById(
+            "viewing-success"
+        );
+
+
+    const errorBox =
+        document.getElementById(
+            "viewing-error"
+        );
+
+
+    const name =
+        document.getElementById(
+            "tenant-name"
+        ).value.trim();
+
+
+    const phone =
+        document.getElementById(
+            "tenant-phone"
+        ).value.trim();
+
+
+    const viewingDate =
+        document.getElementById(
+            "viewing-date"
+        ).value;
+
+
+    const message =
+        document.getElementById(
+            "viewing-message"
+        ).value.trim();
+
+
+
+    /* HIDE OLD MESSAGES */
+
+    success.style.display =
+        "none";
+
+    errorBox.style.display =
+        "none";
+
+
+
+    /* SUBMIT TO SUPABASE */
+
+    const {
+
+        error
+
+    } = await supabaseClient
+
+        .from("viewing_requests")
+
+        .insert([
+
+            {
+
+                property_id:
+                    propertyId,
+
+                tenant_name:
+                    name,
+
+                tenant_phone:
+                    phone,
+
+                viewing_date:
+                    viewingDate || null,
+
+                message:
+                    message || null,
+
+                status:
+                    "Pending"
+
+            }
+
+        ]);
+
+
+
+    /* ERROR */
+
+    if (error) {
+
+        console.error(
+            "Viewing request error:",
+            error
+        );
+
+
+        errorBox.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+
+    /* SUCCESS */
+
+    form.reset();
+
+
+    form.style.display =
+        "none";
+
+
+    success.style.display =
+        "block";
+
+}
+
+
+
+/* =================================
+   CONTACT LANDLORD
+================================= */
+
+function contactLandlord() {
+
+
+    const phone =
+        "254795629436";
+
+
+    window.location.href =
+        "tel:+" +
+        phone;
+
+}
+
+
+
+/* =================================
+   START
+================================= */
+
+loadProperty();
+
+
+</script>
+
+
+</body>
+
+</html>
+```

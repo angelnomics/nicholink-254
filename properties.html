@@ -1,0 +1,1029 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Property Search | NichoLink 254</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<!-- ================================
+     NAVIGATION
+================================ -->
+
+<header class="navbar">
+
+    <div class="logo">
+
+        <span>NichoLink</span>
+        <strong>254</strong>
+
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+        <a href="index.html#how-it-works">
+            How It Works
+        </a>
+
+        <a href="index.html#contact">
+            Contact
+        </a>
+
+    </nav>
+
+
+    <a href="properties.html"
+       class="nav-button">
+
+        Property Search
+
+    </a>
+
+</header>
+
+
+
+<!-- ================================
+     PAGE HEADER
+================================ -->
+
+<section class="properties-header">
+
+    <div>
+
+        <p>
+            NICHO LINK 254
+        </p>
+
+        <h1>
+            Find Your Next Home
+        </h1>
+
+        <span>
+            Search through available properties
+            and find a place that suits your needs.
+        </span>
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================
+     SEARCH AREA
+================================ -->
+
+<section class="property-search-area">
+
+    <div class="property-search-box">
+
+
+        <!-- Location -->
+
+        <div class="search-field">
+
+            <label for="location">
+                Location
+            </label>
+
+            <select id="location">
+
+                <option value="">
+                    Any Location
+                </option>
+
+                <option value="Kisumu">
+                    Kisumu
+                </option>
+
+                <option value="Mamboleo">
+                    Mamboleo
+                </option>
+
+                <option value="Milimani">
+                    Milimani
+                </option>
+
+                <option value="Nyalenda">
+                    Nyalenda
+                </option>
+
+                <option value="Kondele">
+                    Kondele
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- Bedrooms -->
+
+        <div class="search-field">
+
+            <label for="bedrooms">
+                Bedrooms
+            </label>
+
+            <select id="bedrooms">
+
+                <option value="">
+                    Any Bedrooms
+                </option>
+
+                <option value="1">
+                    1 Bedroom
+                </option>
+
+                <option value="2">
+                    2 Bedrooms
+                </option>
+
+                <option value="3">
+                    3 Bedrooms
+                </option>
+
+                <option value="4">
+                    4+ Bedrooms
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- Maximum Rent -->
+<div class="search-field">
+
+    <label for="sort">
+        Sort By
+    </label>
+
+    <select id="sort">
+
+        <option value="newest">
+            Newest Listings
+        </option>
+
+        <option value="low">
+            Lowest Rent
+        </option>
+
+        <option value="high">
+            Highest Rent
+        </option>
+
+    </select>
+
+</div>
+        <div class="search-field">
+
+            <label for="price">
+                Maximum Rent
+            </label>
+
+            <select id="price">
+
+                <option value="">
+                    Any Price
+                </option>
+
+                <option value="5000">
+                    KSh 5,000
+                </option>
+
+                <option value="10000">
+                    KSh 10,000
+                </option>
+
+                <option value="15000">
+                    KSh 15,000
+                </option>
+
+                <option value="20000">
+                    KSh 20,000
+                </option>
+
+                <option value="30000">
+                    KSh 30,000
+                </option>
+
+                <option value="50000">
+                    KSh 50,000
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- Search -->
+
+        <button
+            type="button"
+            class="search-button"
+            onclick="searchProperties()">
+
+            🔍 Search
+
+        </button>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- ================================
+     PROPERTIES
+================================ -->
+
+<main class="properties-container">
+
+
+    <div class="properties-top">
+
+
+        <div>
+
+            <p class="properties-label">
+                AVAILABLE PROPERTIES
+            </p>
+
+            <h2>
+                Properties For Rent
+            </h2>
+
+        </div>
+
+
+        <span id="property-count">
+
+            Loading properties...
+
+        </span>
+
+
+    </div>
+
+
+
+    <div
+        class="properties-grid"
+        id="properties-grid">
+
+        <div class="loading-properties">
+
+            <h3>
+                Loading properties...
+            </h3>
+
+            <p>
+                Please wait while we find
+                available properties.
+            </p>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- No Results -->
+
+    <div
+        id="no-results"
+        class="no-results"
+        style="display:none;">
+
+        <h3>
+            No properties found
+        </h3>
+
+        <p>
+            Try changing your search filters.
+        </p>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- ================================
+     FOOTER
+================================ -->
+
+<footer id="contact">
+
+    <div class="footer-content">
+
+
+        <div>
+
+            <h2>
+                NichoLink <strong>254</strong>
+            </h2>
+
+            <p>
+                Connecting tenants with properties
+                across Kenya.
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Quick Links
+            </h3>
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="properties.html">
+                Properties
+            </a>
+
+            <a href="index.html#how-it-works">
+                How It Works
+            </a>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Contact
+            </h3>
+
+            <p>
+                📞 0795629436
+            </p>
+
+            <p>
+                💬 WhatsApp: 0795629432
+            </p>
+
+            <p>
+                ✉️ nicholink254@gmail.com
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+
+    <div class="copyright">
+
+        © 2026 NichoLink 254.
+        All Rights Reserved.
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- ================================
+     SUPABASE
+================================ -->
+
+<script src="supabase.js"></script>
+
+
+
+<!-- ================================
+     PROPERTY JAVASCRIPT
+================================ -->
+
+<script>
+
+/* =================================
+   GLOBAL PROPERTY DATA
+================================= */
+
+let allProperties = [];
+
+
+
+/* =================================
+   LOAD ALL PROPERTIES
+================================= */
+
+async function loadProperties() {
+
+
+    const grid =
+        document.getElementById(
+            "properties-grid"
+        );
+
+
+    const count =
+        document.getElementById(
+            "property-count"
+        );
+
+
+    const noResults =
+        document.getElementById(
+            "no-results"
+        );
+
+
+    grid.innerHTML = `
+
+        <div class="loading-properties">
+
+            <h3>
+                Loading properties...
+            </h3>
+
+            <p>
+                Please wait.
+            </p>
+
+        </div>
+
+    `;
+
+
+
+    const {
+
+        data,
+        error
+
+    } = await supabaseClient
+
+        .from("properties")
+
+        .select("*")
+
+        .order(
+            "created_at",
+            {
+                ascending: false
+            }
+        );
+
+
+
+    if (error) {
+
+
+        console.error(
+            "Supabase error:",
+            error
+        );
+
+
+        grid.innerHTML = `
+
+            <div class="loading-properties">
+
+                <h3>
+                    Unable to load properties
+                </h3>
+
+                <p>
+                    ${error.message}
+                </p>
+
+            </div>
+
+        `;
+
+
+        count.textContent =
+            "Unable to load properties";
+
+
+        return;
+
+    }
+
+
+
+    allProperties =
+        data || [];
+
+
+    noResults.style.display =
+        "none";
+
+
+    displayProperties(
+        allProperties
+    );
+
+}
+
+
+
+/* =================================
+   DISPLAY PROPERTIES
+================================= */
+
+function displayProperties(
+    properties
+) {
+
+
+    const grid =
+        document.getElementById(
+            "properties-grid"
+        );
+
+
+    const count =
+        document.getElementById(
+            "property-count"
+        );
+
+
+    const noResults =
+        document.getElementById(
+            "no-results"
+        );
+
+
+    grid.innerHTML =
+        "";
+
+
+    count.textContent =
+        properties.length +
+        (
+            properties.length === 1
+            ? " property found"
+            : " properties found"
+        );
+
+
+
+    if (
+        properties.length === 0
+    ) {
+
+
+        noResults.style.display =
+            "block";
+
+
+        return;
+
+    }
+
+
+    noResults.style.display =
+        "none";
+
+
+
+    properties.forEach(
+        function(property) {
+
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+
+            card.className =
+                "listing-card";
+
+
+
+            /* =========================
+               PROPERTY DATA
+            ========================= */
+
+            const image =
+                property.image_url
+                ?
+                property.image_url.trim()
+                :
+                "";
+
+
+            const title =
+                property.title ||
+                "Property";
+
+
+            const location =
+                property.location ||
+                "Location not specified";
+
+
+            const rent =
+                Number(
+                    property.rent || 0
+                ).toLocaleString();
+
+
+            const bedrooms =
+                Number(
+                    property.bedrooms || 0
+                );
+
+
+            const bathrooms =
+                Number(
+                    property.bathrooms || 0
+                );
+
+
+            const status =
+                property.status ||
+                "Available";
+
+
+
+            /* =========================
+               STATUS
+            ========================= */
+
+            const statusClass =
+                status
+                    .toLowerCase()
+                    .replace(
+                        /\s+/g,
+                        "-"
+                    );
+
+
+
+            /* =========================
+               CARD
+            ========================= */
+
+            card.innerHTML = `
+
+                <div class="listing-image">
+
+
+                    ${
+                        image
+
+                        ?
+
+                        `<img
+                            src="${image}"
+                            alt="${escapeHtml(title)}"
+                            class="property-card-image"
+                            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                        >
+
+                        <div
+                            class="property-image-placeholder"
+                            style="display:none;">
+
+                            No image available
+
+                        </div>`
+
+                        :
+
+                        `<div
+                            class="property-image-placeholder">
+
+                            No image available
+
+                        </div>`
+                    }
+
+
+                    <span
+                        class="available-badge ${statusClass}">
+
+                        ${escapeHtml(status)}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="listing-content">
+
+
+                    <h3>
+
+                        ${escapeHtml(title)}
+
+                    </h3>
+
+
+
+                    <p class="listing-location">
+
+                        📍
+                        ${escapeHtml(location)}
+
+                    </p>
+
+
+
+                    <div class="listing-features">
+
+
+                        <span>
+
+                            🛏
+                            ${bedrooms}
+                            Bedroom${bedrooms === 1 ? "" : "s"}
+
+                        </span>
+
+
+
+                        <span>
+
+                            🚿
+                            ${bathrooms}
+                            Bath${bathrooms === 1 ? "" : "s"}
+
+                        </span>
+
+
+                    </div>
+
+
+
+                    <div class="listing-bottom">
+
+
+                        <strong>
+
+                            KSh ${rent}
+
+                            <small>
+                                / month
+                            </small>
+
+                        </strong>
+
+
+
+                        <a
+                            href="property-details.html?id=${encodeURIComponent(property.id)}"
+                            class="details-button">
+
+                            View Details
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(
+                card
+            );
+
+
+        }
+    );
+
+}
+
+
+
+/* =================================
+   SEARCH PROPERTIES
+================================= */
+
+function searchProperties() {
+
+    const location =
+        document.getElementById("location").value.trim();
+
+    const bedroomsValue =
+        document.getElementById("bedrooms").value;
+
+    const maxPrice =
+        document.getElementById("price").value;
+
+    const sort =
+        document.getElementById("sort").value;
+
+
+    let filtered = [...allProperties];
+
+
+    /* ONLY AVAILABLE */
+
+    filtered = filtered.filter(
+        function(property) {
+
+            return (
+                (
+                    property.status ||
+                    "Available"
+                )
+                .toLowerCase()
+                ===
+                "available"
+            );
+
+        }
+    );
+
+
+    /* LOCATION */
+
+    if (location) {
+
+        filtered = filtered.filter(
+            function(property) {
+
+                return (
+                    property.location &&
+                    property.location
+                        .toLowerCase()
+                        .includes(
+                            location.toLowerCase()
+                        )
+                );
+
+            }
+        );
+
+    }
+
+
+    /* BEDROOMS */
+
+    if (bedroomsValue) {
+
+        const requestedBedrooms =
+            Number(bedroomsValue);
+
+        filtered = filtered.filter(
+            function(property) {
+
+                const propertyBedrooms =
+                    Number(
+                        property.bedrooms || 0
+                    );
+
+                if (requestedBedrooms >= 4) {
+
+                    return propertyBedrooms >= 4;
+
+                }
+
+                return (
+                    propertyBedrooms ===
+                    requestedBedrooms
+                );
+
+            }
+        );
+
+    }
+
+
+    /* MAXIMUM RENT */
+
+    if (maxPrice) {
+
+        const maximum =
+            Number(maxPrice);
+
+        filtered = filtered.filter(
+            function(property) {
+
+                return (
+                    Number(
+                        property.rent || 0
+                    )
+                    <=
+                    maximum
+                );
+
+            }
+        );
+
+    }
+
+
+    /* SORT */
+
+    if (sort === "low") {
+
+        filtered.sort(
+            function(a, b) {
+
+                return (
+                    Number(a.rent || 0) -
+                    Number(b.rent || 0)
+                );
+
+            }
+        );
+
+    }
+
+
+    else if (sort === "high") {
+
+        filtered.sort(
+            function(a, b) {
+
+                return (
+                    Number(b.rent || 0) -
+                    Number(a.rent || 0)
+                );
+
+            }
+        );
+
+    }
+
+
+    else {
+
+        /* NEWEST */
+
+        filtered.sort(
+            function(a, b) {
+
+                return (
+                    new Date(b.created_at || 0) -
+                    new Date(a.created_at || 0)
+                );
+
+            }
+        );
+
+    }
+
+
+    displayProperties(filtered);
+
+}
+
+
+
+/* =================================
+   START PAGE
+================================= */
+
+loadProperties();
+
+</script>
+
+
+</body>
+
+</html>
+```

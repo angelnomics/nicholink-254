@@ -1,0 +1,28 @@
+# Environment and secret files
+.env
+.env.*
+!.env.example
+
+# Node / package files if added later
+node_modules/
+
+# Build/output folders
+dist/
+build/
+
+# Local editor/system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Local backups
+*.bak
+*.backup
