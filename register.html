@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,50 +5,183 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <title>Register | NichoLink 254</title>
+    <title>Create Account | NichoLink 254</title>
 
     <link rel="stylesheet" href="style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
     <style>
 
-        /* =========================================
-           NICHO LINK 254 REGISTRATION PAGE
-        ========================================= */
+        /* =====================================================
+           NICHO LINK 254
+           PROFESSIONAL REGISTRATION PAGE
+        ===================================================== */
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
 
         .register-page {
-    min-height: calc(100vh - 75px);
 
-    position: relative;
+            min-height: 100vh;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+            position: relative;
 
-    padding: 60px 20px;
+            display: flex;
 
-    overflow: hidden;
+            align-items: center;
 
-    background-image:
-        linear-gradient(
-            rgba(255, 255, 255, 0.45),
-            rgba(255, 255, 255, 0.45)
-        ),
-        url("images/Nicholink_254_logo.png");
+            justify-content: center;
 
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
+            padding: 90px 20px 50px;
+
+            overflow: hidden;
+
+            box-sizing: border-box;
+
+            background:
+
+                radial-gradient(
+                    circle at 15% 20%,
+                    rgba(0, 132, 61, 0.18),
+                    transparent 32%
+                ),
+
+                radial-gradient(
+                    circle at 85% 80%,
+                    rgba(0, 132, 61, 0.10),
+                    transparent 30%
+                ),
+
+                linear-gradient(
+                    135deg,
+                    #14213D 0%,
+                    #1C2945 45%,
+                    #EEF2F0 100%
+                );
+
+        }
 
 
-        /* =========================================
+
+        /* =====================================================
+           BACKGROUND PATTERN
+        ===================================================== */
+
+        .register-page::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.04) 25%,
+                    transparent 25%
+                );
+
+            background-size: 40px 40px;
+
+            opacity: 0.35;
+
+            pointer-events: none;
+
+        }
+
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .register-navbar {
+
+            position: fixed;
+
+            top: 0;
+
+            left: 0;
+
+            right: 0;
+
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-end;
+
+            padding: 0 35px;
+
+            background:
+                rgba(255,255,255,0.97);
+
+            border-bottom:
+                1px solid #E5E7EB;
+
+            box-shadow:
+                0 4px 20px
+                rgba(15,23,42,0.06);
+
+            z-index: 20;
+
+        }
+
+
+
+        .register-navbar nav {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 28px;
+
+        }
+
+
+
+        .register-navbar nav a {
+
+            color: #14213D;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            transition:
+                color 0.2s ease;
+
+        }
+
+
+
+        .register-navbar nav a:hover {
+
+            color: #00843D;
+
+        }
+
+
+
+        /* =====================================================
            REGISTRATION CARD
-        ========================================= */
+        ===================================================== */
 
         .register-card {
 
@@ -59,257 +191,491 @@
 
             position: relative;
 
-            z-index: 2;
+            z-index: 10;
+
+            margin-top: 20px;
+
+            padding: 42px;
+
+            box-sizing: border-box;
 
             background:
-                rgba(255, 255, 255, 0.96);
+                rgba(255,255,255,0.98);
 
-            padding: 38px;
+            border:
+                1px solid
+                rgba(255,255,255,0.8);
 
             border-radius: 20px;
 
-            border: 1px solid
-                rgba(255, 255, 255, 0.8);
-
             box-shadow:
-                0 25px 70px
-                rgba(0, 0, 0, 0.18);
+                0 30px 80px
+                rgba(0,0,0,0.25);
 
-            backdrop-filter: blur(8px);
-
-            -webkit-backdrop-filter: blur(8px);
         }
 
+
+
+        /* =====================================================
+           CARD HEADER
+        ===================================================== */
+
+        .register-card-header {
+
+            text-align: center;
+
+            margin-bottom: 30px;
+
+        }
+
+
+
+        /* =====================================================
+           BRAND MARK
+        ===================================================== */
+
+        .register-card-header .brand-mark {
+
+            width: 58px;
+
+            height: 58px;
+
+            margin:
+                0 auto 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                #00843D;
+
+            color:
+                #FFFFFF;
+
+            font-size: 20px;
+
+            font-weight: 900;
+
+            letter-spacing: -1px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(0,132,61,0.25);
+
+        }
+
+
+
+        /* =====================================================
+           TITLE
+        ===================================================== */
 
         .register-card h1 {
 
-            margin-top: 0;
+            margin:
+                0 0 8px;
 
-            margin-bottom: 8px;
+            color:
+                #14213D;
 
-            color: #172033;
+            font-size:
+                30px;
 
-            font-size: 32px;
+            font-weight:
+                850;
 
-            line-height: 1.2;
+            line-height:
+                1.2;
+
         }
+
 
 
         .register-intro {
 
-            color: #718096;
+            margin:
+                0;
 
-            margin-bottom: 30px;
+            color:
+                #667085;
 
-            font-size: 15px;
+            font-size:
+                14px;
+
+            line-height:
+                1.6;
+
         }
 
 
-        /* =========================================
-           FORM
-        ========================================= */
+
+        /* =====================================================
+           FORM LABELS
+        ===================================================== */
 
         .register-card label {
 
-            display: block;
+            display:
+                block;
 
-            color: #27352e;
+            margin-bottom:
+                7px;
 
-            font-size: 14px;
+            color:
+                #344054;
 
-            font-weight: 700;
+            font-size:
+                13px;
 
-            margin-bottom: 7px;
+            font-weight:
+                800;
+
         }
 
+
+
+        /* =====================================================
+           FORM INPUTS
+        ===================================================== */
 
         .register-card input,
         .register-card select {
 
-            width: 100%;
+            width:
+                100%;
 
-            padding: 14px;
+            height:
+                48px;
 
-            margin-bottom: 18px;
+            padding:
+                0 14px;
 
-            border: 1px solid #d9e0dc;
+            margin-bottom:
+                18px;
 
-            border-radius: 10px;
+            box-sizing:
+                border-box;
 
-            background: #ffffff;
+            border:
+                1px solid #D0D5DD;
 
-            color: #172033;
+            border-radius:
+                10px;
 
-            font-family: inherit;
+            background:
+                #FFFFFF;
 
-            font-size: 14px;
+            color:
+                #14213D;
 
-            outline: none;
+            font-family:
+                inherit;
 
-            transition: 0.2s ease;
+            font-size:
+                14px;
 
-            box-sizing: border-box;
+            outline:
+                none;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+
         }
+
+
+
+        .register-card input::placeholder {
+
+            color:
+                #98A2B3;
+
+        }
+
 
 
         .register-card input:focus,
         .register-card select:focus {
 
-            border-color: #00843d;
+            border-color:
+                #00843D;
 
             box-shadow:
                 0 0 0 3px
-                rgba(0, 132, 61, 0.10);
+                rgba(0,132,61,0.10);
+
         }
+
 
 
         .register-card select {
 
-            margin-bottom: 25px;
+            cursor:
+                pointer;
 
-            cursor: pointer;
         }
 
 
-        /* =========================================
+
+        /* =====================================================
            REGISTER BUTTON
-        ========================================= */
+        ===================================================== */
 
         #register-button {
 
-            width: 100%;
+            width:
+                100%;
 
-            padding: 14px;
+            height:
+                50px;
 
-            border: none;
+            margin-top:
+                5px;
 
-            border-radius: 10px;
+            border:
+                none;
 
-            background: #00843d;
+            border-radius:
+                10px;
 
-            color: white;
+            background:
+                #00843D;
 
-            font-size: 16px;
+            color:
+                #FFFFFF;
 
-            font-weight: 800;
+            font-size:
+                15px;
 
-            cursor: pointer;
+            font-weight:
+                800;
 
-            transition: 0.2s ease;
+            cursor:
+                pointer;
+
+            box-shadow:
+                0 7px 18px
+                rgba(0,132,61,0.20);
+
+            transition:
+                background 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+
         }
+
 
 
         #register-button:hover {
 
-            background: #006b31;
+            background:
+                #006B31;
 
-            transform: translateY(-1px);
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 10px 24px
+                rgba(0,132,61,0.25);
+
         }
+
 
 
         #register-button:disabled {
 
-            opacity: 0.65;
+            opacity:
+                0.65;
 
-            cursor: not-allowed;
+            cursor:
+                not-allowed;
 
-            transform: none;
+            transform:
+                none;
+
         }
 
 
-        /* =========================================
+
+        /* =====================================================
            MESSAGE
-        ========================================= */
+        ===================================================== */
 
         #register-message {
 
-            margin-top: 20px;
+            min-height:
+                20px;
 
-            text-align: center;
+            margin:
+                18px 0 0;
 
-            font-size: 14px;
+            text-align:
+                center;
 
-            line-height: 1.5;
+            font-size:
+                13px;
+
+            line-height:
+                1.5;
+
         }
 
 
-        /* =========================================
+
+        /* =====================================================
            LOGIN LINK
-        ========================================= */
+        ===================================================== */
 
         .login-link {
 
-            text-align: center;
+            margin:
+                24px 0 0;
 
-            margin-top: 25px;
+            padding-top:
+                20px;
 
-            color: #66736c;
+            border-top:
+                1px solid #EAECF0;
 
-            font-size: 14px;
+            text-align:
+                center;
+
+            color:
+                #667085;
+
+            font-size:
+                14px;
+
         }
+
 
 
         .login-link a {
 
-            color: #00843d;
+            color:
+                #00843D;
 
-            font-weight: 800;
+            font-weight:
+                800;
 
-            text-decoration: none;
+            text-decoration:
+                none;
+
         }
+
 
 
         .login-link a:hover {
 
-            text-decoration: underline;
+            text-decoration:
+                underline;
+
         }
 
 
-        /* =========================================
+
+        /* =====================================================
            MOBILE
-        ========================================= */
+        ===================================================== */
 
         @media (max-width: 700px) {
 
+            .register-navbar {
+
+                height:
+                    62px;
+
+                padding:
+                    0 18px;
+
+            }
+
+
+
+            .register-navbar nav {
+
+                gap:
+                    18px;
+
+            }
+
+
+
+            .register-navbar nav a {
+
+                font-size:
+                    12px;
+
+            }
+
+
+
             .register-page {
 
-                min-height: calc(100vh - 65px);
+                padding:
+                    85px 15px 30px;
 
-                padding: 35px 15px;
-
-                background-size: 600px auto;
-
-                background-attachment: scroll;
             }
+
 
 
             .register-card {
 
-                padding: 28px 22px;
+                padding:
+                    30px 22px;
 
-                border-radius: 16px;
+                border-radius:
+                    17px;
+
             }
+
 
 
             .register-card h1 {
 
-                font-size: 28px;
+                font-size:
+                    27px;
+
             }
 
         }
 
 
+
+        /* =====================================================
+           SMALL PHONES
+        ===================================================== */
+
         @media (max-width: 420px) {
 
-            .register-page {
+            .register-navbar nav {
 
-                background-size: 480px auto;
+                gap:
+                    12px;
+
             }
+
+
+
+            .register-navbar nav a {
+
+                font-size:
+                    11px;
+
+            }
+
 
 
             .register-card {
 
-                padding: 24px 18px;
+                padding:
+                    26px 18px;
+
             }
 
         }
@@ -319,24 +685,15 @@
 </head>
 
 
+
 <body>
 
 
-<!-- =========================================
+<!-- =====================================================
      NAVIGATION
-========================================= -->
+===================================================== -->
 
-<header class="navbar">
-
-    <a href="index.html" class="logo">
-
-        <img
-            src="images/Nicholink_254_logo.png"
-            alt="NichoLink 254 Logo"
-        >
-
-    </a>
-
+<header class="register-navbar">
 
     <nav>
 
@@ -358,26 +715,58 @@
 
 
 
-<!-- =========================================
-     REGISTRATION AREA
-========================================= -->
+<!-- =====================================================
+     REGISTRATION PAGE
+===================================================== -->
 
 <main class="register-page">
 
 
+    <!-- =================================================
+         REGISTRATION CARD
+    ================================================== -->
+
     <section class="register-card">
 
 
-        <h1>
-            Create Account
-        </h1>
+        <!-- CARD HEADER -->
+
+        <div class="register-card-header">
 
 
-        <p class="register-intro">
-            Join NichoLink 254 as a tenant or landlord.
-        </p>
+            <!-- SIMPLE BRAND MARK -->
+
+            <div class="brand-mark">
+
+                NL
+
+            </div>
 
 
+
+            <h1>
+
+                Create Account
+
+            </h1>
+
+
+
+            <p class="register-intro">
+
+                Join NichoLink 254 and find,
+                connect and grow.
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             REGISTRATION FORM
+        ================================================== -->
 
         <form id="register-form">
 
@@ -385,8 +774,11 @@
             <!-- FULL NAME -->
 
             <label for="full_name">
+
                 Full Name
+
             </label>
+
 
             <input
                 type="text"
@@ -401,8 +793,11 @@
             <!-- PHONE -->
 
             <label for="phone">
+
                 Phone Number
+
             </label>
+
 
             <input
                 type="tel"
@@ -417,8 +812,11 @@
             <!-- EMAIL -->
 
             <label for="email">
-                Email
+
+                Email Address
+
             </label>
+
 
             <input
                 type="email"
@@ -433,8 +831,11 @@
             <!-- PASSWORD -->
 
             <label for="password">
+
                 Password
+
             </label>
+
 
             <input
                 type="password"
@@ -450,8 +851,11 @@
             <!-- ACCOUNT TYPE -->
 
             <label for="account_type">
+
                 Account Type
+
             </label>
+
 
             <select
                 id="account_type"
@@ -459,28 +863,38 @@
             >
 
                 <option value="">
+
                     Select account type
+
                 </option>
+
 
                 <option value="tenant">
+
                     Tenant
+
                 </option>
 
+
                 <option value="landlord">
+
                     Landlord
+
                 </option>
 
             </select>
 
 
 
-            <!-- REGISTER BUTTON -->
+            <!-- CREATE ACCOUNT -->
 
             <button
                 type="submit"
                 id="register-button"
             >
+
                 Create Account
+
             </button>
 
 
@@ -488,20 +902,26 @@
 
 
 
-        <!-- MESSAGE -->
+        <!-- =================================================
+             STATUS MESSAGE
+        ================================================== -->
 
         <p id="register-message"></p>
 
 
 
-        <!-- LOGIN -->
+        <!-- =================================================
+             LOGIN
+        ================================================== -->
 
         <p class="login-link">
 
             Already have an account?
 
             <a href="login.html">
+
                 Login
+
             </a>
 
         </p>
@@ -514,14 +934,20 @@
 
 
 
-<!-- =========================================
+<!-- =====================================================
      SUPABASE
-========================================= -->
+===================================================== -->
 
 <script src="supabase.js"></script>
 
 
+
+<!-- =====================================================
+     REGISTRATION JAVASCRIPT
+===================================================== -->
+
 <script>
+
 
 const registerForm =
     document.getElementById(
@@ -542,6 +968,10 @@ const registerMessage =
 
 
 
+/* =====================================================
+   FORM SUBMISSION
+===================================================== */
+
 registerForm.addEventListener(
     "submit",
     async function(event) {
@@ -549,51 +979,131 @@ registerForm.addEventListener(
         event.preventDefault();
 
 
+        /* =============================================
+           GET FORM VALUES
+        ============================================= */
+
         const fullName =
-            document
-                .getElementById("full_name")
-                .value
-                .trim();
+    document
+        .getElementById(
+            "full_name"
+        )
+        .value
+        .trim();
+
+if (
+    !fullName ||
+    fullName.length < 2 ||
+    fullName.length > 100
+) {
+    throw new Error(
+        "Please enter a valid full name between 2 and 100 characters."
+    );
+}
 
 
         const phone =
-            document
-                .getElementById("phone")
-                .value
-                .trim();
+    document
+        .getElementById(
+            "phone"
+        )
+        .value
+        .trim();
+
+if (
+    !/^(?:07|01)\d{8}$/.test(phone)
+) {
+    throw new Error(
+        "Please enter a valid Kenyan phone number, e.g. 0712345678."
+    );
+}
 
 
         const email =
-            document
-                .getElementById("email")
-                .value
-                .trim();
+    document
+        .getElementById(
+            "email"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+    email.length > 254
+) {
+    throw new Error(
+        "Please enter a valid email address."
+    );
+}
 
 
         const password =
-            document
-                .getElementById("password")
-                .value;
+    document
+        .getElementById(
+            "password"
+        )
+        .value;
+
+if (
+    password.length < 8 ||
+    password.length > 72
+) {
+    throw new Error(
+        "Password must be between 8 and 72 characters."
+    );
+}
 
 
         const accountType =
-            document
-                .getElementById("account_type")
-                .value;
+    document
+        .getElementById(
+            "account_type"
+        )
+        .value
+        .trim()
+        .toLowerCase();
 
+const allowedAccountTypes = [
+    "tenant",
+    "landlord"
+];
+
+if (
+    !allowedAccountTypes.includes(
+        accountType
+    )
+) {
+    throw new Error(
+        "Please select a valid account type."
+    );
+}
+
+
+
+        /* =============================================
+           ACCOUNT TYPE VALIDATION
+        ============================================= */
 
         if (!accountType) {
 
             registerMessage.style.color =
-                "#b91c1c";
+                "#B42318";
+
 
             registerMessage.textContent =
                 "Please select an account type.";
+
 
             return;
 
         }
 
+
+
+        /* =============================================
+           BUTTON LOADING STATE
+        ============================================= */
 
         registerButton.disabled =
             true;
@@ -611,45 +1121,55 @@ registerForm.addEventListener(
         try {
 
 
-            /*
-             * CREATE SUPABASE AUTH USER
-             */
+            /* =========================================
+               CREATE SUPABASE ACCOUNT
+            ========================================= */
 
             const {
                 data,
                 error
             } =
-                await supabaseClient.auth.signUp({
+                await supabaseClient
+                    .auth
+                    .signUp({
 
-                    email: email,
+                        email:
+                            email,
 
-                    password: password,
+                        password:
+                            password,
 
-                    options: {
+                        options: {
 
-                        data: {
+                            data: {
 
-                            full_name:
-                                fullName,
+                                full_name:
+                                    fullName,
 
-                            phone:
-                                phone,
+                                phone:
+                                    phone,
 
-                            account_type:
-                                accountType
+                                account_type:
+                                    accountType
+
+                            }
 
                         }
 
-                    }
+                    });
 
-                });
 
+
+            /* =========================================
+               CHECK ERROR
+            ========================================= */
 
             if (error) {
 
                 throw error;
 
             }
+
 
 
             if (!data.user) {
@@ -662,12 +1182,12 @@ registerForm.addEventListener(
 
 
 
-            /*
-             * ACCOUNT CREATED
-             */
+            /* =========================================
+               SUCCESS
+            ========================================= */
 
             registerMessage.style.color =
-                "#15803d";
+                "#15803D";
 
 
             registerMessage.textContent =
@@ -682,6 +1202,7 @@ registerForm.addEventListener(
 
         catch (error) {
 
+
             console.error(
                 "Registration error:",
                 error
@@ -689,17 +1210,19 @@ registerForm.addEventListener(
 
 
             registerMessage.style.color =
-                "#b91c1c";
+                "#B42318";
 
 
             registerMessage.textContent =
                 error.message ||
                 "Unable to create account.";
 
+
         }
 
 
         finally {
+
 
             registerButton.disabled =
                 false;
@@ -708,10 +1231,12 @@ registerForm.addEventListener(
             registerButton.textContent =
                 "Create Account";
 
+
         }
 
     }
 );
+
 
 </script>
 
@@ -719,4 +1244,3 @@ registerForm.addEventListener(
 </body>
 
 </html>
-```

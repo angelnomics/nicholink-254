@@ -1,4 +1,4 @@
-```html
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,138 +15,698 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+    <style>
+
+        /* =========================================
+           LOGIN PAGE
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100%;
+        }
+
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #172033;
+        }
+
+
+        /* =========================================
+           FULL PAGE BACKGROUND
+        ========================================= */
+
+        .login-page {
+
+            min-height: 100vh;
+
+            position: relative;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 40px 20px;
+
+            overflow: hidden;
+
+            background-image:
+                linear-gradient(
+                    rgba(8, 45, 29, 0.42),
+                    rgba(120, 25, 25, 0.42)
+                ),
+                url("images/Nicholink_254_logo.png");
+
+            background-size: cover;
+
+            background-position: center;
+
+            background-repeat: no-repeat;
+
+            background-attachment: fixed;
+        }
+
+
+        /* =========================================
+           PROFESSIONAL BACKGROUND OVERLAY
+        ========================================= */
+
+        .login-page::before {
+
+            content: "";
+
+            position: absolute;
+
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(0, 132, 61, 0.18),
+                    rgba(190, 28, 28, 0.18)
+                );
+
+            z-index: 0;
+
+            pointer-events: none;
+        }
+
+
+        /* =========================================
+           LOGIN CARD
+        ========================================= */
+
+        .login-card {
+
+            width: 100%;
+
+            max-width: 450px;
+
+            position: relative;
+
+            z-index: 2;
+
+            padding: 38px;
+
+            background:
+                rgba(255, 255, 255, 0.97);
+
+            border:
+                1px solid
+                rgba(255, 255, 255, 0.85);
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 30px 80px
+                rgba(0, 0, 0, 0.25);
+
+            backdrop-filter: blur(12px);
+
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+
+        /* =========================================
+           CARD HEADER
+        ========================================= */
+
+        .login-brand {
+
+            text-align: center;
+
+            margin-bottom: 26px;
+        }
+
+
+        .login-brand-mark {
+
+            width: 58px;
+
+            height: 58px;
+
+            margin: 0 auto 16px;
+
+            border-radius: 16px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00843d,
+                    #c62828
+                );
+
+            color: white;
+
+            font-size: 24px;
+
+            font-weight: 900;
+
+            box-shadow:
+                0 10px 25px
+                rgba(0, 0, 0, 0.14);
+        }
+
+
+        .login-card h1 {
+
+            margin: 0 0 8px;
+
+            color: #172033;
+
+            font-size: 31px;
+
+            line-height: 1.2;
+
+            font-weight: 800;
+        }
+
+
+        .login-intro {
+
+            margin: 0;
+
+            color: #718096;
+
+            font-size: 15px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================================
+           FORM
+        ========================================= */
+
+        .login-form-group {
+
+            margin-bottom: 19px;
+        }
+
+
+        .login-form-group label {
+
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #27352e;
+
+            font-size: 14px;
+
+            font-weight: 700;
+        }
+
+
+        .login-input-wrapper {
+
+            position: relative;
+        }
+
+
+        .login-input {
+
+            width: 100%;
+
+            height: 50px;
+
+            padding:
+                0 15px;
+
+            border:
+                1px solid
+                #d9e0dc;
+
+            border-radius: 11px;
+
+            background: #ffffff;
+
+            color: #172033;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            outline: none;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .login-input:focus {
+
+            border-color: #00843d;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(0, 132, 61, 0.10);
+
+            background: #ffffff;
+        }
+
+
+        .password-input {
+
+            padding-right: 92px;
+        }
+
+
+        /* =========================================
+           SHOW PASSWORD
+        ========================================= */
+
+        .show-password {
+
+            position: absolute;
+
+            top: 50%;
+
+            right: 10px;
+
+            transform: translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: #00843d;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            padding: 7px 8px;
+
+            border-radius: 7px;
+        }
+
+
+        .show-password:hover {
+
+            background:
+                rgba(0, 132, 61, 0.08);
+        }
+
+
+        /* =========================================
+           LOGIN OPTIONS
+        ========================================= */
+
+        .login-options {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin-top: -7px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .forgot-password {
+
+            color: #00843d;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .forgot-password:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================================
+           LOGIN BUTTON
+        ========================================= */
+
+        #login-button {
+
+            width: 100%;
+
+            min-height: 52px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #00843d,
+                    #006b31
+                );
+
+            color: #ffffff;
+
+            font-size: 16px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 10px 22px
+                rgba(0, 132, 61, 0.20);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+
+        #login-button:hover {
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 14px 28px
+                rgba(0, 132, 61, 0.25);
+        }
+
+
+        #login-button:disabled {
+
+            opacity: 0.65;
+
+            cursor: wait;
+
+            transform: none;
+
+            box-shadow: none;
+        }
+
+
+        /* =========================================
+           MESSAGE
+        ========================================= */
+
+        #login-message {
+
+            min-height: 20px;
+
+            margin:
+                18px 0 0;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================================
+           REGISTER LINK
+        ========================================= */
+
+        .register-link {
+
+            margin:
+                25px 0 0;
+
+            padding-top: 21px;
+
+            border-top:
+                1px solid
+                #edf0ee;
+
+            text-align: center;
+
+            color: #66736c;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+        }
+
+
+        .register-link a {
+
+            color: #00843d;
+
+            font-weight: 800;
+
+            text-decoration: none;
+        }
+
+
+        .register-link a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        /* =========================================
+           SECURITY NOTE
+        ========================================= */
+
+        .login-security {
+
+            margin-top: 20px;
+
+            text-align: center;
+
+            color: #8a948e;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .login-page {
+
+                min-height: 100vh;
+
+                padding:
+                    25px 15px;
+
+                background-attachment: scroll;
+
+                background-position: center;
+            }
+
+
+            .login-card {
+
+                max-width: 430px;
+
+                padding:
+                    30px 23px;
+
+                border-radius: 18px;
+            }
+
+
+            .login-card h1 {
+
+                font-size: 28px;
+            }
+
+
+            .login-brand-mark {
+
+                width: 52px;
+
+                height: 52px;
+
+                font-size: 21px;
+            }
+        }
+
+
+        @media (max-width: 420px) {
+
+            .login-page {
+
+                padding:
+                    20px 12px;
+            }
+
+
+            .login-card {
+
+                padding:
+                    26px 18px;
+
+                border-radius: 16px;
+            }
+
+
+            .login-card h1 {
+
+                font-size: 26px;
+            }
+        }
+
+    </style>
+
 </head>
 
 
 <body>
 
 
-<header class="navbar">
+<!-- =========================================
+     LOGIN PAGE
+========================================= -->
 
-    <div class="logo">
-        <span>NichoLink</span>
-        <strong>254</strong>
-    </div>
-
-    <nav>
-
-        <a href="index.html">
-            Home
-        </a>
-
-        <a href="properties.html">
-            Properties
-        </a>
-
-        <a href="register.html">
-            Register
-        </a>
-
-    </nav>
-
-</header>
+<main class="login-page">
 
 
-
-<main style="
-    min-height:75vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:40px 20px;
-">
+    <section
+        class="login-card"
+        aria-labelledby="login-title"
+    >
 
 
-    <section style="
-        width:100%;
-        max-width:450px;
-        background:white;
-        padding:35px;
-        border-radius:20px;
-        box-shadow:0 10px 35px rgba(0,0,0,.08);
-    ">
+        <!-- CARD HEADER -->
+
+        <div class="login-brand">
+
+            <div
+                class="login-brand-mark"
+                aria-hidden="true"
+            >
+                N
+            </div>
 
 
-        <h1 style="
-            margin-top:0;
-            margin-bottom:8px;
-        ">
-            Welcome Back
-        </h1>
+            <h1 id="login-title">
+                Welcome Back
+            </h1>
 
 
-        <p style="
-            color:#718096;
-            margin-bottom:30px;
-        ">
-            Login to your NichoLink 254 account.
-        </p>
+            <p class="login-intro">
+                Sign in to your NichoLink 254 account
+                to continue.
+            </p>
+
+        </div>
 
 
+
+        <!-- LOGIN FORM -->
 
         <form id="login-form">
 
 
             <!-- EMAIL -->
 
-            <label for="email">
-                Email
-            </label>
+            <div class="login-form-group">
 
-            <input
-                type="email"
-                id="email"
-                required
-                placeholder="Enter your email"
-                style="
-                    width:100%;
-                    padding:14px;
-                    margin:8px 0 18px;
-                    border:1px solid #ddd;
-                    border-radius:10px;
-                "
-            >
+                <label for="email">
+                    Email Address
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    class="login-input"
+                    required
+                    autocomplete="email"
+                    placeholder="Enter your email"
+                >
+
+            </div>
 
 
 
             <!-- PASSWORD -->
 
-            <label for="password">
-                Password
-            </label>
+            <div class="login-form-group">
 
-            <input
-                type="password"
-                id="password"
-                required
-                placeholder="Enter your password"
-                style="
-                    width:100%;
-                    padding:14px;
-                    margin:8px 0 25px;
-                    border:1px solid #ddd;
-                    border-radius:10px;
-                "
-            >
+                <label for="password">
+                    Password
+                </label>
 
 
+                <div class="login-input-wrapper">
 
-            <!-- LOGIN BUTTON -->
+                    <input
+                        type="password"
+                        id="password"
+                        class="login-input password-input"
+                        required
+                        autocomplete="current-password"
+                        placeholder="Enter your password"
+                    >
+
+
+                    <button
+                        type="button"
+                        class="show-password"
+                        id="show-password"
+                        aria-label="Show password"
+                    >
+                        Show
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- FORGOT PASSWORD -->
+
+            <div class="login-options">
+
+                <a
+                    href="forgot-password.html"
+                    class="forgot-password"
+                >
+                    Forgot password?
+                </a>
+
+            </div>
+
+
+
+            <!-- LOGIN -->
 
             <button
                 type="submit"
                 id="login-button"
-                style="
-                    width:100%;
-                    padding:14px;
-                    border:none;
-                    border-radius:10px;
-                    background:#172033;
-                    color:white;
-                    font-size:16px;
-                    font-weight:bold;
-                    cursor:pointer;
-                "
             >
                 Login
             </button>
@@ -160,24 +720,31 @@
 
         <p
             id="login-message"
-            style="
-                margin-top:20px;
-                text-align:center;
-            "
+            role="alert"
         ></p>
 
 
 
-        <p style="
-            text-align:center;
-            margin-top:25px;
-        ">
+        <!-- REGISTER -->
+
+        <p class="register-link">
 
             Don't have an account?
 
             <a href="register.html">
                 Create Account
             </a>
+
+        </p>
+
+
+
+        <!-- SECURITY -->
+
+        <p class="login-security">
+
+            Your account information is securely
+            handled through NichoLink 254 authentication.
 
         </p>
 
@@ -189,11 +756,15 @@
 
 
 
+<!-- =========================================
+     SUPABASE
+========================================= -->
+
 <script src="supabase.js"></script>
 
 
-<script>
 
+<script>
 
 const loginForm =
     document.getElementById(
@@ -213,10 +784,58 @@ const loginMessage =
     );
 
 
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
 
-/* =================================
+
+const showPasswordButton =
+    document.getElementById(
+        "show-password"
+    );
+
+
+
+/* =========================================
+   SHOW / HIDE PASSWORD
+========================================= */
+
+showPasswordButton.addEventListener(
+    "click",
+    function() {
+
+        const isPassword =
+            passwordInput.type === "password";
+
+
+        passwordInput.type =
+            isPassword
+                ? "text"
+                : "password";
+
+
+        showPasswordButton.textContent =
+            isPassword
+                ? "Hide"
+                : "Show";
+
+
+        showPasswordButton.setAttribute(
+            "aria-label",
+            isPassword
+                ? "Hide password"
+                : "Show password"
+        );
+
+    }
+);
+
+
+
+/* =========================================
    LOGIN
-================================= */
+========================================= */
 
 loginForm.addEventListener(
     "submit",
@@ -233,19 +852,54 @@ loginForm.addEventListener(
 
 
         const password =
-            document
-                .getElementById("password")
-                .value;
+            passwordInput.value;
+/* =====================================================
+   INPUT PROTECTION
+===================================================== */
+
+if (!email) {
+    throw new Error(
+        "Please enter your email address."
+    );
+}
+
+if (email.length > 254) {
+    throw new Error(
+        "Email address is too long."
+    );
+}
+
+if (
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+) {
+    throw new Error(
+        "Please enter a valid email address."
+    );
+}
 
 
-        loginButton.disabled = true;
+if (!password) {
+    throw new Error(
+        "Please enter your password."
+    );
+}
 
-        loginButton.textContent =
-            "Logging in...";
+if (password.length > 128) {
+    throw new Error(
+        "Password is too long."
+    );
+}
 
         loginMessage.textContent =
             "";
 
+
+        loginButton.disabled =
+            true;
+
+
+        loginButton.textContent =
+            "Logging in...";
 
 
         try {
@@ -259,15 +913,17 @@ loginForm.addEventListener(
                 data,
                 error
             } =
-                await supabaseClient.auth.signInWithPassword({
+                await supabaseClient
+                    .auth
+                    .signInWithPassword({
 
-                    email:
-                        email,
+                        email:
+                            email,
 
-                    password:
-                        password
+                        password:
+                            password
 
-                });
+                    });
 
 
             if (error) {
@@ -314,7 +970,6 @@ loginForm.addEventListener(
                     .maybeSingle();
 
 
-
             if (profileError) {
 
                 throw profileError;
@@ -322,10 +977,11 @@ loginForm.addEventListener(
             }
 
 
-
             if (!profile) {
 
-                await supabaseClient.auth.signOut();
+                await supabaseClient
+                    .auth
+                    .signOut();
 
                 throw new Error(
                     "Your account profile could not be found."
@@ -343,7 +999,9 @@ loginForm.addEventListener(
                 profile.is_active === false
             ) {
 
-                await supabaseClient.auth.signOut();
+                await supabaseClient
+                    .auth
+                    .signOut();
 
                 throw new Error(
                     "Your account has been deactivated. Please contact NichoLink 254."
@@ -423,7 +1081,10 @@ loginForm.addEventListener(
                UNKNOWN ACCOUNT TYPE
             ============================= */
 
-            await supabaseClient.auth.signOut();
+            await supabaseClient
+                .auth
+                .signOut();
+
 
             throw new Error(
                 "Your account type is not configured correctly. Please contact NichoLink 254."
@@ -457,13 +1118,10 @@ loginForm.addEventListener(
             loginButton.textContent =
                 "Login";
 
-            return;
-
         }
 
     }
 );
-
 
 </script>
 

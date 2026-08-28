@@ -1,13 +1,10 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Admin Dashboard | NichoLink 254</title>
 
@@ -16,10 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-
-        /* ================================
-           ADMIN DASHBOARD GRID
-        ================================= */
 
         .admin-dashboard-grid {
             display: grid;
@@ -91,13 +84,9 @@
             opacity: 0.9;
         }
 
-        /* ================================
-           STAT GRID
-        ================================= */
-
         .admin-stat-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 18px;
             margin: 30px 0;
         }
@@ -122,10 +111,6 @@
             font-size: 32px;
             color: #111827;
         }
-
-        /* ================================
-           REQUEST GRID
-        ================================= */
 
         .request-grid {
             display: grid;
@@ -175,10 +160,6 @@
             font-weight: 600;
         }
 
-        /* ================================
-           STATUS BADGES
-        ================================= */
-
         .status-badge {
             display: inline-flex;
             padding: 6px 11px;
@@ -202,10 +183,6 @@
             color: #b91c1c;
         }
 
-        /* ================================
-           ACTIVITY CARD
-        ================================= */
-
         .activity-panel {
             background: #ffffff;
             border: 1px solid #e5e7eb;
@@ -214,9 +191,21 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.04);
         }
 
-        /* ================================
-           RESPONSIVE
-        ================================= */
+        .empty-dashboard {
+            grid-column: 1 / -1;
+            padding: 35px;
+            text-align: center;
+            background: #f8fafc;
+            border-radius: 15px;
+        }
+
+        @media (max-width: 1200px) {
+
+            .admin-stat-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+        }
 
         @media (max-width: 1100px) {
 
@@ -252,10 +241,6 @@
 <body>
 
 
-<!-- =========================
-     NAVIGATION
-========================= -->
-
 <header class="navbar">
 
     <div class="logo">
@@ -283,31 +268,21 @@
     </nav>
 
 
-    <a href="properties.html"
-       class="nav-button">
-
+    <a href="properties.html" class="nav-button">
         View Website
-
     </a>
-<a href="#"
-   onclick="logoutAdmin(); return false;"
-   class="nav-button">
 
-    Logout
 
-</a>
+    <a href="#" onclick="logoutAdmin(); return false;" class="nav-button">
+        Logout
+    </a>
+
 </header>
 
 
 
-<!-- =========================
-     ADMIN DASHBOARD
-========================= -->
-
 <main class="dashboard-page">
 
-
-    <!-- HEADER -->
 
     <section class="dashboard-header">
 
@@ -341,10 +316,23 @@
 
 
     <!-- =========================
-         STATISTICS GRID
+         STATISTICS
     ========================= -->
 
     <section class="admin-stat-grid">
+
+
+        <div class="admin-stat-card">
+
+            <span>
+                Total Users
+            </span>
+
+            <strong id="total-users">
+                ...
+            </strong>
+
+        </div>
 
 
         <div class="admin-stat-card">
@@ -404,7 +392,7 @@
 
 
     <!-- =========================
-         ADMIN CONTROL GRID
+         ADMINISTRATION
     ========================= -->
 
     <section class="dashboard-properties">
@@ -428,8 +416,6 @@
 
         <div class="admin-dashboard-grid">
 
-
-            <!-- PROPERTY MANAGEMENT -->
 
             <div class="admin-card">
 
@@ -456,8 +442,6 @@
             </div>
 
 
-
-            <!-- VIEWING REQUESTS -->
 
             <div class="admin-card">
 
@@ -489,8 +473,6 @@
 
 
 
-            <!-- USER MANAGEMENT -->
-
             <div class="admin-card">
 
                 <div>
@@ -517,8 +499,6 @@
 
 
 
-            <!-- REPORTS -->
-
             <div class="admin-card">
 
                 <div>
@@ -537,13 +517,9 @@
 
                 </div>
 
-                <button
-                    type="button"
-                    onclick="showComingSoon('Reports')">
-
+                <a href="reports.html">
                     View Reports
-
-                </button>
+                </a>
 
             </div>
 
@@ -585,9 +561,7 @@
             class="request-grid">
 
             <div class="dashboard-loading">
-
                 Loading viewing requests...
-
             </div>
 
         </div>
@@ -634,10 +608,6 @@
 </main>
 
 
-
-<!-- =========================
-     FOOTER
-========================= -->
 
 <footer>
 
@@ -689,7 +659,7 @@
             </p>
 
             <p>
-                💬 WhatsApp: 0795629432
+                💬 WhatsApp: 0795629436
             </p>
 
             <p>
@@ -713,28 +683,117 @@
 
 
 
-<!-- =========================
-     SUPABASE
-========================= -->
-
 <script src="supabase.js"></script>
 <script src="admin-auth.js"></script>
+
+
 <script>
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
 async function logoutAdmin() {
 
-    await supabaseClient.auth.signOut();
+    try {
 
-    window.location.href = "login.html";
+        await supabaseClient.auth.signOut();
+
+    } catch (error) {
+
+        console.error(
+            "Logout error:",
+            error
+        );
+
+    }
+
+    window.location.href =
+        "login.html";
+
 }
-</script>
 
-<script>
 
-/* =================================
+
+/* =========================================
    LOAD ADMIN DASHBOARD
-================================= */
+========================================= */
 
 async function loadAdminStatistics() {
+
+    /*
+     * We load each section independently.
+     *
+     * This is important because if one
+     * Supabase query fails, the other
+     * statistics can still appear.
+     */
+
+
+    /* =====================================
+       TOTAL USERS
+    ===================================== */
+
+    try {
+
+        const {
+            data: totalUsers,
+            error: usersError
+        } = await supabaseClient
+
+            .rpc(
+                "get_total_users"
+            );
+
+
+        if (usersError) {
+
+            console.error(
+                "Total users error:",
+                usersError
+            );
+
+            document.getElementById(
+                "total-users"
+            ).textContent =
+                "Error";
+
+        } else {
+
+            document.getElementById(
+                "total-users"
+            ).textContent =
+                Number(
+                    totalUsers || 0
+                ).toLocaleString();
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Total users exception:",
+            error
+        );
+
+        document.getElementById(
+            "total-users"
+        ).textContent =
+            "Error";
+
+    }
+
+
+
+    /* =====================================
+       PROPERTIES
+    ===================================== */
+
+    let propertyList = [];
+
 
     try {
 
@@ -755,18 +814,17 @@ async function loadAdminStatistics() {
         }
 
 
-        const propertyList =
+        propertyList =
             Array.isArray(properties)
                 ? properties
                 : [];
 
 
-        /* TOTAL */
-
         document.getElementById(
             "total-properties"
         ).textContent =
             propertyList.length;
+
 
 
         /* AVAILABLE */
@@ -783,7 +841,9 @@ async function loadAdminStatistics() {
                         .trim()
                         .toLowerCase();
 
-                    return status === "available";
+
+                    return status ===
+                           "available";
 
                 }
             ).length;
@@ -793,6 +853,7 @@ async function loadAdminStatistics() {
             "available-properties"
         ).textContent =
             available;
+
 
 
         /* OCCUPIED */
@@ -809,7 +870,9 @@ async function loadAdminStatistics() {
                         .trim()
                         .toLowerCase();
 
-                    return status === "occupied";
+
+                    return status ===
+                           "occupied";
 
                 }
             ).length;
@@ -820,8 +883,42 @@ async function loadAdminStatistics() {
         ).textContent =
             occupied;
 
+    }
 
-        /* VIEWING REQUESTS */
+    catch (error) {
+
+        console.error(
+            "Properties error:",
+            error
+        );
+
+
+        document.getElementById(
+            "total-properties"
+        ).textContent =
+            "Error";
+
+
+        document.getElementById(
+            "available-properties"
+        ).textContent =
+            "Error";
+
+
+        document.getElementById(
+            "occupied-properties"
+        ).textContent =
+            "Error";
+
+    }
+
+
+
+    /* =====================================
+       VIEWING REQUESTS
+    ===================================== */
+
+    try {
 
         const {
             data: viewingRequests,
@@ -854,7 +951,9 @@ async function loadAdminStatistics() {
 
 
         const requests =
-            Array.isArray(viewingRequests)
+            Array.isArray(
+                viewingRequests
+            )
                 ? viewingRequests
                 : [];
 
@@ -884,7 +983,8 @@ async function loadAdminStatistics() {
                 </h3>
 
                 <p>
-                    Properties and viewing requests are connected to Supabase.
+                    NichoLink 254 administration
+                    is connected to Supabase.
                 </p>
 
             </div>
@@ -896,29 +996,15 @@ async function loadAdminStatistics() {
     catch (error) {
 
         console.error(
-            "Admin dashboard error:",
+            "Viewing requests error:",
             error
         );
 
 
         document.getElementById(
-            "total-properties"
-        ).textContent = "Error";
-
-
-        document.getElementById(
-            "available-properties"
-        ).textContent = "Error";
-
-
-        document.getElementById(
-            "occupied-properties"
-        ).textContent = "Error";
-
-
-        document.getElementById(
             "total-viewing-requests"
-        ).textContent = "Error";
+        ).textContent =
+            "Error";
 
 
         document.getElementById(
@@ -948,9 +1034,9 @@ async function loadAdminStatistics() {
 
 
 
-/* =================================
+/* =========================================
    DISPLAY VIEWING REQUESTS
-================================= */
+========================================= */
 
 function displayViewingRequests(
     requests,
@@ -1011,20 +1097,24 @@ function displayViewingRequests(
 
                         return String(item.id)
                             ===
-                            String(request.property_id);
+                            String(
+                                request.property_id
+                            );
 
                     }
                 );
 
 
             const propertyTitle =
-                property && property.title
+                property &&
+                property.title
                     ? property.title
                     : "Property";
 
 
             const propertyLocation =
-                property && property.location
+                property &&
+                property.location
                     ? property.location
                     : "Location not available";
 
@@ -1051,7 +1141,11 @@ function displayViewingRequests(
                     );
 
 
-                if (!isNaN(date.getTime())) {
+                if (
+                    !isNaN(
+                        date.getTime()
+                    )
+                ) {
 
                     viewingDate =
                         date.toLocaleDateString();
@@ -1073,7 +1167,11 @@ function displayViewingRequests(
                     );
 
 
-                if (!isNaN(date.getTime())) {
+                if (
+                    !isNaN(
+                        date.getTime()
+                    )
+                ) {
 
                     createdDate =
                         date.toLocaleString();
@@ -1098,17 +1196,30 @@ function displayViewingRequests(
                 </h3>
 
                 <p>
-                    <strong>Property:</strong>
-                    ${escapeHtml(propertyTitle)}
+                    <strong>
+                        Property:
+                    </strong>
+
+                    ${escapeHtml(
+                        propertyTitle
+                    )}
                 </p>
 
                 <p>
-                    <strong>Location:</strong>
-                    ${escapeHtml(propertyLocation)}
+                    <strong>
+                        Location:
+                    </strong>
+
+                    ${escapeHtml(
+                        propertyLocation
+                    )}
                 </p>
 
                 <p>
-                    <strong>Tenant:</strong>
+                    <strong>
+                        Tenant:
+                    </strong>
+
                     ${escapeHtml(
                         request.tenant_name ||
                         "Not provided"
@@ -1116,7 +1227,10 @@ function displayViewingRequests(
                 </p>
 
                 <p>
-                    <strong>Phone:</strong>
+                    <strong>
+                        Phone:
+                    </strong>
+
                     ${escapeHtml(
                         request.tenant_phone ||
                         "Not provided"
@@ -1124,12 +1238,20 @@ function displayViewingRequests(
                 </p>
 
                 <p>
-                    <strong>Viewing Date:</strong>
-                    ${escapeHtml(viewingDate)}
+                    <strong>
+                        Viewing Date:
+                    </strong>
+
+                    ${escapeHtml(
+                        viewingDate
+                    )}
                 </p>
 
                 <p>
-                    <strong>Message:</strong>
+                    <strong>
+                        Message:
+                    </strong>
+
                     ${escapeHtml(
                         request.message ||
                         "No message"
@@ -1137,13 +1259,18 @@ function displayViewingRequests(
                 </p>
 
                 <p>
-                    <strong>Status:</strong>
+
+                    <strong>
+                        Status:
+                    </strong>
 
                     <span
                         class="status-badge ${statusClass}">
 
                         ${escapeHtml(
-                            formatStatus(status)
+                            formatStatus(
+                                status
+                            )
                         )}
 
                     </span>
@@ -1151,8 +1278,12 @@ function displayViewingRequests(
                 </p>
 
                 <small>
+
                     Requested:
-                    ${escapeHtml(createdDate)}
+                    ${escapeHtml(
+                        createdDate
+                    )}
+
                 </small>
 
                 <div class="request-actions">
@@ -1168,6 +1299,7 @@ function displayViewingRequests(
 
                     </button>
 
+
                     <button
                         type="button"
                         onclick="updateViewingRequestStatus(
@@ -1178,6 +1310,7 @@ function displayViewingRequests(
                         🟢 Approve
 
                     </button>
+
 
                     <button
                         type="button"
@@ -1195,7 +1328,9 @@ function displayViewingRequests(
             `;
 
 
-            container.appendChild(card);
+            container.appendChild(
+                card
+            );
 
         }
     );
@@ -1204,9 +1339,9 @@ function displayViewingRequests(
 
 
 
-/* =================================
+/* =========================================
    UPDATE REQUEST STATUS
-================================= */
+========================================= */
 
 async function updateViewingRequestStatus(
     requestId,
@@ -1224,7 +1359,9 @@ async function updateViewingRequestStatus(
 
 
     const statusText =
-        formatStatus(newStatus);
+        formatStatus(
+            newStatus
+        );
 
 
     if (
@@ -1247,7 +1384,9 @@ async function updateViewingRequestStatus(
             error
         } = await supabaseClient
 
-            .from("viewing_requests")
+            .from(
+                "viewing_requests"
+            )
 
             .update({
                 status: newStatus
@@ -1313,9 +1452,9 @@ async function updateViewingRequestStatus(
 
 
 
-/* =================================
+/* =========================================
    FORMAT STATUS
-================================= */
+========================================= */
 
 function formatStatus(status) {
 
@@ -1328,14 +1467,20 @@ function formatStatus(status) {
         .toLowerCase();
 
 
-    if (normalized === "approved") {
+    if (
+        normalized ===
+        "approved"
+    ) {
 
         return "Approved";
 
     }
 
 
-    if (normalized === "rejected") {
+    if (
+        normalized ===
+        "rejected"
+    ) {
 
         return "Rejected";
 
@@ -1348,9 +1493,9 @@ function formatStatus(status) {
 
 
 
-/* =================================
+/* =========================================
    SHOW VIEWING REQUESTS
-================================= */
+========================================= */
 
 function showViewingRequests() {
 
@@ -1360,58 +1505,72 @@ function showViewingRequests() {
         );
 
 
-    section.scrollIntoView({
-        behavior: "smooth"
-    });
+    if (section) {
+
+        section.scrollIntoView({
+            behavior: "smooth"
+        });
+
+    }
 
 }
 
 
 
-/* =================================
-   COMING SOON
-================================= */
+/* =========================================
+   ESCAPE HTML
+========================================= */
 
-function showComingSoon(section) {
+function escapeHtml(value) {
 
-    alert(
-        section +
-        " will be connected in a later admin stage."
+    return String(
+        value ?? ""
+    )
+
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+
+    .replace(
+        /</g,
+        "&lt;"
+    )
+
+    .replace(
+        />/g,
+        "&gt;"
+    )
+
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+
+    .replace(
+        /'/g,
+        "&#039;"
     );
 
 }
 
 
 
-/* =================================
-   ESCAPE HTML
-================================= */
+/* =========================================
+   START DASHBOARD
+========================================= */
 
-function escapeHtml(value) {
+requireAdmin().then(
+    function(isAdmin) {
 
-    return String(value)
+        if (isAdmin) {
 
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+            loadAdminStatistics();
 
-}
+        }
 
-
-
-/* =================================
-   START
-================================= */
-
-requireAdmin().then(function(isAdmin) {
-
-    if (isAdmin) {
-        loadAdminStatistics();
     }
-
-});
+);
 
 </script>
 
@@ -1419,4 +1578,3 @@ requireAdmin().then(function(isAdmin) {
 </body>
 
 </html>
-```

@@ -5,14 +5,1534 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Tenant Dashboard | NichoLink 254</title>
 
-    <link rel="stylesheet" href="style.css">
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        :root {
+            --navy: #172033;
+            --blue: #2563eb;
+            --green: #15803d;
+            --green-dark: #166534;
+            --red: #dc2626;
+            --orange: #ea580c;
+            --purple: #7c3aed;
+            --teal: #0f766e;
+            --text: #1f2937;
+            --muted: #64748b;
+            --bg: #f5f7fa;
+            --border: #e2e8f0;
+            --white: #ffffff;
+            --shadow: 0 12px 35px rgba(15,23,42,.07);
+            --radius: 18px;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            font-family:
+                Inter,
+                ui-sans-serif,
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+
+        button,
+        input {
+            font: inherit;
+        }
+
+
+        a {
+            color: inherit;
+        }
+
+
+        /* =====================================================
+           TOP BAR
+        ===================================================== */
+
+        .tenant-topbar {
+            min-height: 72px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 28px;
+
+            padding: 12px 32px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid var(--border);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            box-shadow:
+                0 4px 18px rgba(15,23,42,.04);
+        }
+
+
+        .tenant-brand {
+            display: flex;
+            align-items: center;
+
+            font-size: 23px;
+            font-weight: 900;
+
+            text-decoration: none;
+
+            white-space: nowrap;
+        }
+
+
+        .tenant-brand span {
+            color: var(--navy);
+        }
+
+
+        .tenant-brand strong {
+            color: var(--green);
+            margin-left: 3px;
+        }
+
+
+        .top-navigation {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+
+            flex: 1;
+        }
+
+
+        .top-navigation a {
+            text-decoration: none;
+
+            padding: 9px 13px;
+
+            border-radius: 10px;
+
+            color: #64748b;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            transition: .2s ease;
+        }
+
+
+        .top-navigation a:hover,
+        .top-navigation a.active {
+            color: var(--blue);
+            background: #eff6ff;
+        }
+
+
+        .tenant-user-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+
+        .tenant-user-mini {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .tenant-avatar {
+            width: 43px;
+            height: 43px;
+            min-width: 43px;
+
+            border-radius: 50%;
+            overflow: hidden;
+
+            background: #dcfce7;
+            color: var(--green);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-weight: 900;
+            font-size: 17px;
+
+            border: 2px solid #ffffff;
+
+            box-shadow:
+                0 2px 10px rgba(0,0,0,.12);
+        }
+
+
+        .tenant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        .tenant-user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .tenant-user-info strong {
+            color: var(--navy);
+            font-size: 14px;
+        }
+
+
+        .tenant-user-info span {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+
+        .logout-button {
+            border: 0;
+
+            background: #fee2e2;
+            color: #b91c1c;
+
+            padding: 10px 14px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+
+        .logout-button:hover {
+            background: #fecaca;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .tenant-dashboard {
+            width: min(1400px,100%);
+            margin: 0 auto;
+            padding: 28px 30px 50px;
+        }
+
+
+        /* =====================================================
+           ACCOUNT
+        ===================================================== */
+
+        .account-section {
+            display: grid;
+
+            grid-template-columns:
+                minmax(0,1.2fr)
+                minmax(280px,.8fr);
+
+            gap: 22px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .account-card {
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            box-shadow: var(--shadow);
+
+            padding: 25px;
+        }
+
+
+        .account-heading {
+            margin-bottom: 20px;
+        }
+
+
+        .account-heading span {
+            color: var(--blue);
+
+            font-size: 11px;
+            font-weight: 900;
+
+            letter-spacing: 1.4px;
+        }
+
+
+        .account-heading h1 {
+            margin-top: 5px;
+
+            font-size: 25px;
+            color: var(--navy);
+        }
+
+
+        .account-content {
+            display: flex;
+
+            align-items: center;
+
+            gap: 22px;
+        }
+
+
+        .main-profile-photo {
+            width: 125px;
+            height: 125px;
+            min-width: 125px;
+
+            border-radius: 50%;
+            overflow: hidden;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #dcfce7,
+                    #ccfbf1
+                );
+
+            color: var(--green);
+
+            font-size: 42px;
+            font-weight: 900;
+
+            border: 5px solid #ffffff;
+
+            box-shadow:
+                0 8px 25px rgba(15,23,42,.13);
+        }
+
+
+        .main-profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        .account-details {
+            flex: 1;
+        }
+
+
+        .account-name {
+            font-size: 23px;
+
+            font-weight: 900;
+
+            color: var(--navy);
+
+            margin-bottom: 4px;
+        }
+
+
+        .account-role {
+            display: inline-block;
+
+            background: #dcfce7;
+            color: var(--green);
+
+            border-radius: 999px;
+
+            padding: 5px 10px;
+
+            font-size: 11px;
+            font-weight: 900;
+
+            margin-bottom: 15px;
+        }
+
+
+        .account-info-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(2,minmax(150px,1fr));
+
+            gap: 12px;
+        }
+
+
+        .account-info-item {
+            padding: 11px 13px;
+
+            background: #f8fafc;
+
+            border-radius: 11px;
+
+            border: 1px solid #eef2f7;
+        }
+
+
+        .account-info-item span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            font-weight: 700;
+
+            margin-bottom: 3px;
+        }
+
+
+        .account-info-item strong {
+            color: var(--navy);
+            font-size: 13px;
+            word-break: break-word;
+        }
+
+
+        /* =====================================================
+           PHOTO MANAGEMENT
+        ===================================================== */
+
+        .photo-management {
+            background:
+                linear-gradient(
+                    145deg,
+                    #0f766e,
+                    #115e59
+                );
+
+            color: #ffffff;
+
+            border-radius: var(--radius);
+
+            padding: 25px;
+
+            box-shadow: var(--shadow);
+        }
+
+
+        .photo-management h2 {
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+
+        .photo-management p {
+            font-size: 13px;
+            color: #ccfbf1;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+
+        .photo-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+
+        .photo-button {
+            border: 0;
+
+            padding: 10px 13px;
+
+            border-radius: 10px;
+
+            cursor: pointer;
+
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+
+        .choose-photo {
+            background: #ffffff;
+            color: var(--teal);
+        }
+
+
+        .upload-photo {
+            background: #16a34a;
+            color: #ffffff;
+        }
+
+
+        .remove-photo {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+
+        .photo-button:disabled {
+            opacity: .55;
+            cursor: not-allowed;
+        }
+
+
+        #profile-picture-input {
+            display: none;
+        }
+
+
+        #profile-upload-message {
+            margin-top: 14px;
+            min-height: 20px;
+
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+
+        .message-success {
+            color: #bbf7d0;
+        }
+
+
+        .message-error {
+            color: #fecaca;
+        }
+
+
+        .message-info {
+            color: #bfdbfe;
+        }
+
+
+        /* =====================================================
+           WELCOME
+        ===================================================== */
+
+        .tenant-welcome {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 27px;
+
+            margin-bottom: 23px;
+
+            border-radius: var(--radius);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #172033,
+                    #263449
+                );
+
+            color: #ffffff;
+
+            box-shadow: var(--shadow);
+        }
+
+
+        .dashboard-label {
+            color: #86efac;
+
+            font-size: 11px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .tenant-welcome h2 {
+            margin-top: 5px;
+            font-size: 27px;
+        }
+
+
+        .tenant-welcome p {
+            color: #cbd5e1;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+
+        .find-home-button {
+            display: inline-flex;
+
+            align-items: center;
+            justify-content: center;
+
+            text-decoration: none;
+
+            border: 0;
+
+            background: #16a34a;
+            color: #ffffff;
+
+            padding: 12px 17px;
+
+            border-radius: 11px;
+
+            font-size: 13px;
+            font-weight: 900;
+
+            cursor: pointer;
+
+            white-space: nowrap;
+        }
+
+
+        .find-home-button:hover {
+            background: var(--green);
+        }
+
+
+        /* =====================================================
+           STATISTICS
+        ===================================================== */
+
+        .tenant-stat-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 17px;
+
+            margin-bottom: 28px;
+        }
+
+
+        .tenant-stat-card {
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+
+            border-radius: 16px;
+
+            padding: 19px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 15px;
+
+            box-shadow: var(--shadow);
+        }
+
+
+        .stat-icon {
+            width: 47px;
+            height: 47px;
+            min-width: 47px;
+
+            border-radius: 13px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 20px;
+        }
+
+
+        .stat-green .stat-icon {
+            background: #dcfce7;
+        }
+
+
+        .stat-blue .stat-icon {
+            background: #dbeafe;
+        }
+
+
+        .stat-orange .stat-icon {
+            background: #ffedd5;
+        }
+
+
+        .stat-teal .stat-icon {
+            background: #ccfbf1;
+        }
+
+
+        .tenant-stat-card span {
+            display: block;
+
+            color: var(--muted);
+
+            font-size: 11px;
+            font-weight: 700;
+
+            margin-bottom: 2px;
+        }
+
+
+        .tenant-stat-card strong {
+            font-size: 25px;
+            color: var(--navy);
+        }
+
+
+        /* =====================================================
+           SECTION HEADINGS
+        ===================================================== */
+
+        .section-heading {
+            margin-bottom: 16px;
+        }
+
+
+        .section-heading span,
+        .content-section-header > div > span {
+            color: var(--blue);
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            letter-spacing: 1.4px;
+        }
+
+
+        .section-heading h2 {
+            color: var(--navy);
+
+            font-size: 22px;
+
+            margin-top: 4px;
+        }
+
+
+        .section-heading p {
+            color: var(--muted);
+
+            font-size: 13px;
+
+            margin-top: 3px;
+        }
+
+
+        /* =====================================================
+           QUICK NAVIGATION
+        ===================================================== */
+
+        .tenant-navigation-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4,1fr);
+
+            gap: 16px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .tenant-navigation-card {
+            border: 1px solid var(--border);
+
+            background: #ffffff;
+
+            border-radius: 16px;
+
+            padding: 19px;
+
+            text-align: left;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            box-shadow: var(--shadow);
+
+            transition: .2s ease;
+
+            color: inherit;
+        }
+
+
+        .tenant-navigation-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 18px 35px rgba(15,23,42,.10);
+        }
+
+
+        .navigation-icon {
+            width: 43px;
+            height: 43px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 12px;
+
+            margin-bottom: 13px;
+
+            font-size: 19px;
+        }
+
+
+        .navigation-green .navigation-icon {
+            background: #dcfce7;
+        }
+
+
+        .navigation-blue .navigation-icon {
+            background: #dbeafe;
+        }
+
+
+        .navigation-red .navigation-icon {
+            background: #fee2e2;
+        }
+
+
+        .navigation-purple .navigation-icon {
+            background: #ede9fe;
+        }
+
+
+        .navigation-orange .navigation-icon {
+            background: #ffedd5;
+        }
+
+
+        .navigation-teal .navigation-icon {
+            background: #ccfbf1;
+        }
+
+
+        .navigation-dark .navigation-icon {
+            background: #e2e8f0;
+        }
+
+
+        .tenant-navigation-card h3 {
+            color: var(--navy);
+
+            font-size: 16px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .tenant-navigation-card p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.55;
+
+            margin-bottom: 12px;
+        }
+
+
+        .navigation-link {
+            color: var(--blue);
+
+            font-size: 12px;
+
+            font-weight: 900;
+        }
+
+
+        /* =====================================================
+           CONTENT SECTIONS
+        ===================================================== */
+
+        .tenant-content-section {
+            background: #ffffff;
+
+            border: 1px solid var(--border);
+
+            border-radius: var(--radius);
+
+            padding: 24px;
+
+            margin-bottom: 23px;
+
+            box-shadow: var(--shadow);
+        }
+
+
+        .content-section-header {
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .content-section-header h2 {
+            color: var(--navy);
+
+            font-size: 21px;
+
+            margin-top: 4px;
+        }
+
+
+        .content-section-header p {
+            color: var(--muted);
+
+            font-size: 13px;
+
+            margin-top: 3px;
+        }
+
+
+        .small-action-button {
+            display: inline-flex;
+
+            text-decoration: none;
+
+            background: var(--navy);
+            color: #ffffff;
+
+            padding: 10px 13px;
+
+            border-radius: 10px;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           REQUESTS
+        ===================================================== */
+
+        .tenant-request-list {
+            display: grid;
+            gap: 12px;
+        }
+
+
+        .tenant-request-card {
+            display: grid;
+
+            grid-template-columns:
+                48px minmax(0,1fr) auto;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 15px;
+
+            background: #f8fafc;
+
+            border: 1px solid #eef2f7;
+
+            border-radius: 14px;
+        }
+
+
+        .request-icon {
+            width: 45px;
+            height: 45px;
+
+            border-radius: 12px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #dcfce7;
+        }
+
+
+        .request-information h3 {
+            color: var(--navy);
+
+            font-size: 15px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .request-information p {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-top: 3px;
+        }
+
+
+        .request-status {
+            padding: 6px 10px;
+
+            border-radius: 999px;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+
+        .request-status.approved {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+
+        .request-status.pending {
+            background: #ffedd5;
+            color: #c2410c;
+        }
+
+
+        .request-status.rejected {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+
+        /* =====================================================
+           SAVED PROPERTIES
+        ===================================================== */
+
+        .saved-properties-list {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(260px,1fr)
+                );
+
+            gap: 18px;
+        }
+
+
+        .saved-property-card {
+            overflow: hidden;
+
+            border: 1px solid var(--border);
+
+            border-radius: 15px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 7px 20px rgba(15,23,42,.06);
+        }
+
+
+        .saved-property-image,
+        .saved-property-image-placeholder {
+            width: 100%;
+            height: 180px;
+        }
+
+
+        .saved-property-image {
+            object-fit: cover;
+            display: block;
+        }
+
+
+        .saved-property-image-placeholder {
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            background: #f1f5f9;
+
+            font-size: 40px;
+        }
+
+
+        .saved-property-content {
+            padding: 16px;
+        }
+
+
+        .saved-property-content h3 {
+            color: var(--navy);
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .saved-property-location {
+            color: var(--muted);
+
+            font-size: 12px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .saved-property-rent {
+            color: var(--navy);
+
+            font-size: 17px;
+
+            font-weight: 900;
+
+            margin-bottom: 9px;
+        }
+
+
+        .saved-property-meta {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 8px;
+
+            color: var(--muted);
+
+            font-size: 11px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .saved-property-status {
+            display: inline-block;
+
+            padding: 5px 8px;
+
+            border-radius: 999px;
+
+            background: #dcfce7;
+
+            color: #15803d;
+
+            font-size: 10px;
+
+            font-weight: 900;
+
+            margin-bottom: 13px;
+        }
+
+
+        .saved-property-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+
+        .saved-view-button,
+        .saved-remove-button {
+            border: 0;
+
+            border-radius: 9px;
+
+            padding: 9px 11px;
+
+            font-size: 11px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            text-decoration: none;
+        }
+
+
+        .saved-view-button {
+            background: var(--navy);
+            color: #ffffff;
+        }
+
+
+        .saved-remove-button {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+
+        /* =====================================================
+           EMPTY
+        ===================================================== */
+
+        .tenant-empty-card {
+            text-align: center;
+
+            padding: 45px 20px;
+
+            border: 1px dashed #cbd5e1;
+
+            border-radius: 15px;
+
+            background: #f8fafc;
+        }
+
+
+        .empty-icon {
+            font-size: 34px;
+            margin-bottom: 10px;
+        }
+
+
+        .tenant-empty-card h3 {
+            color: var(--navy);
+
+            font-size: 17px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .tenant-empty-card p {
+            max-width: 500px;
+
+            margin: 0 auto 17px;
+
+            color: var(--muted);
+
+            font-size: 13px;
+        }
+
+
+        /* =====================================================
+           PROFILE
+        ===================================================== */
+
+        .tenant-profile-card {
+            display: grid;
+
+            grid-template-columns:
+                140px minmax(0,1fr);
+
+            gap: 25px;
+
+            align-items: start;
+        }
+
+
+        .profile-card-photo {
+            width: 125px;
+            height: 125px;
+
+            border-radius: 50%;
+
+            overflow: hidden;
+
+            background: #dcfce7;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            color: var(--green);
+
+            font-size: 40px;
+
+            font-weight: 900;
+        }
+
+
+        .profile-card-photo img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+
+        .profile-information h3 {
+            color: var(--navy);
+
+            margin-bottom: 15px;
+
+            font-size: 18px;
+        }
+
+
+        .profile-row {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding: 12px 0;
+
+            border-bottom:
+                1px solid #eef2f7;
+        }
+
+
+        .profile-row span {
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+
+        .profile-row strong {
+            color: var(--navy);
+
+            font-size: 13px;
+
+            text-align: right;
+
+            word-break: break-word;
+        }
+
+
+        .active-status {
+            color: var(--green) !important;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .tenant-footer {
+            margin-top: 35px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid var(--border);
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            color: var(--muted);
+
+            font-size: 12px;
+        }
+
+
+        .tenant-footer strong {
+            color: var(--navy);
+            font-size: 18px;
+        }
+
+
+        .tenant-footer strong span {
+            color: var(--green);
+        }
+
+
+        .tenant-footer p {
+            margin-top: 4px;
+        }
+
+
+        .tenant-footer a {
+            color: var(--blue);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width:1050px) {
+
+            .tenant-stat-grid {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .tenant-navigation-grid {
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .account-section {
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media (max-width:760px) {
+
+            .tenant-topbar {
+                padding: 12px 16px;
+
+                flex-wrap: wrap;
+
+                gap: 12px;
+            }
+
+
+            .top-navigation {
+                order: 3;
+
+                width: 100%;
+
+                overflow-x: auto;
+            }
+
+
+            .tenant-user-area {
+                margin-left: auto;
+            }
+
+
+            .tenant-user-info {
+                display: none;
+            }
+
+
+            .tenant-dashboard {
+                padding: 20px 15px 40px;
+            }
+
+
+            .tenant-welcome {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+
+            .account-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+
+            .account-info-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .photo-buttons {
+                flex-direction: column;
+            }
+
+
+            .photo-button {
+                width: 100%;
+            }
+
+
+            .tenant-profile-card {
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media (max-width:520px) {
+
+            .tenant-stat-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .tenant-navigation-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .tenant-request-card {
+                grid-template-columns:
+                    45px minmax(0,1fr);
+            }
+
+
+            .request-status {
+                grid-column: 2;
+                justify-self: start;
+            }
+
+
+            .content-section-header {
+                flex-direction: column;
+            }
+
+
+            .tenant-footer {
+                flex-direction: column;
+            }
+
+
+            .main-profile-photo {
+                width: 110px;
+                height: 110px;
+                min-width: 110px;
+            }
+
+        }
+
+    </style>
 
 </head>
 
@@ -20,18 +1540,20 @@
 <body>
 
 
-<!-- =================================
-     TOP NAVIGATION
-================================= -->
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
 
 <header class="tenant-topbar">
 
-    <div class="tenant-brand">
 
+    <a
+        href="index.html"
+        class="tenant-brand"
+    >
         <span>NichoLink</span>
         <strong>254</strong>
-
-    </div>
+    </a>
 
 
     <nav class="top-navigation">
@@ -40,12 +1562,16 @@
             🏠 Home
         </a>
 
+
         <a href="properties.html">
             🔎 Properties
         </a>
 
-        <a href="tenant-dashboard.html"
-           class="active">
+
+        <a
+            href="tenant-dashboard.html"
+            class="active"
+        >
             📊 Dashboard
         </a>
 
@@ -54,14 +1580,17 @@
 
     <div class="tenant-user-area">
 
+
         <div class="tenant-user-mini">
 
-            <div class="tenant-avatar"
-                 id="top-avatar">
 
+            <div
+                id="top-avatar"
+                class="tenant-avatar"
+            >
                 T
-
             </div>
+
 
             <div class="tenant-user-info">
 
@@ -70,10 +1599,11 @@
                 </strong>
 
                 <span>
-                    Tenant
+                    Tenant Account
                 </span>
 
             </div>
+
 
         </div>
 
@@ -81,30 +1611,217 @@
         <button
             type="button"
             class="logout-button"
-            onclick="logoutTenant()">
-
-            🚪 Logout
-
+            onclick="logoutTenant()"
+        >
+            Logout
         </button>
 
+
     </div>
+
 
 </header>
 
 
 
-<!-- =================================
-     MAIN DASHBOARD
-================================= -->
+<!-- =====================================================
+     MAIN
+===================================================== -->
 
 <main class="tenant-dashboard">
 
 
-    <!-- =================================
-         WELCOME HEADER
-    ================================= -->
+    <!-- =================================================
+         ACCOUNT INFORMATION
+    ================================================= -->
+
+    <section class="account-section">
+
+
+        <div class="account-card">
+
+
+            <div class="account-heading">
+
+                <span>
+                    ACCOUNT INFORMATION
+                </span>
+
+                <h1>
+                    My Account
+                </h1>
+
+            </div>
+
+
+            <div class="account-content">
+
+
+                <div
+                    id="main-profile-photo"
+                    class="main-profile-photo"
+                >
+                    T
+                </div>
+
+
+                <div class="account-details">
+
+
+                    <div
+                        id="account-name"
+                        class="account-name"
+                    >
+                        Tenant
+                    </div>
+
+
+                    <span class="account-role">
+                        TENANT
+                    </span>
+
+
+                    <div class="account-info-grid">
+
+
+                        <div class="account-info-item">
+
+                            <span>
+                                Email
+                            </span>
+
+                            <strong id="account-email">
+                                Loading...
+                            </strong>
+
+                        </div>
+
+
+                        <div class="account-info-item">
+
+                            <span>
+                                Phone
+                            </span>
+
+                            <strong id="account-phone">
+                                Loading...
+                            </strong>
+
+                        </div>
+
+
+                        <div class="account-info-item">
+
+                            <span>
+                                Account Status
+                            </span>
+
+                            <strong id="account-status">
+                                Active
+                            </strong>
+
+                        </div>
+
+
+                        <div class="account-info-item">
+
+                            <span>
+                                Account Type
+                            </span>
+
+                            <strong>
+                                Tenant
+                            </strong>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PHOTO MANAGEMENT -->
+
+        <div class="photo-management">
+
+
+            <h2>
+                Profile Photo
+            </h2>
+
+
+            <p>
+                Add a real profile photo so landlords
+                can identify your tenant account.
+                JPG, PNG or WEBP up to 5 MB.
+            </p>
+
+
+            <input
+                type="file"
+                id="profile-picture-input"
+                accept="image/jpeg,image/png,image/webp"
+            >
+
+
+            <div class="photo-buttons">
+
+
+                <button
+                    type="button"
+                    id="choose-profile-picture"
+                    class="photo-button choose-photo"
+                >
+                    📷 Choose Photo
+                </button>
+
+
+                <button
+                    type="button"
+                    id="upload-profile-picture"
+                    class="photo-button upload-photo"
+                >
+                    Upload Photo
+                </button>
+
+
+                <button
+                    type="button"
+                    id="remove-profile-picture"
+                    class="photo-button remove-photo"
+                >
+                    Remove
+                </button>
+
+
+            </div>
+
+
+            <div
+                id="profile-upload-message"
+            ></div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =================================================
+         WELCOME
+    ================================================= -->
 
     <section class="tenant-welcome">
+
 
         <div>
 
@@ -112,32 +1829,35 @@
                 TENANT PORTAL
             </span>
 
-            <h1 id="welcome-name">
+
+            <h2 id="welcome-name">
                 Welcome, Tenant 👋
-            </h1>
+            </h2>
+
 
             <p>
-                Find your next home, manage your viewing
-                requests and keep your rental journey organized.
+                Find your next home and manage your
+                rental journey from one place.
             </p>
 
         </div>
 
 
-        <a href="properties.html"
-           class="find-home-button">
-
+        <a
+            href="properties.html"
+            class="find-home-button"
+        >
             🔎 Find a Home
-
         </a>
+
 
     </section>
 
 
 
-    <!-- =================================
+    <!-- =================================================
          STATISTICS
-    ================================= -->
+    ================================================= -->
 
     <section class="tenant-stat-grid">
 
@@ -163,7 +1883,6 @@
         </div>
 
 
-
         <div class="tenant-stat-card stat-blue">
 
             <div class="stat-icon">
@@ -185,7 +1904,6 @@
         </div>
 
 
-
         <div class="tenant-stat-card stat-orange">
 
             <div class="stat-icon">
@@ -205,7 +1923,6 @@
             </div>
 
         </div>
-
 
 
         <div class="tenant-stat-card stat-teal">
@@ -233,11 +1950,11 @@
 
 
 
-    <!-- =================================
+    <!-- =================================================
          QUICK NAVIGATION
-    ================================= -->
+    ================================================= -->
 
-    <section class="tenant-navigation-section">
+    <section>
 
 
         <div class="section-heading">
@@ -251,203 +1968,218 @@
             </h2>
 
             <p>
-                Choose an option below to manage your rental journey.
+                Manage your rental activities from here.
             </p>
 
         </div>
 
 
-
         <div class="tenant-navigation-grid">
 
 
-            <!-- FIND PROPERTIES -->
-
-            <a href="properties.html"
-               class="tenant-navigation-card navigation-green">
+            <a
+                href="properties.html"
+                class="tenant-navigation-card navigation-green"
+            >
 
                 <div class="navigation-icon">
                     🔎
                 </div>
 
-                <div class="navigation-content">
+                <h3>
+                    Find Properties
+                </h3>
 
-                    <h3>
-                        Find Properties
-                    </h3>
+                <p>
+                    Browse available rental properties.
+                </p>
 
-                    <p>
-                        Browse available rental properties
-                        in Kisumu and surrounding areas.
-                    </p>
-
-                    <span class="navigation-link">
-                        Browse Properties →
-                    </span>
-
-                </div>
+                <span class="navigation-link">
+                    Browse Properties →
+                </span>
 
             </a>
 
 
 
-            <!-- VIEWING REQUESTS -->
-
             <button
                 type="button"
                 onclick="showRequests()"
-                class="tenant-navigation-card navigation-blue">
+                class="tenant-navigation-card navigation-blue"
+            >
 
                 <div class="navigation-icon">
                     📅
                 </div>
 
-                <div class="navigation-content">
+                <h3>
+                    Viewing Requests
+                </h3>
 
-                    <h3>
-                        Viewing Requests
-                    </h3>
+                <p>
+                    Track your property viewing requests.
+                </p>
 
-                    <p>
-                        Track the properties you have
-                        requested to view.
-                    </p>
-
-                    <span class="navigation-link">
-                        View Requests →
-                    </span>
-
-                </div>
+                <span class="navigation-link">
+                    View Requests →
+                </span>
 
             </button>
 
 
 
-            <!-- SAVED PROPERTIES -->
-
             <button
                 type="button"
                 onclick="showSaved()"
-                class="tenant-navigation-card navigation-red">
+                class="tenant-navigation-card navigation-red"
+            >
 
                 <div class="navigation-icon">
                     ❤️
                 </div>
 
-                <div class="navigation-content">
+                <h3>
+                    Saved Properties
+                </h3>
 
-                    <h3>
-                        Saved Properties
-                    </h3>
+                <p>
+                    Access properties you saved for later.
+                </p>
 
-                    <p>
-                        Quickly access properties
-                        you have saved for later.
-                    </p>
-
-                    <span class="navigation-link">
-                        View Saved →
-                    </span>
-
-                </div>
+                <span class="navigation-link">
+                    View Saved →
+                </span>
 
             </button>
 
 
 
-            <!-- MESSAGES -->
-
             <button
                 type="button"
                 onclick="showMessages()"
-                class="tenant-navigation-card navigation-purple">
+                class="tenant-navigation-card navigation-purple"
+            >
 
                 <div class="navigation-icon">
                     💬
                 </div>
 
-                <div class="navigation-content">
+                <h3>
+                    Messages
+                </h3>
 
-                    <h3>
-                        Messages
-                    </h3>
+                <p>
+                    Communicate with property owners.
+                </p>
 
-                    <p>
-                        Communicate with landlords
-                        about properties.
-                    </p>
-
-                    <span class="navigation-link">
-                        Open Messages →
-                    </span>
-
-                </div>
+                <span class="navigation-link">
+                    Open Messages →
+                </span>
 
             </button>
 
 
 
-            <!-- PROFILE -->
+            <a
+                href="notifications.html"
+                class="tenant-navigation-card navigation-orange"
+            >
+
+                <div class="navigation-icon">
+                    🔔
+                </div>
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    View important account updates.
+                </p>
+
+                <span class="navigation-link">
+                    View Notifications →
+                </span>
+
+            </a>
+
+
+
+            <a
+                href="trust-center.html"
+                class="tenant-navigation-card navigation-dark"
+            >
+
+                <div class="navigation-icon">
+                    🛡️
+                </div>
+
+                <h3>
+                    Trust Center
+                </h3>
+
+                <p>
+                    Safety, privacy, terms and help.
+                </p>
+
+                <span class="navigation-link">
+                    Open Trust Center →
+                </span>
+
+            </a>
+
+
 
             <button
                 type="button"
                 onclick="showProfile()"
-                class="tenant-navigation-card navigation-teal">
+                class="tenant-navigation-card navigation-teal"
+            >
 
                 <div class="navigation-icon">
                     👤
                 </div>
 
-                <div class="navigation-content">
+                <h3>
+                    My Profile
+                </h3>
 
-                    <h3>
-                        My Profile
-                    </h3>
+                <p>
+                    View your account information.
+                </p>
 
-                    <p>
-                        View your account and
-                        personal information.
-                    </p>
-
-                    <span class="navigation-link">
-                        View Profile →
-                    </span>
-
-                </div>
+                <span class="navigation-link">
+                    View Profile →
+                </span>
 
             </button>
 
 
 
-            <!-- SETTINGS -->
+            <!-- SETTINGS NOW CONNECTS TO settings.html -->
 
-            <button
-                type="button"
-                onclick="showSettings()"
-                class="tenant-navigation-card navigation-dark">
+            <a
+                href="settings.html"
+                class="tenant-navigation-card navigation-dark"
+            >
 
                 <div class="navigation-icon">
                     ⚙️
                 </div>
 
-                <div class="navigation-content">
+                <h3>
+                    Settings
+                </h3>
 
-                    <h3>
-                        Settings
-                    </h3>
+                <p>
+                    Manage your account preferences.
+                </p>
 
-                    <p>
-                        Manage your account
-                        preferences.
-                    </p>
+                <span class="navigation-link">
+                    Open Settings →
+                </span>
 
-                    <span class="navigation-link">
-                        Open Settings →
-                    </span>
-
-                </div>
-
-            </button>
+            </a>
 
 
         </div>
@@ -457,15 +2189,18 @@
 
 
 
-    <!-- =================================
+    <!-- =================================================
          VIEWING REQUESTS
-    ================================= -->
+    ================================================= -->
 
-    <section class="tenant-content-section"
-             id="requests-section">
+    <section
+        class="tenant-content-section"
+        id="requests-section"
+    >
 
 
         <div class="content-section-header">
+
 
             <div>
 
@@ -484,22 +2219,35 @@
             </div>
 
 
-            <a href="properties.html"
-               class="small-action-button">
-
+            <a
+                href="properties.html"
+                class="small-action-button"
+            >
                 + New Request
-
             </a>
+
 
         </div>
 
 
-        <div id="requests-list"
-             class="tenant-request-list">
+        <div
+            id="requests-list"
+            class="tenant-request-list"
+        >
 
-            <div class="dashboard-loading">
+            <div class="tenant-empty-card">
 
-                Loading requests...
+                <div class="empty-icon">
+                    ⏳
+                </div>
+
+                <h3>
+                    Loading Requests
+                </h3>
+
+                <p>
+                    Please wait while your requests load.
+                </p>
 
             </div>
 
@@ -510,13 +2258,15 @@
 
 
 
-    <!-- =================================
+    <!-- =================================================
          PROFILE
-    ================================= -->
+    ================================================= -->
 
-    <section class="tenant-content-section"
-             id="profile-section"
-             style="display:none;">
+    <section
+        class="tenant-content-section"
+        id="profile-section"
+        style="display:none;"
+    >
 
 
         <div class="content-section-header">
@@ -540,23 +2290,22 @@
         </div>
 
 
-        <div id="profile-card"
-             class="tenant-profile-container">
-
-        </div>
+        <div id="profile-card"></div>
 
 
     </section>
 
 
 
-    <!-- =================================
+    <!-- =================================================
          SAVED PROPERTIES
-    ================================= -->
+    ================================================= -->
 
-    <section class="tenant-content-section"
-             id="saved-section"
-             style="display:none;">
+    <section
+        class="tenant-content-section"
+        id="saved-section"
+        style="display:none;"
+    >
 
 
         <div class="content-section-header">
@@ -577,44 +2326,36 @@
 
             </div>
 
-        </div>
 
-
-        <div class="tenant-empty-card">
-
-            <div class="empty-icon">
-                ❤️
-            </div>
-
-            <h3>
-                No Saved Properties Yet
-            </h3>
-
-            <p>
-                Saved properties will appear here.
-            </p>
-
-            <a href="properties.html"
-               class="find-home-button">
-
-                🔎 Browse Properties
-
+            <a
+                href="properties.html"
+                class="small-action-button"
+            >
+                🔎 Find More Homes
             </a>
 
         </div>
+
+
+        <div
+            id="saved-properties-list"
+            class="saved-properties-list"
+        ></div>
 
 
     </section>
 
 
 
-    <!-- =================================
+    <!-- =================================================
          MESSAGES
-    ================================= -->
+    ================================================= -->
 
-    <section class="tenant-content-section"
-             id="messages-section"
-             style="display:none;">
+    <section
+        class="tenant-content-section"
+        id="messages-section"
+        style="display:none;"
+    >
 
 
         <div class="content-section-header">
@@ -660,69 +2401,17 @@
 
 
 
-    <!-- =================================
-         SETTINGS
-    ================================= -->
-
-    <section class="tenant-content-section"
-             id="settings-section"
-             style="display:none;">
-
-
-        <div class="content-section-header">
-
-            <div>
-
-                <span>
-                    ACCOUNT
-                </span>
-
-                <h2>
-                    Settings
-                </h2>
-
-                <p>
-                    Manage your NichoLink 254 preferences.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="tenant-empty-card">
-
-            <div class="empty-icon">
-                ⚙️
-            </div>
-
-            <h3>
-                Account Settings
-            </h3>
-
-            <p>
-                Additional account settings will be
-                available here.
-            </p>
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =================================
+    <!-- =================================================
          FOOTER
-    ================================= -->
+    ================================================= -->
 
     <footer class="tenant-footer">
+
 
         <div>
 
             <strong>
-                NichoLink
-                <span>254</span>
+                NichoLink<span>254</span>
             </strong>
 
             <p>
@@ -732,10 +2421,24 @@
         </div>
 
 
-        <p>
-            © 2026 NichoLink 254.
-            All rights reserved.
-        </p>
+        <div>
+
+            <p>
+                © 2026 NichoLink 254.
+                All rights reserved.
+            </p>
+
+
+            <p>
+
+                <a href="trust-center.html">
+                    🛡️ Trust & Information Center
+                </a>
+
+            </p>
+
+        </div>
+
 
     </footer>
 
@@ -749,21 +2452,55 @@
 
 <script>
 
-
 let currentUser = null;
 
 let currentProfile = null;
 
+let selectedProfileFile = null;
 
 
-/* =================================
-   LOAD TENANT DASHBOARD
-================================= */
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
+const profilePictureInput =
+    document.getElementById(
+        "profile-picture-input"
+    );
+
+
+const chooseProfilePictureButton =
+    document.getElementById(
+        "choose-profile-picture"
+    );
+
+
+const uploadProfilePictureButton =
+    document.getElementById(
+        "upload-profile-picture"
+    );
+
+
+const removeProfilePictureButton =
+    document.getElementById(
+        "remove-profile-picture"
+    );
+
+
+const profileUploadMessage =
+    document.getElementById(
+        "profile-upload-message"
+    );
+
+
+
+/* =====================================================
+   LOAD DASHBOARD
+===================================================== */
 
 async function loadTenantDashboard() {
 
     try {
-
 
         const {
             data: {
@@ -771,7 +2508,9 @@ async function loadTenantDashboard() {
             },
             error: authError
         } =
-            await supabaseClient.auth.getUser();
+            await supabaseClient
+                .auth
+                .getUser();
 
 
         if (authError) {
@@ -785,26 +2524,19 @@ async function loadTenantDashboard() {
                 "login.html";
 
             return;
-
         }
 
 
-        currentUser = user;
+        currentUser =
+            user;
 
-
-
-        /* =============================
-           GET PROFILE
-        ============================= */
 
         const {
             data: profile,
             error: profileError
         } =
             await supabaseClient
-
                 .from("profiles")
-
                 .select(`
                     id,
                     full_name,
@@ -812,14 +2544,13 @@ async function loadTenantDashboard() {
                     email,
                     account_type,
                     created_at,
-                    is_active
+                    is_active,
+                    avatar_url
                 `)
-
                 .eq(
                     "id",
                     user.id
                 )
-
                 .maybeSingle();
 
 
@@ -833,235 +2564,77 @@ async function loadTenantDashboard() {
             throw new Error(
                 "Tenant profile not found."
             );
-
         }
 
 
-        currentProfile = profile;
+        currentProfile =
+            profile;
 
-
-
-        /* =============================
-           VERIFY TENANT
-        ============================= */
 
         const accountType =
             String(
                 profile.account_type || ""
             )
-            .trim()
-            .toLowerCase();
+                .trim()
+                .toLowerCase();
 
 
-        if (accountType !== "tenant") {
+        if (
+            accountType !==
+            "tenant"
+        ) {
 
             alert(
-                "This dashboard is for tenant accounts."
+                "This dashboard is only available to tenant accounts."
             );
+
 
             window.location.href =
                 "index.html";
 
-            return;
 
+            return;
         }
 
 
-        if (profile.is_active === false) {
+        if (
+            profile.is_active === false
+        ) {
 
-            await supabaseClient.auth.signOut();
+            await supabaseClient
+                .auth
+                .signOut();
+
 
             window.location.href =
                 "login.html";
 
+
             return;
-
         }
 
 
-
-        /* =============================
-           WELCOME
-        ============================= */
-
-        const fullName =
-            profile.full_name ||
-            "Tenant";
-
-
-        document.getElementById(
-            "welcome-name"
-        ).textContent =
-            "Welcome, " +
-            fullName +
-            " 👋";
-
-
-        document.getElementById(
-            "top-user-name"
-        ).textContent =
-            fullName;
-
-
-        const firstLetter =
-            String(fullName)
-                .trim()
-                .charAt(0)
-                .toUpperCase() ||
-            "T";
-
-
-        document.getElementById(
-            "top-avatar"
-        ).textContent =
-            firstLetter;
-
-
-
-        /* =============================
-           LOAD PROPERTIES
-        ============================= */
-
-        const {
-            data: properties,
-            error: propertiesError
-        } =
-            await supabaseClient
-
-                .from("properties")
-
-                .select(`
-                    id,
-                    title,
-                    status
-                `);
-
-
-        if (propertiesError) {
-            throw propertiesError;
-        }
-
-
-        const propertyList =
-            Array.isArray(properties)
-                ? properties
-                : [];
-
-
-        const available =
-            propertyList.filter(
-                property =>
-                    String(
-                        property.status ||
-                        "available"
-                    )
-                    .trim()
-                    .toLowerCase()
-                    ===
-                    "available"
-            ).length;
-
-
-        document.getElementById(
-            "available-properties"
-        ).textContent =
-            available;
-
-
-
-        /* =============================
-           LOAD MY REQUESTS
-        ============================= */
-
-        const {
-            data: requests,
-            error: requestsError
-        } =
-            await supabaseClient
-
-                .from("viewing_requests")
-
-                .select(`
-                    id,
-                    property_id,
-                    tenant_name,
-                    tenant_phone,
-                    viewing_date,
-                    message,
-                    status,
-                    created_at
-                `)
-
-                .eq(
-                    "tenant_phone",
-                    profile.phone
-                )
-
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
-
-
-        if (requestsError) {
-            throw requestsError;
-        }
-
-
-        const requestList =
-            Array.isArray(requests)
-                ? requests
-                : [];
-
-
-        const pending =
-            requestList.filter(
-                request =>
-                    normalizeStatus(
-                        request.status
-                    ) === "pending"
-            ).length;
-
-
-        const approved =
-            requestList.filter(
-                request =>
-                    normalizeStatus(
-                        request.status
-                    ) === "approved"
-            ).length;
-
-
-        document.getElementById(
-            "my-requests"
-        ).textContent =
-            requestList.length;
-
-
-        document.getElementById(
-            "pending-requests"
-        ).textContent =
-            pending;
-
-
-        document.getElementById(
-            "approved-requests"
-        ).textContent =
-            approved;
-
-
-        displayRequests(
-            requestList,
-            propertyList
+        updateAccountInformation(
+            profile
         );
 
 
-        displayProfile(profile);
+        updateTopAvatar(
+            profile
+        );
 
+
+        displayProfile(
+            profile
+        );
+
+
+        await loadDashboardStatistics(
+            profile
+        );
 
     }
+
 
     catch (error) {
 
@@ -1071,9 +2644,13 @@ async function loadTenantDashboard() {
         );
 
 
-        document.getElementById(
-            "requests-list"
-        ).innerHTML = `
+        const requestList =
+            document.getElementById(
+                "requests-list"
+            );
+
+
+        requestList.innerHTML = `
 
             <div class="tenant-empty-card">
 
@@ -1102,9 +2679,322 @@ async function loadTenantDashboard() {
 
 
 
-/* =================================
+/* =====================================================
+   ACCOUNT INFORMATION
+===================================================== */
+
+function updateAccountInformation(
+    profile
+) {
+
+    const name =
+        profile.full_name ||
+        "Tenant";
+
+
+    document.getElementById(
+        "account-name"
+    ).textContent =
+        name;
+
+
+    document.getElementById(
+        "account-email"
+    ).textContent =
+        profile.email ||
+        currentUser?.email ||
+        "Not provided";
+
+
+    document.getElementById(
+        "account-phone"
+    ).textContent =
+        profile.phone ||
+        "Not provided";
+
+
+    document.getElementById(
+        "account-status"
+    ).textContent =
+        profile.is_active === false
+            ? "Inactive"
+            : "Active";
+
+
+    document.getElementById(
+        "welcome-name"
+    ).textContent =
+        "Welcome, " +
+        name +
+        " 👋";
+
+
+    updateMainProfilePhoto(
+        profile
+    );
+
+}
+
+
+
+/* =====================================================
+   MAIN PROFILE PHOTO
+===================================================== */
+
+function updateMainProfilePhoto(
+    profile
+) {
+
+    const element =
+        document.getElementById(
+            "main-profile-photo"
+        );
+
+
+    const name =
+        profile.full_name ||
+        "Tenant";
+
+
+    const firstLetter =
+        String(name)
+            .trim()
+            .charAt(0)
+            .toUpperCase() ||
+        "T";
+
+
+    if (
+        profile.avatar_url
+    ) {
+
+        element.innerHTML = `
+
+            <img
+                src="${escapeHtml(
+                    addCacheBuster(
+                        profile.avatar_url
+                    )
+                )}"
+                alt="Profile photo"
+            >
+
+        `;
+
+    }
+
+    else {
+
+        element.textContent =
+            firstLetter;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   TOP AVATAR
+===================================================== */
+
+function updateTopAvatar(
+    profile
+) {
+
+    const avatar =
+        document.getElementById(
+            "top-avatar"
+        );
+
+
+    const name =
+        profile.full_name ||
+        "Tenant";
+
+
+    const firstLetter =
+        String(name)
+            .trim()
+            .charAt(0)
+            .toUpperCase() ||
+        "T";
+
+
+    if (
+        profile.avatar_url
+    ) {
+
+        avatar.innerHTML = `
+
+            <img
+                src="${escapeHtml(
+                    addCacheBuster(
+                        profile.avatar_url
+                    )
+                )}"
+                alt="Profile photo"
+            >
+
+        `;
+
+    }
+
+    else {
+
+        avatar.textContent =
+            firstLetter;
+
+    }
+
+
+    document.getElementById(
+        "top-user-name"
+    ).textContent =
+        name;
+
+}
+
+
+
+/* =====================================================
+   STATISTICS
+===================================================== */
+
+async function loadDashboardStatistics(
+    profile
+) {
+
+    const {
+        data: properties,
+        error: propertiesError
+    } =
+        await supabaseClient
+            .from("properties")
+            .select(`
+                id,
+                title,
+                status
+            `);
+
+
+    if (propertiesError) {
+        throw propertiesError;
+    }
+
+
+    const propertyList =
+        Array.isArray(properties)
+            ? properties
+            : [];
+
+
+    const available =
+        propertyList.filter(
+            property =>
+                normalizeStatus(
+                    property.status ||
+                    "available"
+                ) ===
+                "available"
+        ).length;
+
+
+    document.getElementById(
+        "available-properties"
+    ).textContent =
+        available;
+
+
+    const {
+        data: requests,
+        error: requestsError
+    } =
+        await supabaseClient
+            .from("viewing_requests")
+            .select(`
+                id,
+                property_id,
+                tenant_name,
+                tenant_phone,
+                viewing_date,
+                message,
+                status,
+                created_at
+            `)
+            .eq(
+                "tenant_phone",
+                profile.phone
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (requestsError) {
+        throw requestsError;
+    }
+
+
+    const requestList =
+        Array.isArray(requests)
+            ? requests
+            : [];
+
+
+    const pending =
+        requestList.filter(
+            request =>
+                normalizeStatus(
+                    request.status
+                ) ===
+                "pending"
+        ).length;
+
+
+    const approved =
+        requestList.filter(
+            request =>
+                normalizeStatus(
+                    request.status
+                ) ===
+                "approved"
+        ).length;
+
+
+    document.getElementById(
+        "my-requests"
+    ).textContent =
+        requestList.length;
+
+
+    document.getElementById(
+        "pending-requests"
+    ).textContent =
+        pending;
+
+
+    document.getElementById(
+        "approved-requests"
+    ).textContent =
+        approved;
+
+
+    displayRequests(
+        requestList,
+        propertyList
+    );
+
+}
+
+
+
+/* =====================================================
    DISPLAY REQUESTS
-================================= */
+===================================================== */
 
 function displayRequests(
     requests,
@@ -1117,10 +3007,13 @@ function displayRequests(
         );
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
-    if (!requests.length) {
+    if (
+        !requests.length
+    ) {
 
         container.innerHTML = `
 
@@ -1135,15 +3028,15 @@ function displayRequests(
                 </h3>
 
                 <p>
-                    You have not submitted
-                    any viewing requests yet.
+                    You have not submitted any
+                    viewing requests yet.
                 </p>
 
-                <a href="properties.html"
-                   class="find-home-button">
-
+                <a
+                    href="properties.html"
+                    class="find-home-button"
+                >
                     🔎 Find a Property
-
                 </a>
 
             </div>
@@ -1151,19 +3044,16 @@ function displayRequests(
         `;
 
         return;
-
     }
 
 
     requests.forEach(
         request => {
 
-
             const property =
                 properties.find(
                     item =>
-                        String(item.id)
-                        ===
+                        String(item.id) ===
                         String(
                             request.property_id
                         )
@@ -1171,10 +3061,8 @@ function displayRequests(
 
 
             const propertyTitle =
-                property &&
-                property.title
-                    ? property.title
-                    : "Property";
+                property?.title ||
+                "Property";
 
 
             const status =
@@ -1218,7 +3106,6 @@ function displayRequests(
 
 
                     <p>
-
                         <strong>
                             Viewing Date:
                         </strong>
@@ -1228,12 +3115,10 @@ function displayRequests(
                                 request.viewing_date
                             )
                         )}
-
                     </p>
 
 
                     <p>
-
                         <strong>
                             Message:
                         </strong>
@@ -1242,24 +3127,27 @@ function displayRequests(
                             request.message ||
                             "No message"
                         )}
-
                     </p>
 
                 </div>
 
 
-                <div class="request-status ${statusClass}">
-
+                <div
+                    class="request-status ${statusClass}"
+                >
                     ${escapeHtml(
-                        formatStatus(status)
+                        formatStatus(
+                            status
+                        )
                     )}
-
                 </div>
 
             `;
 
 
-            container.appendChild(card);
+            container.appendChild(
+                card
+            );
 
         }
     );
@@ -1268,11 +3156,13 @@ function displayRequests(
 
 
 
-/* =================================
-   DISPLAY PROFILE
-================================= */
+/* =====================================================
+   PROFILE DISPLAY
+===================================================== */
 
-function displayProfile(profile) {
+function displayProfile(
+    profile
+) {
 
     const container =
         document.getElementById(
@@ -1280,12 +3170,44 @@ function displayProfile(profile) {
         );
 
 
-    container.innerHTML = `
+    if (!container) {
+        return;
+    }
 
-        <div class="tenant-profile-card">
 
-            <div class="profile-avatar">
+    const avatar =
+        profile.avatar_url
 
+            ?
+
+        `
+
+            <img
+                src="${escapeHtml(
+                    addCacheBuster(
+                        profile.avatar_url
+                    )
+                )}"
+                alt="Profile photo"
+                class="profile-card-photo"
+                style="
+                    width:125px;
+                    height:125px;
+                    border-radius:50%;
+                    object-fit:cover;
+                    display:block;
+                "
+            >
+
+        `
+
+            :
+
+        `
+
+            <div
+                class="profile-card-photo"
+            >
                 ${escapeHtml(
                     (
                         profile.full_name ||
@@ -1294,6 +3216,18 @@ function displayProfile(profile) {
                     .charAt(0)
                     .toUpperCase()
                 )}
+            </div>
+
+        `;
+
+
+    container.innerHTML = `
+
+        <div class="tenant-profile-card">
+
+            <div>
+
+                ${avatar}
 
             </div>
 
@@ -1388,16 +3322,1157 @@ function displayProfile(profile) {
 
 
 
-/* =================================
-   NAVIGATION FUNCTIONS
-================================= */
+/* =====================================================
+   PROFILE PHOTO SELECTION
+===================================================== */
 
-function showRequests() {
+if (
+    chooseProfilePictureButton
+) {
+
+    chooseProfilePictureButton.addEventListener(
+        "click",
+        function() {
+
+            profilePictureInput?.click();
+
+        }
+    );
+
+}
+
+
+if (
+    profilePictureInput
+) {
+
+    profilePictureInput.addEventListener(
+        "change",
+        function() {
+
+            const file =
+                profilePictureInput.files &&
+                profilePictureInput.files[0];
+
+
+            if (!file) {
+                return;
+            }
+
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+
+            if (
+                !allowedTypes.includes(
+                    file.type
+                )
+            ) {
+
+                showProfileMessage(
+                    "Please choose a JPG, PNG or WEBP photo.",
+                    "error"
+                );
+
+                profilePictureInput.value =
+                    "";
+
+                selectedProfileFile =
+                    null;
+
+                return;
+            }
+
+
+            if (
+                file.size >
+                5 * 1024 * 1024
+            ) {
+
+                showProfileMessage(
+                    "Photo must be 5 MB or smaller.",
+                    "error"
+                );
+
+                profilePictureInput.value =
+                    "";
+
+                selectedProfileFile =
+                    null;
+
+                return;
+            }
+
+
+            selectedProfileFile =
+                file;
+
+
+            const previewUrl =
+                URL.createObjectURL(
+                    file
+                );
+
+
+            document.getElementById(
+                "main-profile-photo"
+            ).innerHTML = `
+
+                <img
+                    src="${previewUrl}"
+                    alt="Selected profile photo"
+                >
+
+            `;
+
+
+            document.getElementById(
+                "top-avatar"
+            ).innerHTML = `
+
+                <img
+                    src="${previewUrl}"
+                    alt="Selected profile photo"
+                >
+
+            `;
+
+
+            showProfileMessage(
+                "Photo selected. Click Upload Photo.",
+                "info"
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   UPLOAD PROFILE PHOTO
+===================================================== */
+
+if (
+    uploadProfilePictureButton
+) {
+
+    uploadProfilePictureButton.addEventListener(
+        "click",
+        uploadProfilePicture
+    );
+
+}
+
+
+async function uploadProfilePicture() {
+
+    if (!currentUser) {
+
+        showProfileMessage(
+            "Your login session has expired.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!selectedProfileFile) {
+
+        showProfileMessage(
+            "Choose a photo first.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    setPhotoButtons(
+        true
+    );
+
+
+    try {
+
+        const extension =
+            getFileExtension(
+                selectedProfileFile.name
+            );
+
+
+        const filePath =
+            currentUser.id +
+            "/profile-" +
+            Date.now() +
+            "." +
+            extension;
+
+
+        const {
+            error: uploadError
+        } =
+            await supabaseClient
+                .storage
+                .from("avatars")
+                .upload(
+                    filePath,
+                    selectedProfileFile,
+                    {
+                        cacheControl: "3600",
+                        upsert: false,
+                        contentType:
+                            selectedProfileFile.type
+                    }
+                );
+
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+
+        const {
+            data
+        } =
+            supabaseClient
+                .storage
+                .from("avatars")
+                .getPublicUrl(
+                    filePath
+                );
+
+
+        const avatarUrl =
+            data?.publicUrl;
+
+
+        if (!avatarUrl) {
+
+            throw new Error(
+                "Unable to create profile photo URL."
+            );
+        }
+
+
+        const {
+            error: updateError
+        } =
+            await supabaseClient
+                .from("profiles")
+                .update({
+                    avatar_url:
+                        avatarUrl
+                })
+                .eq(
+                    "id",
+                    currentUser.id
+                );
+
+
+        if (updateError) {
+            throw updateError;
+        }
+
+
+        currentProfile = {
+            ...currentProfile,
+            avatar_url:
+                avatarUrl
+        };
+
+
+        updateAccountInformation(
+            currentProfile
+        );
+
+
+        updateTopAvatar(
+            currentProfile
+        );
+
+
+        displayProfile(
+            currentProfile
+        );
+
+
+        selectedProfileFile =
+            null;
+
+
+        profilePictureInput.value =
+            "";
+
+
+        showProfileMessage(
+            "Profile photo uploaded successfully.",
+            "success"
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Profile photo upload error:",
+            error
+        );
+
+
+        updateAccountInformation(
+            currentProfile
+        );
+
+
+        showProfileMessage(
+            error.message ||
+            "Unable to upload profile photo.",
+            "error"
+        );
+
+    }
+
+
+    finally {
+
+        setPhotoButtons(
+            false
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   REMOVE PROFILE PHOTO
+===================================================== */
+
+if (
+    removeProfilePictureButton
+) {
+
+    removeProfilePictureButton.addEventListener(
+        "click",
+        removeProfilePicture
+    );
+
+}
+
+
+async function removeProfilePicture() {
+
+    if (
+        !currentProfile ||
+        !currentProfile.avatar_url
+    ) {
+
+        showProfileMessage(
+            "There is no profile photo to remove.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (
+        !confirm(
+            "Remove your profile photo?"
+        )
+    ) {
+        return;
+    }
+
+
+    setPhotoButtons(
+        true
+    );
+
+
+    try {
+
+        const storagePath =
+            getAvatarStoragePath(
+                currentProfile.avatar_url
+            );
+
+
+        if (storagePath) {
+
+            const {
+                error:
+                    storageError
+            } =
+                await supabaseClient
+                    .storage
+                    .from("avatars")
+                    .remove([
+                        storagePath
+                    ]);
+
+
+            if (storageError) {
+
+                console.warn(
+                    "Storage removal warning:",
+                    storageError
+                );
+
+            }
+
+        }
+
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .update({
+                    avatar_url:
+                        null
+                })
+                .eq(
+                    "id",
+                    currentUser.id
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        currentProfile = {
+            ...currentProfile,
+            avatar_url:
+                null
+        };
+
+
+        updateAccountInformation(
+            currentProfile
+        );
+
+
+        updateTopAvatar(
+            currentProfile
+        );
+
+
+        displayProfile(
+            currentProfile
+        );
+
+
+        showProfileMessage(
+            "Profile photo removed.",
+            "success"
+        );
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Profile photo removal error:",
+            error
+        );
+
+
+        showProfileMessage(
+            error.message ||
+            "Unable to remove profile photo.",
+            "error"
+        );
+
+    }
+
+
+    finally {
+
+        setPhotoButtons(
+            false
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PHOTO HELPERS
+===================================================== */
+
+function setPhotoButtons(
+    disabled
+) {
+
+    [
+        chooseProfilePictureButton,
+        uploadProfilePictureButton,
+        removeProfilePictureButton
+    ].forEach(
+        button => {
+
+            if (button) {
+                button.disabled =
+                    disabled;
+            }
+
+        }
+    );
+
+}
+
+
+function showProfileMessage(
+    message,
+    type
+) {
+
+    if (!profileUploadMessage) {
+        return;
+    }
+
+
+    profileUploadMessage.textContent =
+        message;
+
+
+    profileUploadMessage.className =
+        "";
+
+
+    if (type === "success") {
+        profileUploadMessage.classList.add(
+            "message-success"
+        );
+    }
+
+    else if (type === "error") {
+        profileUploadMessage.classList.add(
+            "message-error"
+        );
+    }
+
+    else {
+        profileUploadMessage.classList.add(
+            "message-info"
+        );
+    }
+
+}
+
+
+function getAvatarStoragePath(
+    avatarUrl
+) {
+
+    try {
+
+        const marker =
+            "/storage/v1/object/public/avatars/";
+
+
+        const index =
+            avatarUrl.indexOf(
+                marker
+            );
+
+
+        if (
+            index === -1
+        ) {
+            return null;
+        }
+
+
+        return decodeURIComponent(
+            avatarUrl.substring(
+                index +
+                marker.length
+            )
+        );
+
+    }
+
+    catch {
+        return null;
+    }
+
+}
+
+
+function addCacheBuster(
+    url
+) {
+
+    if (!url) {
+        return url;
+    }
+
+
+    return (
+        url +
+        (
+            url.includes("?")
+                ? "&"
+                : "?"
+        ) +
+        "v=" +
+        Date.now()
+    );
+
+}
+
+
+function getFileExtension(
+    filename
+) {
+
+    const parts =
+        String(filename)
+            .split(".");
+
+
+    return (
+        parts.length > 1
+            ? parts.pop()
+            : "jpg"
+    )
+        .toLowerCase()
+        .replace(
+            /[^a-z0-9]/g,
+            ""
+        );
+
+}
+
+
+
+/* =====================================================
+   SAVED PROPERTIES
+===================================================== */
+
+async function loadSavedProperties() {
+
+    const container =
+        document.getElementById(
+            "saved-properties-list"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (!currentUser) {
+
+        container.innerHTML = `
+
+            <div class="tenant-empty-card">
+
+                <div class="empty-icon">
+                    🔐
+                </div>
+
+                <h3>
+                    Login Required
+                </h3>
+
+                <p>
+                    Please log in to view saved properties.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML = `
+
+        <div class="tenant-empty-card">
+
+            <div class="empty-icon">
+                ⏳
+            </div>
+
+            <h3>
+                Loading Saved Properties
+            </h3>
+
+            <p>
+                Please wait.
+            </p>
+
+        </div>
+
+    `;
+
+
+    try {
+
+        const {
+            data: savedRows,
+            error: savedError
+        } =
+            await supabaseClient
+                .from("saved_properties")
+                .select(`
+                    id,
+                    property_id,
+                    created_at
+                `)
+                .eq(
+                    "user_id",
+                    currentUser.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (savedError) {
+            throw savedError;
+        }
+
+
+        if (
+            !savedRows ||
+            savedRows.length === 0
+        ) {
+
+            container.innerHTML = `
+
+                <div class="tenant-empty-card">
+
+                    <div class="empty-icon">
+                        ❤️
+                    </div>
+
+                    <h3>
+                        No Saved Properties Yet
+                    </h3>
+
+                    <p>
+                        Save properties from the property
+                        search page and they will appear here.
+                    </p>
+
+                    <a
+                        href="properties.html"
+                        class="find-home-button"
+                    >
+                        🔎 Browse Properties
+                    </a>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        const ids =
+            savedRows.map(
+                row =>
+                    row.property_id
+            );
+
+
+        const {
+            data: properties,
+            error: propertyError
+        } =
+            await supabaseClient
+                .from("properties")
+                .select(`
+                    id,
+                    title,
+                    location,
+                    rent,
+                    bedrooms,
+                    bathrooms,
+                    status,
+                    image_url
+                `)
+                .in(
+                    "id",
+                    ids
+                );
+
+
+        if (propertyError) {
+            throw propertyError;
+        }
+
+
+        const map =
+            new Map();
+
+
+        (
+            properties || []
+        ).forEach(
+            property => {
+
+                map.set(
+                    String(property.id),
+                    property
+                );
+
+            }
+        );
+
+
+        container.innerHTML =
+            "";
+
+
+        savedRows.forEach(
+            saved => {
+
+                const property =
+                    map.get(
+                        String(
+                            saved.property_id
+                        )
+                    );
+
+
+                if (!property) {
+                    return;
+                }
+
+
+                const card =
+                    document.createElement(
+                        "article"
+                    );
+
+
+                card.className =
+                    "saved-property-card";
+
+
+                const image =
+                    property.image_url?.trim() ||
+                    "";
+
+
+                card.innerHTML = `
+
+                    ${
+                        image
+
+                        ?
+
+                        `
+
+                            <img
+                                src="${escapeHtml(image)}"
+                                alt="${escapeHtml(
+                                    property.title ||
+                                    "Property"
+                                )}"
+                                class="saved-property-image"
+                            >
+
+                        `
+
+                        :
+
+                        `
+
+                            <div
+                                class="saved-property-image-placeholder"
+                            >
+                                🏠
+                            </div>
+
+                        `
+                    }
+
+
+                    <div class="saved-property-content">
+
+                        <h3>
+                            ${escapeHtml(
+                                property.title ||
+                                "Property"
+                            )}
+                        </h3>
+
+
+                        <p class="saved-property-location">
+
+                            📍
+                            ${escapeHtml(
+                                property.location ||
+                                "Location not specified"
+                            )}
+
+                        </p>
+
+
+                        <p class="saved-property-rent">
+
+                            KSh
+                            ${Number(
+                                property.rent || 0
+                            ).toLocaleString()}
+
+                            <span
+                                style="
+                                    font-size:11px;
+                                    font-weight:500;
+                                    color:#64748b;
+                                "
+                            >
+                                / month
+                            </span>
+
+                        </p>
+
+
+                        <div class="saved-property-meta">
+
+                            <span>
+                                🛏
+                                ${Number(
+                                    property.bedrooms || 0
+                                )}
+                                bedrooms
+                            </span>
+
+                            <span>
+                                🚿
+                                ${Number(
+                                    property.bathrooms || 0
+                                )}
+                                bathrooms
+                            </span>
+
+                        </div>
+
+
+                        <span class="saved-property-status">
+
+                            ${escapeHtml(
+                                property.status ||
+                                "Available"
+                            )}
+
+                        </span>
+
+
+                        <div class="saved-property-actions">
+
+                            <a
+                                href="property-details.html?id=${encodeURIComponent(
+                                    property.id
+                                )}"
+                                class="saved-view-button"
+                            >
+                                View Details
+                            </a>
+
+
+                            <button
+                                type="button"
+                                class="saved-remove-button"
+                                onclick="removeSavedProperty(
+                                    '${escapeHtml(
+                                        property.id
+                                    )}'
+                                )"
+                            >
+                                Remove
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
+
+        if (
+            !container.children.length
+        ) {
+
+            container.innerHTML = `
+
+                <div class="tenant-empty-card">
+
+                    <div class="empty-icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        Saved Properties Unavailable
+                    </h3>
+
+                    <p>
+                        Some saved properties may
+                        no longer be available.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Saved properties error:",
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="tenant-empty-card">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to Load Saved Properties
+                </h3>
+
+                <p>
+                    ${escapeHtml(
+                        error.message ||
+                        "Unknown error"
+                    )}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =====================================================
+   REMOVE SAVED PROPERTY
+===================================================== */
+
+async function removeSavedProperty(
+    propertyId
+) {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    if (
+        !confirm(
+            "Remove this property from your saved properties?"
+        )
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("saved_properties")
+                .delete()
+                .eq(
+                    "user_id",
+                    currentUser.id
+                )
+                .eq(
+                    "property_id",
+                    propertyId
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        await loadSavedProperties();
+
+    }
+
+
+    catch (error) {
+
+        alert(
+            error.message ||
+            "Unable to remove saved property."
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   NAVIGATION FUNCTIONS
+===================================================== */
+
+function showSection(
+    id
+) {
 
     const section =
         document.getElementById(
-            "requests-section"
+            id
         );
+
+
+    if (!section) {
+        return;
+    }
 
 
     section.style.display =
@@ -1405,137 +4480,118 @@ function showRequests() {
 
 
     section.scrollIntoView({
-        behavior: "smooth"
+        behavior: "smooth",
+        block: "start"
     });
 
 }
 
+
+function showRequests() {
+
+    showSection(
+        "requests-section"
+    );
+
+}
 
 
 function showProfile() {
 
-    const section =
-        document.getElementById(
-            "profile-section"
-        );
-
-
-    section.style.display =
-        "block";
-
-
-    section.scrollIntoView({
-        behavior: "smooth"
-    });
+    showSection(
+        "profile-section"
+    );
 
 }
 
 
+async function showSaved() {
 
-function showSaved() {
-
-    const section =
-        document.getElementById(
-            "saved-section"
-        );
+    showSection(
+        "saved-section"
+    );
 
 
-    section.style.display =
-        "block";
-
-
-    section.scrollIntoView({
-        behavior: "smooth"
-    });
+    await loadSavedProperties();
 
 }
-
 
 
 function showMessages() {
 
-    const section =
-        document.getElementById(
-            "messages-section"
-        );
-
-
-    section.style.display =
-        "block";
-
-
-    section.scrollIntoView({
-        behavior: "smooth"
-    });
+    showSection(
+        "messages-section"
+    );
 
 }
 
 
 
-function showSettings() {
-
-    const section =
-        document.getElementById(
-            "settings-section"
-        );
-
-
-    section.style.display =
-        "block";
-
-
-    section.scrollIntoView({
-        behavior: "smooth"
-    });
-
-}
-
-
-
-/* =================================
+/* =====================================================
    LOGOUT
-================================= */
+===================================================== */
 
 async function logoutTenant() {
 
-    await supabaseClient.auth.signOut();
+    try {
 
-    window.location.href =
-        "login.html";
+        await supabaseClient
+            .auth
+            .signOut();
+
+    }
+
+    finally {
+
+        window.location.href =
+            "login.html";
+
+    }
 
 }
 
 
 
-/* =================================
+/* =====================================================
    HELPERS
-================================= */
+===================================================== */
 
-function normalizeStatus(value) {
+function normalizeStatus(
+    value
+) {
 
     return String(
         value ||
         "pending"
     )
-    .trim()
-    .toLowerCase();
+        .trim()
+        .toLowerCase();
 
 }
 
 
-
-function formatStatus(status) {
+function formatStatus(
+    status
+) {
 
     const normalized =
-        normalizeStatus(status);
+        normalizeStatus(
+            status
+        );
 
 
-    if (normalized === "approved") {
+    if (
+        normalized ===
+        "approved"
+    ) {
         return "Approved";
     }
 
 
-    if (normalized === "rejected") {
+    if (
+        normalized ===
+        "rejected"
+    ) {
         return "Rejected";
     }
 
@@ -1545,8 +4601,9 @@ function formatStatus(status) {
 }
 
 
-
-function formatDate(value) {
+function formatDate(
+    value
+) {
 
     if (!value) {
         return "Not specified";
@@ -1555,12 +4612,10 @@ function formatDate(value) {
 
     const date =
         new Date(
-            value +
-            (
-                String(value).includes("T")
-                    ? ""
-                    : "T00:00:00"
-            )
+            String(value).includes("T")
+                ? value
+                : value +
+                    "T00:00:00"
         );
 
 
@@ -1569,9 +4624,7 @@ function formatDate(value) {
             date.getTime()
         )
     ) {
-
         return "Not specified";
-
     }
 
 
@@ -1587,10 +4640,13 @@ function formatDate(value) {
 }
 
 
+function escapeHtml(
+    value
+) {
 
-function escapeHtml(value) {
-
-    return String(value)
+    return String(
+        value ?? ""
+    )
 
         .replace(
             /&/g,
@@ -1621,9 +4677,9 @@ function escapeHtml(value) {
 
 
 
-/* =================================
+/* =====================================================
    START
-================================= */
+===================================================== */
 
 loadTenantDashboard();
 

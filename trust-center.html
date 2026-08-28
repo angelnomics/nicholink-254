@@ -1,0 +1,1716 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Trust & Information Center | NichoLink 254</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+
+            color: #172033;
+        }
+
+
+        .trust-page {
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .trust-hero {
+
+            padding:
+                70px 20px 55px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #eef7f1
+                );
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            text-align: center;
+        }
+
+
+        .trust-hero-label {
+
+            display: inline-block;
+
+            margin-bottom: 12px;
+
+            color: #00843d;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            letter-spacing:
+                1.5px;
+        }
+
+
+        .trust-hero h1 {
+
+            margin:
+                0 0 15px;
+
+            font-size:
+                clamp(
+                    32px,
+                    5vw,
+                    48px
+                );
+        }
+
+
+        .trust-hero p {
+
+            width:
+                min(
+                    760px,
+                    100%
+                );
+
+            margin:
+                0 auto;
+
+            color: #64748b;
+
+            line-height: 1.7;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================================
+           INTERNAL NAV
+        ========================================= */
+
+        .trust-navigation {
+
+            position:
+                sticky;
+
+            top: 0;
+
+            z-index: 20;
+
+            background: #ffffff;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            box-shadow:
+                0 4px 18px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.04
+                );
+        }
+
+
+        .trust-navigation-inner {
+
+            width:
+                min(
+                    1150px,
+                    calc(
+                        100% - 30px
+                    )
+                );
+
+            margin:
+                0 auto;
+
+            padding:
+                12px 0;
+
+            display: flex;
+
+            gap: 8px;
+
+            overflow-x: auto;
+        }
+
+
+        .trust-navigation a {
+
+            flex-shrink: 0;
+
+            padding:
+                9px 13px;
+
+            border-radius: 999px;
+
+            color: #475569;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease;
+        }
+
+
+        .trust-navigation a:hover {
+
+            background: #eef7f1;
+
+            color: #00843d;
+        }
+
+
+        /* =========================================
+           CONTENT
+        ========================================= */
+
+        .trust-container {
+
+            width:
+                min(
+                    1050px,
+                    calc(
+                        100% - 30px
+                    )
+                );
+
+            margin:
+                35px auto 70px;
+        }
+
+
+        .trust-section {
+
+            margin-bottom: 25px;
+
+            padding: 32px;
+
+            background: #ffffff;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 18px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.04
+                );
+        }
+
+
+        .trust-section-label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #00843d;
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .trust-section h2 {
+
+            margin:
+                0 0 14px;
+
+            font-size: 28px;
+        }
+
+
+        .trust-section h3 {
+
+            margin:
+                25px 0 9px;
+
+            font-size: 19px;
+        }
+
+
+        .trust-section p {
+
+            margin:
+                0 0 12px;
+
+            color: #475569;
+
+            line-height: 1.75;
+        }
+
+
+        .trust-section ul {
+
+            margin:
+                10px 0 18px;
+
+            padding-left: 22px;
+        }
+
+
+        .trust-section li {
+
+            margin-bottom: 9px;
+
+            color: #475569;
+
+            line-height: 1.65;
+        }
+
+
+        .trust-note {
+
+            padding: 16px 18px;
+
+            margin:
+                18px 0;
+
+            background: #f8fafc;
+
+            border-left:
+                4px solid #00843d;
+
+            border-radius:
+                8px;
+        }
+
+
+        .trust-note p {
+            margin: 0;
+        }
+
+
+        /* =========================================
+           FAQ
+        ========================================= */
+
+        .faq-item {
+
+            padding:
+                16px 0;
+
+            border-bottom:
+                1px solid #edf0f4;
+        }
+
+
+        .faq-item:last-child {
+            border-bottom: 0;
+        }
+
+
+        .faq-item h3 {
+
+            margin:
+                0 0 8px;
+
+            font-size: 16px;
+        }
+
+
+        /* =========================================
+           REPORT FORM
+        ========================================= */
+
+        .report-form {
+
+            margin-top: 22px;
+        }
+
+
+        .report-field {
+
+            margin-bottom: 16px;
+        }
+
+
+        .report-field label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .report-field input,
+        .report-field select,
+        .report-field textarea {
+
+            width: 100%;
+
+            padding:
+                12px 13px;
+
+            border:
+                1px solid #dfe4ea;
+
+            border-radius: 10px;
+
+            background: #ffffff;
+
+            font-family: inherit;
+
+            font-size: 14px;
+
+            outline: none;
+        }
+
+
+        .report-field textarea {
+
+            min-height: 130px;
+
+            resize: vertical;
+        }
+
+
+        .report-field input:focus,
+        .report-field select:focus,
+        .report-field textarea:focus {
+
+            border-color:
+                #00843d;
+        }
+
+
+        .report-submit {
+
+            border: none;
+
+            padding:
+                12px 18px;
+
+            border-radius: 10px;
+
+            background: #00843d;
+
+            color: #ffffff;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .report-submit:hover {
+
+            background: #006b31;
+        }
+
+
+        #report-success {
+
+            display: none;
+
+            margin-top: 16px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #ecfdf3;
+
+            color: #166534;
+        }
+
+
+        #report-error {
+
+            display: none;
+
+            margin-top: 16px;
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #fef2f2;
+
+            color: #b91c1c;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .trust-footer {
+
+            padding:
+                30px 20px;
+
+            background: #172033;
+
+            color: #ffffff;
+
+            text-align: center;
+        }
+
+
+        .trust-footer p {
+
+            margin:
+                5px 0;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+        }
+
+
+        .trust-footer a {
+
+            color: #ffffff;
+
+            text-decoration: none;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .trust-section {
+
+                padding: 23px 18px;
+
+            }
+
+
+            .trust-section h2 {
+
+                font-size: 24px;
+
+            }
+
+
+            .trust-navigation-inner {
+
+                width:
+                    calc(
+                        100% - 20px
+                    );
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="trust-page">
+
+
+    <!-- =========================================
+         HERO
+    ========================================= -->
+
+    <section class="trust-hero">
+
+        <span class="trust-hero-label">
+
+            NICHO LINK 254
+
+        </span>
+
+
+        <h1>
+
+            Trust & Information Center
+
+        </h1>
+
+
+        <p>
+
+            Learn about NichoLink 254, understand your
+            responsibilities, protect your information,
+            get help and report suspicious property listings.
+
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         NAVIGATION
+    ========================================= -->
+
+    <nav class="trust-navigation">
+
+        <div class="trust-navigation-inner">
+
+            <a href="#about">
+                About
+            </a>
+
+            <a href="#terms">
+                Terms
+            </a>
+
+            <a href="#privacy">
+                Privacy
+            </a>
+
+            <a href="#help">
+                Help Center
+            </a>
+
+            <a href="#report">
+                Report Listing
+            </a>
+
+            <a href="#safety">
+                Safety Tips
+            </a>
+
+        </div>
+
+    </nav>
+
+
+
+    <main class="trust-container">
+
+
+        <!-- =========================================
+             ABOUT
+        ========================================= -->
+
+        <section
+            id="about"
+            class="trust-section"
+        >
+
+            <span class="trust-section-label">
+                ABOUT NICHO LINK 254
+            </span>
+
+
+            <h2>
+                About NichoLink 254
+            </h2>
+
+
+            <p>
+
+                NichoLink 254 is a rental property platform
+                designed to make it easier for tenants to
+                discover available homes and connect with
+                landlords.
+
+            </p>
+
+
+            <p>
+
+                The platform brings property listings,
+                property information, viewing requests,
+                messaging and other rental tools together
+                in one place.
+
+            </p>
+
+
+            <h3>
+                Our goal
+            </h3>
+
+
+            <p>
+
+                Our goal is to make finding and managing
+                rental-property interactions simpler,
+                clearer and more organized for tenants
+                and landlords.
+
+            </p>
+
+
+            <h3>
+                How it works
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    Tenants browse available properties.
+                </li>
+
+                <li>
+                    Tenants can save properties they are
+                    interested in.
+                </li>
+
+                <li>
+                    Tenants can contact landlords and
+                    request property viewings.
+                </li>
+
+                <li>
+                    Landlords can manage their properties
+                    and respond to viewing requests.
+                </li>
+
+                <li>
+                    Users can receive messages and
+                    notifications about platform activity.
+                </li>
+
+            </ul>
+
+        </section>
+
+
+
+        <!-- =========================================
+             TERMS
+        ========================================= -->
+
+        <section
+            id="terms"
+            class="trust-section"
+        >
+
+            <span class="trust-section-label">
+                TERMS
+            </span>
+
+
+            <h2>
+                Terms & Conditions
+            </h2>
+
+
+            <div class="trust-note">
+
+                <p>
+
+                    These terms are a general website draft
+                    and should be reviewed by a qualified
+                    legal professional before being adopted
+                    as final legal terms.
+
+                </p>
+
+            </div>
+
+
+            <h3>
+                Use of the platform
+            </h3>
+
+
+            <p>
+
+                Users are responsible for providing accurate
+                information when creating accounts, listing
+                properties or submitting requests.
+
+            </p>
+
+
+            <h3>
+                Property listings
+            </h3>
+
+
+            <p>
+
+                Landlords are responsible for the accuracy
+                of information they provide about their
+                properties, including rent, location,
+                availability, photos and amenities.
+
+            </p>
+
+
+            <h3>
+                Tenant responsibilities
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    Provide accurate account information.
+                </li>
+
+                <li>
+                    Use the platform only for legitimate
+                    rental-related purposes.
+                </li>
+
+                <li>
+                    Do not impersonate another person.
+                </li>
+
+                <li>
+                    Do not upload fraudulent or misleading
+                    property information.
+                </li>
+
+                <li>
+                    Do not use the platform to harass,
+                    threaten or deceive other users.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                Platform limitations
+            </h3>
+
+
+            <p>
+
+                NichoLink 254 provides a platform for users
+                to discover properties and communicate.
+                A listing on the platform should not
+                automatically be treated as a guarantee that
+                a property or landlord is genuine.
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =========================================
+             PRIVACY
+        ========================================= -->
+
+        <section
+            id="privacy"
+            class="trust-section"
+        >
+
+            <span class="trust-section-label">
+                PRIVACY
+            </span>
+
+
+            <h2>
+                Privacy Policy
+            </h2>
+
+
+            <div class="trust-note">
+
+                <p>
+
+                    This is a general privacy-policy draft
+                    for the website and should be reviewed
+                    for legal and regulatory requirements
+                    before publication as a final policy.
+
+                </p>
+
+            </div>
+
+
+            <h3>
+                Information we may collect
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    Name and account information.
+                </li>
+
+                <li>
+                    Phone number and email address.
+                </li>
+
+                <li>
+                    Property listing information.
+                </li>
+
+                <li>
+                    Viewing requests.
+                </li>
+
+                <li>
+                    Messages exchanged through the platform.
+                </li>
+
+                <li>
+                    Saved-property information.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                How information may be used
+            </h3>
+
+
+            <p>
+
+                Information may be used to provide platform
+                services, manage accounts, process viewing
+                requests, support communications, maintain
+                platform security and improve the service.
+
+            </p>
+
+
+            <h3>
+                Protecting your account
+            </h3>
+
+
+            <p>
+
+                Users should keep their login credentials
+                private and immediately report suspected
+                unauthorized access.
+
+            </p>
+
+
+            <h3>
+                Third-party services
+            </h3>
+
+
+            <p>
+
+                NichoLink 254 may use third-party services
+                such as hosting, databases, authentication,
+                analytics or communication services to
+                operate the platform.
+
+            </p>
+
+        </section>
+
+
+
+        <!-- =========================================
+             HELP CENTER
+        ========================================= -->
+
+        <section
+            id="help"
+            class="trust-section"
+        >
+
+            <span class="trust-section-label">
+                SUPPORT
+            </span>
+
+
+            <h2>
+                Help Center
+            </h2>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    How do I find a property?
+                </h3>
+
+                <p>
+
+                    Open the Properties page and use the
+                    available location, bedroom, price and
+                    sorting options.
+
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    How do I save a property?
+                </h3>
+
+                <p>
+
+                    Click the ❤️ Save Property button on a
+                    property card or on the property-details
+                    page. Saved properties appear in your
+                    tenant dashboard.
+
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    How do I contact a landlord?
+                </h3>
+
+                <p>
+
+                    Open a property and select
+                    <strong>Message Landlord</strong>.
+                    You can also use the available WhatsApp
+                    contact option.
+
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    How do I request a viewing?
+                </h3>
+
+                <p>
+
+                    Open the property's details page,
+                    complete the viewing-request form and
+                    submit it.
+
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    Where can I see my notifications?
+                </h3>
+
+                <p>
+
+                    Open the Notifications section from your
+                    dashboard to view messages, viewing
+                    updates and other account activity.
+
+                </p>
+
+            </div>
+
+
+            <div class="faq-item">
+
+                <h3>
+                    How do I report a suspicious listing?
+                </h3>
+
+                <p>
+
+                    Use the Report a Listing section below
+                    and provide as much accurate information
+                    as possible.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             REPORT LISTING
+        ========================================= -->
+
+        <section
+            id="report"
+            class="trust-section"
+        >
+
+            <span class="trust-section-label">
+                REPORT
+            </span>
+
+
+            <h2>
+                Report a Listing
+            </h2>
+
+
+            <p>
+
+                Found something suspicious or misleading?
+                Tell us what you found so it can be reviewed.
+
+            </p>
+
+
+            <form
+                id="report-form"
+                class="report-form"
+            >
+
+
+                <div class="report-field">
+
+                    <label for="report-property">
+                        Property ID or Property Link
+                    </label>
+
+                    <input
+                        type="text"
+                        id="report-property"
+                        placeholder="Enter property ID or URL"
+                        required
+                    >
+
+                </div>
+
+
+
+                <div class="report-field">
+
+                    <label for="report-reason">
+                        Reason for Report
+                    </label>
+
+                    <select
+                        id="report-reason"
+                        required
+                    >
+
+                        <option value="">
+                            Select a reason
+                        </option>
+
+                        <option value="fake_listing">
+                            Suspected fake listing
+                        </option>
+
+                        <option value="incorrect_information">
+                            Incorrect property information
+                        </option>
+
+                        <option value="duplicate">
+                            Duplicate listing
+                        </option>
+
+                        <option value="payment_request">
+                            Suspicious payment request
+                        </option>
+
+                        <option value="scam">
+                            Suspected scam
+                        </option>
+
+                        <option value="harassment">
+                            Harassment or inappropriate behaviour
+                        </option>
+
+                        <option value="other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="report-field">
+
+                    <label for="report-description">
+                        Description
+                    </label>
+
+                    <textarea
+                        id="report-description"
+                        placeholder="Describe what you found..."
+                        required
+                    ></textarea>
+
+                </div>
+
+
+
+                <div class="report-field">
+
+                    <label for="report-contact">
+                        Your Phone or Email
+                        <span style="font-weight:400;">
+                            (Optional)
+                        </span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="report-contact"
+                        placeholder="Optional contact information"
+                    >
+
+                </div>
+
+
+
+                <button
+                    type="submit"
+                    class="report-submit"
+                >
+
+                    🚩 Submit Report
+
+                </button>
+
+
+            </form>
+
+
+
+            <div id="report-success">
+
+                ✅ Your report has been recorded.
+                Thank you for helping keep NichoLink 254 safer.
+
+            </div>
+
+
+            <div id="report-error">
+
+                ❌ We could not submit your report.
+                Please try again.
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================================
+             SAFETY
+        ========================================= -->
+
+        <section
+            id="safety"
+            class="trust-section"
+        >
+
+            <span class="trust-section-label">
+                SAFETY
+            </span>
+
+
+            <h2>
+                Safety Tips
+            </h2>
+
+
+            <h3>
+                Before paying
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    Verify the property and landlord before
+                    making significant payments.
+                </li>
+
+                <li>
+                    Be cautious if someone pressures you to
+                    pay immediately.
+                </li>
+
+                <li>
+                    Be especially careful with requests to
+                    send money to an unrelated person's
+                    account.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                When arranging a viewing
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    Confirm the property details before
+                    travelling to a viewing.
+                </li>
+
+                <li>
+                    Consider meeting in an appropriate,
+                    safe environment.
+                </li>
+
+                <li>
+                    Tell someone you trust where you are going
+                    for a viewing.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                Protect your personal information
+            </h3>
+
+
+            <ul>
+
+                <li>
+                    Never share your password with another
+                    person.
+                </li>
+
+                <li>
+                    Be careful with requests for passwords,
+                    verification codes or sensitive
+                    information.
+                </li>
+
+                <li>
+                    Use strong, unique login credentials.
+                </li>
+
+            </ul>
+
+
+            <h3>
+                Suspicious activity
+            </h3>
+
+
+            <p>
+
+                Stop communicating and report the listing
+                if something feels suspicious, misleading
+                or unsafe.
+
+            </p>
+
+
+            <div class="trust-note">
+
+                <p>
+
+                    NichoLink 254 is a platform for connecting
+                    users. Always use your own judgment and
+                    verify important information before making
+                    payments or entering into a rental agreement.
+
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <footer class="trust-footer">
+
+        <p>
+            © 2026 NichoLink 254. All Rights Reserved.
+        </p>
+
+        <p>
+
+            <a href="index.html">
+                Return to NichoLink 254
+            </a>
+
+        </p>
+
+    </footer>
+
+
+</div>
+
+
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+
+/* =========================================
+   REPORT LISTING
+========================================= */
+/* =========================================
+
+
+const reportForm =
+    document.getElementById(
+        "report-form"
+    );
+
+
+const reportSuccess =
+    document.getElementById(
+        "report-success"
+    );
+
+
+const reportError =
+    document.getElementById(
+        "report-error"
+    );
+
+
+reportForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        reportSuccess.style.display =
+            "none";
+
+        reportError.style.display =
+            "none";
+
+
+        const propertyReference =
+            document.getElementById(
+                "report-property"
+            )
+            .value
+            .trim();
+
+
+        const reason =
+            document.getElementById(
+                "report-reason"
+            )
+            .value;
+
+
+        const description =
+            document.getElementById(
+                "report-description"
+            )
+            .value
+            .trim();
+
+
+        const contact =
+            document.getElementById(
+                "report-contact"
+            )
+            .value
+            .trim();
+
+
+
+        try {
+
+            /* =========================
+               CHECK LOGIN
+            ========================= */
+
+            const {
+                data: {
+                    session
+                },
+                error: sessionError
+            } =
+                await supabaseClient
+                    .auth
+                    .getSession();
+
+
+            if (sessionError) {
+                throw sessionError;
+            }
+
+
+            if (
+                !session ||
+                !session.user
+            ) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const reporterId =
+                session.user.id;
+
+
+
+            /* =========================
+               TRY TO FIND PROPERTY ID
+            ========================= */
+
+            let propertyId =
+                null;
+
+
+            /*
+             * The user may enter:
+             *
+             * 1. UUID
+             * 2. Full property-details URL
+             * 3. Just an ID
+             *
+             */
+
+
+            const urlMatch =
+                propertyReference.match(
+                    /[?&]id=([^&#]+)/i
+                );
+
+
+            if (urlMatch) {
+
+                propertyId =
+                    decodeURIComponent(
+                        urlMatch[1]
+                    );
+
+            }
+
+            else {
+
+                propertyId =
+                    propertyReference;
+
+            }
+
+
+
+            /* =========================
+               VERIFY PROPERTY
+            ========================= */
+
+            const {
+                data: property,
+                error: propertyError
+            } =
+                await supabaseClient
+
+                    .from("properties")
+
+                    .select(
+                        "id"
+                    )
+
+                    .eq(
+                        "id",
+                        propertyId
+                    )
+
+                    .maybeSingle();
+
+
+            if (propertyError) {
+
+                throw propertyError;
+
+            }
+
+
+            /*
+             * If it isn't a valid property ID,
+             * we still keep the original reference.
+             */
+
+            if (
+                property
+            ) {
+
+                propertyId =
+                    property.id;
+
+            }
+
+            else {
+
+                propertyId =
+                    null;
+
+            }
+
+
+
+            /* =========================
+               INSERT REPORT
+            ========================= */
+
+            const {
+                error: insertError
+            } =
+                await supabaseClient
+
+                    .from(
+                        "listing_reports"
+                    )
+
+                    .insert({
+
+                        property_id:
+                            propertyId,
+
+                        property_reference:
+                            propertyReference,
+
+                        reason:
+                            reason,
+
+                        description:
+                            description,
+
+                        contact:
+                            contact ||
+                            null,
+
+                        reporter_id:
+                            reporterId,
+
+                        status:
+                            "pending"
+
+                    });
+
+
+            if (insertError) {
+
+                throw insertError;
+
+            }
+
+
+
+            /* =========================
+               SUCCESS
+            ========================= */
+
+            reportForm.reset();
+
+
+            reportSuccess.style.display =
+                "block";
+
+
+            reportSuccess.scrollIntoView({
+                behavior:
+                    "smooth",
+                block:
+                    "center"
+            });
+
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Listing report error:",
+                error
+            );
+
+
+            reportError.textContent =
+                "❌ Unable to submit your report. " +
+                (
+                    error.message ||
+                    "Please try again."
+                );
+
+
+            reportError.style.display =
+                "block";
+
+
+            reportError.scrollIntoView({
+                behavior:
+                    "smooth",
+                block:
+                    "center"
+            );
+
+        }
+
+    }
+);

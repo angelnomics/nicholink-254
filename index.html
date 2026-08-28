@@ -1,68 +1,54 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <title>NichoLink 254 | Find Your Next Home</title>
 
-    <title>
-        NichoLink 254 | Find Your Next Home
-    </title>
+    <link rel="stylesheet" href="style.css">
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <!-- Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-
         :root {
             --navy: #172033;
-            --blue: #2563eb;
+            --navy-light: #243047;
             --green: #00843d;
             --green-dark: #006b31;
-            --red: #dc2626;
+            --green-soft: #e9f8ef;
+            --blue: #2563eb;
             --muted: #64748b;
-            --light: #f8fafc;
-            --border: #e5e7eb;
+            --light: #f5f8f6;
+            --border: #e2e8f0;
             --white: #ffffff;
+            --shadow: 0 10px 30px rgba(15, 23, 42, .07);
         }
-
 
         * {
             box-sizing: border-box;
         }
 
-
         html {
             scroll-behavior: smooth;
         }
 
-
         body {
             margin: 0;
-            font-family:
-                Inter,
-                Arial,
-                Helvetica,
-                sans-serif;
+            font-family: Inter, Arial, Helvetica, sans-serif;
             color: #334155;
             background: #ffffff;
+            line-height: 1.5;
         }
-
 
         a {
             color: inherit;
         }
 
+        button {
+            font-family: inherit;
+        }
 
         /* =====================================================
            NAVIGATION
@@ -73,46 +59,43 @@
             top: 0;
             z-index: 1000;
 
+            width: 100%;
+
+            min-height: 70px;
+
             display: flex;
             align-items: center;
-            gap: 20px;
 
-            padding: 14px 30px;
+            padding: 0 30px;
 
-            background: rgba(255,255,255,.97);
+            background: rgba(255, 255, 255, .97);
 
-            border-bottom:
-                1px solid var(--border);
+            border-bottom: 1px solid var(--border);
 
-            box-shadow:
-                0 4px 18px rgba(15,23,42,.05);
+            box-shadow: 0 3px 18px rgba(15, 23, 42, .05);
         }
-
 
         .logo {
             color: var(--navy);
             text-decoration: none;
 
-            font-size: 22px;
+            font-size: 23px;
             font-weight: 900;
 
             white-space: nowrap;
         }
 
-
         .logo strong {
             color: var(--green);
         }
 
-
         .main-nav {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
 
             margin-left: auto;
         }
-
 
         .main-nav a {
             padding: 9px 13px;
@@ -125,131 +108,226 @@
 
             font-size: 14px;
             font-weight: 700;
-        }
 
+            transition: .2s ease;
+        }
 
         .main-nav a:hover {
-            background: #eff6ff;
-            color: var(--blue);
+            background: var(--green-soft);
+            color: var(--green);
         }
-
 
         .nav-actions {
             display: flex;
+            align-items: center;
             gap: 8px;
-        }
 
+            margin-left: 12px;
+        }
 
         .nav-register,
         .nav-login {
-            min-height: 42px;
+            min-height: 40px;
 
             display: inline-flex;
             align-items: center;
             justify-content: center;
 
-            padding: 0 16px;
+            padding: 0 15px;
 
-            border-radius: 9px;
+            border-radius: 8px;
 
             text-decoration: none;
 
             font-size: 13px;
             font-weight: 800;
-        }
 
+            transition: .2s ease;
+        }
 
         .nav-register {
             background: var(--green);
             color: #ffffff;
         }
 
+        .nav-register:hover {
+            background: var(--green-dark);
+        }
 
         .nav-login {
             background: #ffffff;
             color: var(--navy);
 
-            border:
-                1px solid #cbd5e1;
+            border: 1px solid #cbd5e1;
         }
 
+        .nav-login:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
+
+        /* =====================================================
+           MENU BUTTON
+        ===================================================== */
 
         .hamburger {
             display: none;
 
-            width: 42px;
-            height: 42px;
+            width: 44px;
+            height: 44px;
+
+            margin-left: auto;
 
             border: 0;
             border-radius: 9px;
 
             background: var(--navy);
+            color: #ffffff;
+
+            font-size: 21px;
 
             cursor: pointer;
+
+            transition: .2s ease;
         }
 
+        .hamburger:hover {
+            background: var(--green);
+        }
+
+        /* =====================================================
+           MOBILE MENU
+        ===================================================== */
+
+        .mobile-menu {
+            display: none;
+
+            position: fixed;
+
+            top: 70px;
+            left: 0;
+            right: 0;
+
+            z-index: 999;
+
+            padding: 14px;
+
+            background: #ffffff;
+
+            border-bottom: 1px solid var(--border);
+
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .12);
+        }
+
+        .mobile-menu.open {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 6px;
+        }
+
+        .mobile-menu a {
+            display: flex;
+            align-items: center;
+
+            min-height: 45px;
+
+            padding: 0 15px;
+
+            border-radius: 9px;
+
+            color: var(--navy);
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .mobile-menu a:hover {
+            background: var(--green-soft);
+            color: var(--green);
+        }
+
+        .mobile-menu .register {
+            background: var(--green);
+            color: #ffffff;
+
+            justify-content: center;
+        }
+
+        .mobile-menu .login {
+            border: 1px solid var(--border);
+
+            justify-content: center;
+        }
 
         /* =====================================================
            HERO
         ===================================================== */
 
         .hero {
-            padding: 90px 22px 110px;
+            padding: 90px 22px 105px;
 
             background:
+                radial-gradient(
+                    circle at top right,
+                    rgba(0, 132, 61, .08),
+                    transparent 35%
+                ),
                 linear-gradient(
                     135deg,
-                    #f8fbff,
-                    #ffffff 55%,
-                    #f3fbf6
+                    #f7fbf9,
+                    #ffffff 58%,
+                    #f4f9ff
                 );
         }
 
-
         .hero-inner {
-            width: min(1180px,100%);
+            width: min(1180px, 100%);
+
             margin: auto;
 
             display: grid;
 
             grid-template-columns:
-                minmax(0,1.2fr)
-                minmax(300px,.8fr);
+                minmax(0, 1.15fr)
+                minmax(330px, .85fr);
 
             gap: 60px;
 
             align-items: center;
         }
 
-
         .hero-eyebrow {
-            margin: 0 0 15px;
+            margin: 0 0 14px;
 
-            color: var(--blue);
+            color: var(--green);
 
             font-size: 12px;
             font-weight: 900;
 
-            letter-spacing: 1.3px;
+            letter-spacing: 1.5px;
         }
-
 
         .hero h1 {
             margin: 0 0 20px;
 
             color: var(--navy);
 
-            font-size:
-                clamp(42px,6vw,70px);
+            font-size: clamp(42px, 6vw, 70px);
 
-            line-height: 1.04;
+            line-height: 1.03;
+
+            letter-spacing: -2px;
         }
-
 
         .hero h1 span {
+            display: block;
+
             color: var(--green);
         }
-
 
         .hero-description {
             max-width: 650px;
@@ -258,56 +336,64 @@
 
             color: var(--muted);
 
-            font-size: 18px;
+            font-size: 17px;
 
             line-height: 1.7;
         }
 
-
         .hero-buttons {
             display: flex;
+
             flex-wrap: wrap;
+
             gap: 10px;
         }
 
-
         .primary-button,
         .secondary-button {
-            min-height: 47px;
+            min-height: 46px;
 
             display: inline-flex;
-
             align-items: center;
             justify-content: center;
 
             padding: 0 19px;
 
-            border-radius: 10px;
+            border-radius: 9px;
 
             text-decoration: none;
 
             font-size: 13px;
             font-weight: 800;
-        }
 
+            transition: .2s ease;
+        }
 
         .primary-button {
             background: var(--green);
             color: #ffffff;
         }
 
+        .primary-button:hover {
+            background: var(--green-dark);
+            transform: translateY(-1px);
+        }
 
         .secondary-button {
             background: #ffffff;
+
             color: var(--navy);
 
-            border:
-                1px solid #cbd5e1;
+            border: 1px solid var(--border);
         }
 
+        .secondary-button:hover {
+            border-color: var(--green);
+            color: var(--green);
+        }
 
         /* =====================================================
-           HERO SEARCH
+           SEARCH CARD
         ===================================================== */
 
         .hero-card {
@@ -315,78 +401,73 @@
 
             background: #ffffff;
 
-            border:
-                1px solid var(--border);
+            border: 1px solid var(--border);
 
             border-radius: 18px;
 
-            box-shadow:
-                0 20px 45px
-                rgba(15,23,42,.10);
+            box-shadow: 0 20px 50px rgba(15, 23, 42, .10);
         }
-
 
         .hero-card h2 {
             margin: 0 0 18px;
 
             color: var(--navy);
 
-            font-size: 20px;
+            font-size: 21px;
         }
-
 
         .search-grid {
             display: grid;
 
-            grid-template-columns:
-                1fr 1fr;
+            grid-template-columns: 1fr 1fr;
 
-            gap: 12px;
+            gap: 11px;
         }
 
-
         .search-item {
-            padding: 13px;
+            padding: 14px;
 
             background: #f8fafc;
 
-            border:
-                1px solid #eef2f7;
+            border: 1px solid #edf1f5;
 
             border-radius: 10px;
         }
-
 
         .search-item span {
             display: block;
 
             margin-bottom: 4px;
 
-            color: var(--blue);
+            color: var(--green);
 
             font-size: 10px;
             font-weight: 900;
-        }
 
+            text-transform: uppercase;
+
+            letter-spacing: .5px;
+        }
 
         .search-item strong {
             color: var(--navy);
+
             font-size: 13px;
         }
-
 
         .search-button {
             width: 100%;
 
-            min-height: 45px;
+            min-height: 46px;
 
             display: inline-flex;
+
             align-items: center;
             justify-content: center;
 
             margin-top: 12px;
 
-            border-radius: 10px;
+            border-radius: 9px;
 
             background: var(--green);
             color: #ffffff;
@@ -395,59 +476,60 @@
 
             font-size: 13px;
             font-weight: 800;
+
+            transition: .2s ease;
         }
 
+        .search-button:hover {
+            background: var(--green-dark);
+        }
 
         /* =====================================================
-           SECTION
+           SECTIONS
         ===================================================== */
 
         .section {
-            padding: 85px 22px;
+            padding: 75px 22px;
         }
-
 
         .section.light {
-            background: var(--light);
+            background: #f3f7f5;
         }
-
 
         .section-container {
-            width: min(1180px,100%);
+            width: min(1180px, 100%);
+
             margin: auto;
         }
-
 
         .section-heading {
             max-width: 700px;
 
-            margin: 0 auto 40px;
+            margin: 0 auto 38px;
 
             text-align: center;
         }
 
-
         .section-heading .subtitle {
             margin: 0 0 7px;
 
-            color: var(--blue);
+            color: var(--green);
 
             font-size: 11px;
             font-weight: 900;
 
-            letter-spacing: 1.3px;
+            letter-spacing: 1.4px;
         }
-
 
         .section-heading h2 {
             margin: 0 0 10px;
 
             color: var(--navy);
 
-            font-size:
-                clamp(28px,4vw,42px);
-        }
+            font-size: clamp(28px, 4vw, 40px);
 
+            line-height: 1.15;
+        }
 
         .section-heading p {
             margin: 0;
@@ -459,47 +541,49 @@
             line-height: 1.7;
         }
 
-
         /* =====================================================
-           REAL HOMES ONLY
+           PROPERTIES
         ===================================================== */
 
         .property-grid {
             display: grid;
 
             grid-template-columns:
-                repeat(3,minmax(0,1fr));
+                repeat(3, minmax(0, 1fr));
 
             gap: 20px;
         }
-
 
         .property-card {
             overflow: hidden;
 
             background: #ffffff;
 
-            border:
-                1px solid var(--border);
+            border: 1px solid var(--border);
 
-            border-radius: 16px;
+            border-radius: 15px;
 
-            box-shadow:
-                0 8px 24px
-                rgba(15,23,42,.06);
+            box-shadow: var(--shadow);
+
+            transition: transform .2s ease, box-shadow .2s ease;
         }
 
+        .property-card:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 16px 35px
+                rgba(15, 23, 42, .11);
+        }
 
         .property-photo {
             position: relative;
 
             width: 100%;
-            height: 210px;
+            height: 205px;
 
-            background:
-                #eef2f7;
+            background: #e8efeb;
         }
-
 
         .property-photo img {
             width: 100%;
@@ -510,7 +594,6 @@
             object-fit: cover;
         }
 
-
         .property-photo-placeholder {
             width: 100%;
             height: 100%;
@@ -520,85 +603,80 @@
             align-items: center;
             justify-content: center;
 
-            font-size: 48px;
+            font-size: 46px;
         }
-
 
         .property-status {
             position: absolute;
 
-            top: 12px;
-            right: 12px;
+            top: 11px;
+            right: 11px;
 
-            padding: 6px 9px;
+            padding: 6px 10px;
 
             border-radius: 999px;
 
-            background: #ecfdf5;
+            background: #dcfce7;
             color: var(--green);
 
             font-size: 10px;
             font-weight: 900;
         }
 
-
         .property-content {
-            padding: 19px;
+            padding: 18px;
         }
-
 
         .property-content h3 {
             margin: 0 0 7px;
 
             color: var(--navy);
 
-            font-size: 19px;
+            font-size: 18px;
         }
 
-
         .property-location {
-            margin: 0 0 12px;
+            margin: 0 0 10px;
 
             color: var(--muted);
 
             font-size: 13px;
         }
 
-
         .property-price {
-            margin: 0 0 12px;
+            margin: 0 0 11px;
 
-            color: var(--navy);
+            color: var(--green-dark);
 
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 900;
         }
-
 
         .property-meta {
             display: flex;
 
+            flex-wrap: wrap;
+
             gap: 12px;
 
-            margin-bottom: 15px;
+            margin-bottom: 14px;
 
             color: var(--muted);
 
             font-size: 12px;
         }
 
-
         .property-button {
             width: 100%;
 
-            min-height: 42px;
+            min-height: 41px;
 
             display: inline-flex;
 
             align-items: center;
             justify-content: center;
 
-            border-radius: 9px;
+            border-radius: 8px;
 
             background: var(--green);
             color: #ffffff;
@@ -607,31 +685,33 @@
 
             font-size: 13px;
             font-weight: 800;
+
+            transition: .2s ease;
         }
 
+        .property-button:hover {
+            background: var(--green-dark);
+        }
 
         .empty-properties {
-            grid-column: 1/-1;
+            grid-column: 1 / -1;
 
-            padding: 55px 20px;
+            padding: 50px 20px;
 
             text-align: center;
 
-            border:
-                1px dashed #cbd5e1;
+            border: 1px dashed #b8c9bf;
 
-            border-radius: 16px;
+            border-radius: 15px;
 
-            background: #f8fafc;
+            background: #f5f8f6;
         }
-
 
         .empty-properties .icon {
-            font-size: 45px;
+            margin-bottom: 8px;
 
-            margin-bottom: 10px;
+            font-size: 43px;
         }
-
 
         .empty-properties h3 {
             margin: 0 0 7px;
@@ -640,7 +720,6 @@
 
             font-size: 20px;
         }
-
 
         .empty-properties p {
             max-width: 560px;
@@ -654,16 +733,24 @@
             line-height: 1.7;
         }
 
+        .featured-loading {
+            grid-column: 1 / -1;
+
+            padding: 50px;
+
+            text-align: center;
+
+            color: var(--muted);
+        }
 
         .view-all {
-            margin-top: 28px;
+            margin-top: 25px;
 
             text-align: center;
         }
 
-
         .view-all a {
-            color: var(--blue);
+            color: var(--green);
 
             text-decoration: none;
 
@@ -671,64 +758,60 @@
             font-weight: 800;
         }
 
+        .view-all a:hover {
+            text-decoration: underline;
+        }
 
         /* =====================================================
-           SIMPLER WAY
+           BENEFITS
         ===================================================== */
 
         .benefits {
             display: grid;
 
             grid-template-columns:
-                repeat(4,minmax(0,1fr));
+                repeat(4, minmax(0, 1fr));
 
-            gap: 18px;
+            gap: 17px;
         }
 
-
         .benefit {
-            padding: 23px;
+            padding: 21px;
 
             background: #ffffff;
 
-            border:
-                1px solid var(--border);
+            border: 1px solid var(--border);
 
-            border-radius: 15px;
+            border-radius: 14px;
 
-            box-shadow:
-                0 7px 20px
-                rgba(15,23,42,.05);
+            box-shadow: 0 6px 18px rgba(15, 23, 42, .05);
         }
 
-
         .benefit-icon {
-            width: 47px;
-            height: 47px;
+            width: 45px;
+            height: 45px;
 
             display: flex;
 
             align-items: center;
             justify-content: center;
 
-            margin-bottom: 14px;
+            margin-bottom: 12px;
 
-            border-radius: 12px;
+            border-radius: 11px;
 
-            background: #eff6ff;
+            background: var(--green-soft);
 
-            font-size: 21px;
+            font-size: 20px;
         }
-
 
         .benefit h3 {
             margin: 0 0 7px;
 
             color: var(--navy);
 
-            font-size: 17px;
+            font-size: 16px;
         }
-
 
         .benefit p {
             margin: 0;
@@ -740,7 +823,6 @@
             line-height: 1.6;
         }
 
-
         /* =====================================================
            HOW IT WORKS
         ===================================================== */
@@ -749,29 +831,27 @@
             display: grid;
 
             grid-template-columns:
-                repeat(4,minmax(0,1fr));
+                repeat(4, minmax(0, 1fr));
 
-            gap: 18px;
+            gap: 16px;
         }
-
 
         .step {
-            text-align: center;
-
             padding: 10px 14px;
+
+            text-align: center;
         }
 
-
         .step-number {
-            width: 50px;
-            height: 50px;
+            width: 49px;
+            height: 49px;
 
             display: flex;
 
             align-items: center;
             justify-content: center;
 
-            margin: 0 auto 15px;
+            margin: 0 auto 14px;
 
             border-radius: 50%;
 
@@ -780,17 +860,17 @@
             color: #ffffff;
 
             font-weight: 900;
-        }
 
+            box-shadow: 0 7px 15px rgba(0, 132, 61, .20);
+        }
 
         .step h3 {
             margin: 0 0 7px;
 
             color: var(--navy);
 
-            font-size: 17px;
+            font-size: 16px;
         }
-
 
         .step p {
             margin: 0;
@@ -802,18 +882,16 @@
             line-height: 1.6;
         }
 
-
         /* =====================================================
-           LANDLORD
+           LANDLORD CTA
         ===================================================== */
 
         .landlord-cta {
-            width:
-                min(1180px,calc(100% - 44px));
+            width: min(1180px, calc(100% - 44px));
 
-            margin: 0 auto 80px;
+            margin: 0 auto 70px;
 
-            padding: 35px;
+            padding: 32px;
 
             display: flex;
 
@@ -822,22 +900,27 @@
 
             gap: 25px;
 
-            border-radius: 18px;
+            border-radius: 17px;
 
-            background: var(--navy);
+            background:
+                linear-gradient(
+                    135deg,
+                    #172033,
+                    #243c31
+                );
 
             color: #ffffff;
-        }
 
+            box-shadow: 0 12px 35px rgba(15, 23, 42, .13);
+        }
 
         .landlord-cta h2 {
-            margin: 0 0 8px;
+            margin: 0 0 7px;
 
             color: #ffffff;
 
-            font-size: 30px;
+            font-size: 28px;
         }
-
 
         .landlord-cta p {
             margin: 0;
@@ -847,20 +930,19 @@
             font-size: 14px;
         }
 
-
         .landlord-button {
             flex-shrink: 0;
 
-            min-height: 46px;
+            min-height: 45px;
 
             display: inline-flex;
 
             align-items: center;
             justify-content: center;
 
-            padding: 0 18px;
+            padding: 0 19px;
 
-            border-radius: 10px;
+            border-radius: 9px;
 
             background: var(--green);
 
@@ -870,24 +952,29 @@
 
             font-size: 13px;
             font-weight: 800;
+
+            transition: .2s ease;
         }
 
+        .landlord-button:hover {
+            background: #00a94f;
+        }
 
         /* =====================================================
            FOOTER
         ===================================================== */
 
         footer {
-            padding: 50px 22px 25px;
+            padding: 48px 22px 22px;
 
             background: var(--navy);
 
             color: #cbd5e1;
         }
 
-
         .footer-grid {
-            width: min(1180px,100%);
+            width: min(1180px, 100%);
+
             margin: auto;
 
             display: grid;
@@ -898,60 +985,63 @@
             gap: 35px;
         }
 
-
         footer h2 {
-            margin: 0 0 10px;
+            margin: 0 0 9px;
 
             color: #ffffff;
         }
-
 
         footer h2 strong {
             color: #4ade80;
         }
 
-
         footer h3 {
-            margin: 0 0 12px;
+            margin: 0 0 11px;
 
             color: #ffffff;
 
             font-size: 14px;
         }
 
-
         footer p,
         footer a {
             font-size: 13px;
         }
 
+        footer p {
+            line-height: 1.7;
+        }
 
         .footer-links {
             display: flex;
 
             flex-direction: column;
 
-            gap: 8px;
+            gap: 7px;
         }
-
 
         .footer-links a {
             color: #cbd5e1;
 
             text-decoration: none;
+
+            transition: .2s ease;
         }
 
+        .footer-links a:hover {
+            color: #ffffff;
+        }
 
         .copyright {
             max-width: 1180px;
 
-            margin: 30px auto 0;
+            margin: 27px auto 0;
 
-            padding-top: 18px;
+            padding-top: 17px;
 
             border-top:
                 1px solid
-                rgba(255,255,255,.10);
+                rgba(255, 255, 255, .10);
 
             text-align: center;
 
@@ -960,9 +1050,8 @@
             font-size: 12px;
         }
 
-
         /* =====================================================
-           MOBILE
+           RESPONSIVE
         ===================================================== */
 
         @media (max-width: 1000px) {
@@ -971,70 +1060,54 @@
                 grid-template-columns: 1fr;
             }
 
-
             .property-grid,
             .benefits,
             .steps {
                 grid-template-columns:
-                    repeat(2,minmax(0,1fr));
+                    repeat(2, minmax(0, 1fr));
             }
-
 
             .footer-grid {
                 grid-template-columns:
-                    repeat(2,minmax(0,1fr));
+                    repeat(2, minmax(0, 1fr));
             }
-
         }
-
 
         @media (max-width: 760px) {
 
             .navbar {
-                flex-wrap: wrap;
+                min-height: 64px;
 
-                padding:
-                    12px 16px;
+                padding: 0 16px;
             }
-
 
             .main-nav,
             .nav-actions {
                 display: none;
             }
 
-
             .hamburger {
-                display: block;
-
-                margin-left: auto;
-            }
-
-
-            .navbar.mobile-open .main-nav,
-            .navbar.mobile-open .nav-actions {
                 display: flex;
 
-                width: 100%;
+                align-items: center;
+                justify-content: center;
             }
 
-
-            .navbar.mobile-open .main-nav {
-                order: 5;
-
-                flex-direction: column;
+            .mobile-menu {
+                top: 64px;
             }
 
-
-            .navbar.mobile-open .nav-actions {
-                order: 6;
+            .hero {
+                padding: 58px 18px 70px;
             }
 
-
-            .nav-actions a {
-                flex: 1;
+            .hero h1 {
+                letter-spacing: -1px;
             }
 
+            .section {
+                padding: 55px 18px;
+            }
 
             .property-grid,
             .benefits,
@@ -1043,23 +1116,20 @@
                 grid-template-columns: 1fr;
             }
 
-
             .landlord-cta {
                 flex-direction: column;
 
                 align-items: flex-start;
 
-                width:
-                    calc(100% - 28px);
-            }
+                width: calc(100% - 28px);
 
+                padding: 26px;
+            }
 
             .landlord-button {
                 width: 100%;
             }
-
         }
-
 
         @media (max-width: 500px) {
 
@@ -1067,44 +1137,32 @@
                 flex-direction: column;
             }
 
-
             .hero-buttons a {
                 width: 100%;
             }
-
 
             .search-grid {
                 grid-template-columns: 1fr;
             }
 
+            .hero-card {
+                padding: 18px;
+            }
         }
-
     </style>
-
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      NAVIGATION
 ===================================================== -->
 
-<header
-    class="navbar"
-    id="navbar"
->
+<header class="navbar" id="navbar">
 
-
-    <a
-        href="index.html"
-        class="logo"
-    >
-        NichoLink
-        <strong>254</strong>
+    <a href="index.html" class="logo">
+        NichoLink <strong>254</strong>
     </a>
-
 
     <nav class="main-nav">
 
@@ -1112,23 +1170,19 @@
             Home
         </a>
 
-
         <a href="properties.html">
             Properties
         </a>
 
-
         <a href="#how-it-works">
             How It Works
         </a>
-
 
         <a href="#contact">
             Contact
         </a>
 
     </nav>
-
 
     <div class="nav-actions">
 
@@ -1139,7 +1193,6 @@
             Register
         </a>
 
-
         <a
             href="login.html"
             class="nav-login"
@@ -1149,7 +1202,7 @@
 
     </div>
 
-
+    <!-- MENU BUTTON -->
     <button
         type="button"
         class="hamburger"
@@ -1160,9 +1213,58 @@
         ☰
     </button>
 
-
 </header>
 
+
+<!-- =====================================================
+     MOBILE MENU
+===================================================== -->
+
+<nav
+    class="mobile-menu"
+    id="mobileMenu"
+    aria-label="Mobile navigation"
+>
+
+    <a
+        href="register.html"
+        class="register"
+    >
+        Register
+    </a>
+
+    <a
+        href="login.html"
+        class="login"
+    >
+        Login
+    </a>
+
+    <a href="index.html">
+        Home
+    </a>
+
+    <a href="properties.html">
+        Properties
+    </a>
+
+    <a href="#how-it-works">
+        How It Works
+    </a>
+
+    <a href="#contact">
+        Contact
+    </a>
+
+    <a href="adverts.html">
+        Adverts
+    </a>
+
+    <a href="trust-center.html">
+        Trust & Information Center
+    </a>
+
+</nav>
 
 
 <!-- =====================================================
@@ -1171,9 +1273,7 @@
 
 <section class="hero">
 
-
     <div class="hero-inner">
-
 
         <div>
 
@@ -1181,19 +1281,16 @@
                 🏠 NICHOLINK 254 • KENYA
             </p>
 
-
             <h1>
                 Find a home
                 <span>you'll love.</span>
             </h1>
-
 
             <p class="hero-description">
                 Discover rental houses, apartments,
                 bedsitters and homes around Kisumu
                 and beyond—all in one simple place.
             </p>
-
 
             <div class="hero-buttons">
 
@@ -1203,7 +1300,6 @@
                 >
                     🔎 Find a Home
                 </a>
-
 
                 <a
                     href="#homes-you-may-like"
@@ -1217,6 +1313,7 @@
         </div>
 
 
+        <!-- SEARCH CARD -->
 
         <div class="hero-card">
 
@@ -1224,62 +1321,29 @@
                 Start Your Search
             </h2>
 
-
             <div class="search-grid">
 
                 <div class="search-item">
-
-                    <span>
-                        Location
-                    </span>
-
-                    <strong>
-                        📍 Kisumu
-                    </strong>
-
+                    <span>Location</span>
+                    <strong>📍 Kisumu</strong>
                 </div>
 
-
                 <div class="search-item">
-
-                    <span>
-                        Property
-                    </span>
-
-                    <strong>
-                        🏠 Any Type
-                    </strong>
-
+                    <span>Property</span>
+                    <strong>🏠 Any Type</strong>
                 </div>
 
-
                 <div class="search-item">
-
-                    <span>
-                        Bedrooms
-                    </span>
-
-                    <strong>
-                        🛏 Any
-                    </strong>
-
+                    <span>Bedrooms</span>
+                    <strong>🛏 Any</strong>
                 </div>
 
-
                 <div class="search-item">
-
-                    <span>
-                        Budget
-                    </span>
-
-                    <strong>
-                        💰 Any Price
-                    </strong>
-
+                    <span>Budget</span>
+                    <strong>💰 Any Price</strong>
                 </div>
 
             </div>
-
 
             <a
                 href="properties.html"
@@ -1290,17 +1354,13 @@
 
         </div>
 
-
     </div>
-
 
 </section>
 
 
-
 <!-- =====================================================
-     HOMES YOU MAY LIKE
-     THERE ARE NO HARDCODED EXAMPLE PROPERTIES HERE.
+     HOMES
 ===================================================== -->
 
 <section
@@ -1308,9 +1368,7 @@
     id="homes-you-may-like"
 >
 
-
     <div class="section-container">
-
 
         <div class="section-heading">
 
@@ -1318,11 +1376,9 @@
                 AVAILABLE HOMES
             </p>
 
-
             <h2>
                 Homes You May Like
             </h2>
-
 
             <p>
                 Real properties listed by landlords
@@ -1337,15 +1393,7 @@
             class="property-grid"
         >
 
-            <div
-                class="featured-loading"
-                style="
-                    grid-column:1/-1;
-                    text-align:center;
-                    padding:50px;
-                    color:#64748b;
-                "
-            >
+            <div class="featured-loading">
                 Loading real properties...
             </div>
 
@@ -1360,23 +1408,18 @@
 
         </div>
 
-
     </div>
-
 
 </section>
 
 
-
 <!-- =====================================================
-     A SIMPLER WAY TO FIND YOUR NEXT HOME
+     BENEFITS
 ===================================================== -->
 
 <section class="section light">
 
-
     <div class="section-container">
-
 
         <div class="section-heading">
 
@@ -1384,11 +1427,9 @@
                 WHY NICHOLINK 254?
             </p>
 
-
             <h2>
                 A Simpler Way to Find Your Next Home
             </h2>
-
 
             <p>
                 Everything you need to move from
@@ -1400,18 +1441,15 @@
 
         <div class="benefits">
 
-
             <div class="benefit">
 
                 <div class="benefit-icon">
                     📍
                 </div>
 
-
                 <h3>
                     Local Properties
                 </h3>
-
 
                 <p>
                     Discover rental properties around
@@ -1427,11 +1465,9 @@
                     🔎
                 </div>
 
-
                 <h3>
                     Easy Search
                 </h3>
-
 
                 <p>
                     Find homes using location,
@@ -1447,11 +1483,9 @@
                     📅
                 </div>
 
-
                 <h3>
                     Request a Viewing
                 </h3>
-
 
                 <p>
                     Choose a property and request
@@ -1467,11 +1501,9 @@
                     🤝
                 </div>
 
-
                 <h3>
                     Connect
                 </h3>
-
 
                 <p>
                     Communicate with landlords and
@@ -1480,15 +1512,11 @@
 
             </div>
 
-
         </div>
-
 
     </div>
 
-
 </section>
-
 
 
 <!-- =====================================================
@@ -1500,9 +1528,7 @@
     id="how-it-works"
 >
 
-
     <div class="section-container">
-
 
         <div class="section-heading">
 
@@ -1510,11 +1536,9 @@
                 SIMPLE & EASY
             </p>
 
-
             <h2>
                 How It Works
             </h2>
-
 
             <p>
                 Finding a home should not be complicated.
@@ -1526,18 +1550,15 @@
 
         <div class="steps">
 
-
             <div class="step">
 
                 <div class="step-number">
                     1
                 </div>
 
-
                 <h3>
                     Search
                 </h3>
-
 
                 <p>
                     Search for available homes by
@@ -1553,11 +1574,9 @@
                     2
                 </div>
 
-
                 <h3>
                     Choose
                 </h3>
-
 
                 <p>
                     Explore property details,
@@ -1573,11 +1592,9 @@
                     3
                 </div>
 
-
                 <h3>
                     Request a Viewing
                 </h3>
-
 
                 <p>
                     Submit a viewing request for
@@ -1593,11 +1610,9 @@
                     4
                 </div>
 
-
                 <h3>
                     Connect
                 </h3>
-
 
                 <p>
                     Communicate with the landlord
@@ -1606,15 +1621,11 @@
 
             </div>
 
-
         </div>
-
 
     </div>
 
-
 </section>
-
 
 
 <!-- =====================================================
@@ -1623,13 +1634,11 @@
 
 <section class="landlord-cta">
 
-
     <div>
 
         <h2>
             Have a property to rent?
         </h2>
-
 
         <p>
             Register as a landlord and connect
@@ -1638,7 +1647,6 @@
 
     </div>
 
-
     <a
         href="register.html"
         class="landlord-button"
@@ -1646,9 +1654,7 @@
         Register as a Landlord
     </a>
 
-
 </section>
-
 
 
 <!-- =====================================================
@@ -1657,23 +1663,18 @@
 
 <footer id="contact">
 
-
     <div class="footer-grid">
-
 
         <div>
 
             <h2>
-                NichoLink
-                <strong>254</strong>
+                NichoLink <strong>254</strong>
             </h2>
-
 
             <p>
                 Connecting tenants with properties
                 across Kenya.
             </p>
-
 
             <p>
                 Find. Connect. Grow.
@@ -1688,33 +1689,31 @@
                 Quick Links
             </h3>
 
-
             <div class="footer-links">
 
                 <a href="index.html">
                     Home
                 </a>
 
-
                 <a href="properties.html">
                     Properties
                 </a>
-
 
                 <a href="register.html">
                     Register
                 </a>
 
+                <a href="adverts.html">
+                    Adverts
+                </a>
 
                 <a href="login.html">
                     Login
                 </a>
 
-
                 <a href="#how-it-works">
                     How It Works
                 </a>
-
 
                 <a href="trust-center.html">
                     Trust & Information Center
@@ -1731,16 +1730,13 @@
                 Contact
             </h3>
 
-
             <p>
                 📞 0795629436
             </p>
 
-
             <p>
-                💬 WhatsApp: 0795629432
+                💬 WhatsApp: 0795629436
             </p>
-
 
             <p>
                 ✉️ nicholink254@gmail.com
@@ -1748,119 +1744,99 @@
 
         </div>
 
-
     </div>
 
 
     <div class="copyright">
-
-        © 2026 NichoLink 254.
-        All Rights Reserved.
-
+        © 2026 NichoLink 254. All Rights Reserved.
     </div>
-
 
 </footer>
 
 
-
 <!-- =====================================================
-     REAL PROPERTY LOADER
+     JAVASCRIPT
 ===================================================== -->
 
 <script>
 
-async function loadFeaturedProperties() {
+    /* =====================================================
+       SUPABASE CONFIGURATION
+    ===================================================== */
 
-    const container =
-        document.getElementById(
-            "featured-properties"
-        );
+    const SUPABASE_URL = "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
 
+    let supabaseClient = null;
 
-    if (!container) {
-        return;
+    if (
+        SUPABASE_URL !== "YOUR_SUPABASE_URL" &&
+        SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY" &&
+        window.supabase
+    ) {
+
+        supabaseClient =
+            window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
     }
 
 
-    try {
+    /* =====================================================
+       HTML ESCAPE
+    ===================================================== */
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("properties")
-                .select(`
-                    id,
-                    title,
-                    location,
-                    rent,
-                    bedrooms,
-                    bathrooms,
-                    status,
-                    image_url,
-                    created_at
-                `)
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                )
-                .limit(6);
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
 
-        if (error) {
-            throw error;
+    /* =====================================================
+       LOAD FEATURED PROPERTIES
+    ===================================================== */
+
+    async function loadFeaturedProperties() {
+
+        const container =
+            document.getElementById(
+                "featured-properties"
+            );
+
+        if (!container) {
+            return;
         }
 
 
-        const realProperties =
-            Array.isArray(data)
-                ? data.filter(
-                    property =>
-                        String(
-                            property.status ||
-                            "available"
-                        )
-                        .trim()
-                        .toLowerCase()
-                        ===
-                        "available"
-                )
-                : [];
+        /*
+         * If Supabase credentials have not
+         * been added yet, do not crash the page.
+         */
 
-
-        container.innerHTML = "";
-
-
-        if (
-            realProperties.length === 0
-        ) {
+        if (!supabaseClient) {
 
             container.innerHTML = `
 
-                <div
-                    class="empty-properties"
-                >
+                <div class="empty-properties">
 
                     <div class="icon">
                         🏠
                     </div>
 
-
                     <h3>
-                        No Available Homes Yet
+                        Properties Coming Soon
                     </h3>
 
-
                     <p>
-                        Real properties will appear here
-                        automatically when landlords list
-                        available homes on NichoLink 254.
+                        Browse the Properties page to see
+                        current NichoLink 254 listings.
                     </p>
-
 
                     <a
                         href="properties.html"
@@ -1877,314 +1853,275 @@ async function loadFeaturedProperties() {
         }
 
 
-        realProperties.forEach(
-            function(property) {
+        try {
 
-                const card =
-                    document.createElement(
-                        "article"
-                    );
-
-
-                card.className =
-                    "property-card";
-
-
-                const title =
-                    property.title ||
-                    "Property";
-
-
-                const location =
-                    property.location ||
-                    "Location not specified";
-
-
-                const rent =
-                    Number(
-                        property.rent || 0
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("properties")
+                    .select(`
+                        id,
+                        title,
+                        location,
+                        rent,
+                        bedrooms,
+                        bathrooms,
+                        status,
+                        image_url,
+                        created_at
+                    `)
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
                     )
-                    .toLocaleString();
+                    .limit(6);
 
 
-                const bedrooms =
-                    Number(
-                        property.bedrooms || 0
-                    );
+            if (error) {
+                throw error;
+            }
 
 
-                const bathrooms =
-                    Number(
-                        property.bathrooms || 0
-                    );
+            /*
+             * Only show available properties.
+             */
+
+            const realProperties =
+                Array.isArray(data)
+                    ? data.filter(
+                        property =>
+                            String(
+                                property.status ||
+                                "available"
+                            )
+                            .trim()
+                            .toLowerCase()
+                            === "available"
+                    )
+                    : [];
 
 
-                const image =
-                    property.image_url
-                        ? String(
-                            property.image_url
-                        ).trim()
-                        : "";
+            container.innerHTML = "";
 
 
-                const photoHTML =
-                    image
+            /*
+             * No available properties.
+             */
 
-                        ?
+            if (
+                realProperties.length === 0
+            ) {
 
-                    `
+                container.innerHTML = `
 
-                        <div class="property-photo">
+                    <div class="empty-properties">
 
-                            <img
-                                src="${escapeHtml(image)}"
-                                alt="${escapeHtml(title)}"
-                                onerror="
-                                    this.style.display='none';
-                                    this.parentElement.querySelector('.property-photo-placeholder').style.display='flex';
-                                "
-                            >
-
-
-                            <div
-                                class="property-photo-placeholder"
-                                style="display:none;"
-                            >
-                                🏠
-                            </div>
-
-
-                            <span
-                                class="property-status"
-                            >
-                                Available
-                            </span>
-
+                        <div class="icon">
+                            🏠
                         </div>
-
-                    `
-
-                        :
-
-                    `
-
-                        <div class="property-photo">
-
-                            <div
-                                class="property-photo-placeholder"
-                            >
-                                🏠
-                            </div>
-
-
-                            <span
-                                class="property-status"
-                            >
-                                Available
-                            </span>
-
-                        </div>
-
-                    `;
-
-
-                card.innerHTML = `
-
-                    ${photoHTML}
-
-
-                    <div class="property-content">
-
 
                         <h3>
-                            ${escapeHtml(title)}
+                            No Available Homes Yet
                         </h3>
 
-
-                        <p class="property-location">
-                            📍
-                            ${escapeHtml(location)}
+                        <p>
+                            Real properties will appear here
+                            automatically when landlords list
+                            available homes on NichoLink 254.
                         </p>
-
-
-                        <p class="property-price">
-
-                            KSh ${rent}
-
-                            <span
-                                style="
-                                    color:#64748b;
-                                    font-size:12px;
-                                    font-weight:500;
-                                "
-                            >
-                                / month
-                            </span>
-
-                        </p>
-
-
-                        <div class="property-meta">
-
-                            <span>
-                                🛏
-                                ${bedrooms}
-                                bedroom${bedrooms === 1 ? "" : "s"}
-                            </span>
-
-
-                            <span>
-                                🚿
-                                ${bathrooms}
-                                bathroom${bathrooms === 1 ? "" : "s"}
-                            </span>
-
-                        </div>
-
 
                         <a
-                            href="property-details.html?id=${encodeURIComponent(property.id)}"
-                            class="property-button"
+                            href="properties.html"
+                            class="primary-button"
                         >
-                            View Details
+                            Browse Properties
                         </a>
-
 
                     </div>
 
                 `;
 
-
-                container.appendChild(
-                    card
-                );
-
+                return;
             }
-        );
-
-    }
 
 
-    catch (error) {
+            /*
+             * Create property cards.
+             */
 
-        console.error(
-            "Featured properties error:",
-            error
-        );
+            realProperties.forEach(
+                function(property) {
 
+                    const card =
+                        document.createElement(
+                            "article"
+                        );
 
-        container.innerHTML = `
-
-            <div class="empty-properties">
-
-                <div class="icon">
-                    🏠
-                </div>
-
-
-                <h3>
-                    Properties Coming Soon
-                </h3>
+                    card.className =
+                        "property-card";
 
 
-                <p>
-                    Browse the Properties page to see
-                    current NichoLink 254 listings.
-                </p>
+                    const title =
+                        property.title ||
+                        "Property";
 
 
-                <a
-                    href="properties.html"
-                    class="primary-button"
-                >
-                    Browse Properties
-                </a>
-
-            </div>
-
-        `;
-
-    }
-
-}
+                    const location =
+                        property.location ||
+                        "Location not specified";
 
 
-
-/* =====================================================
-   HTML ESCAPE
-===================================================== */
-
-function escapeHtml(value) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
+                    const rent =
+                        Number(
+                            property.rent || 0
+                        ).toLocaleString();
 
 
-
-/* =====================================================
-   MOBILE NAVIGATION
-===================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        const navbar =
-            document.getElementById(
-                "navbar"
-            );
-
-
-        const hamburger =
-            document.getElementById(
-                "hamburger"
-            );
-
-
-        if (
-            navbar &&
-            hamburger
-        ) {
-
-            hamburger.addEventListener(
-                "click",
-                function() {
-
-                    const opened =
-                        navbar.classList.toggle(
-                            "mobile-open"
+                    const bedrooms =
+                        Number(
+                            property.bedrooms || 0
                         );
 
 
-                    hamburger.setAttribute(
-                        "aria-expanded",
-                        opened
-                            ? "true"
-                            : "false"
-                    );
+                    const bathrooms =
+                        Number(
+                            property.bathrooms || 0
+                        );
+
+
+                    const image =
+                        property.image_url
+                            ? String(
+                                property.image_url
+                            ).trim()
+                            : "";
+
+
+                    /*
+                     * Property image.
+                     */
+
+                    const photoHTML =
+                        image
+
+                            ?
+
+                        `
+
+                            <div class="property-photo">
+
+                                <img
+                                    src="${escapeHtml(image)}"
+                                    alt="${escapeHtml(title)}"
+                                    onerror="
+                                        this.style.display='none';
+                                        const placeholder =
+                                            this.parentElement.querySelector('.property-photo-placeholder');
+
+                                        if (placeholder) {
+                                            placeholder.style.display='flex';
+                                        }
+                                    "
+                                >
+
+                                <div
+                                    class="property-photo-placeholder"
+                                    style="display:none;"
+                                >
+                                    🏠
+                                </div>
+
+                                <span class="property-status">
+                                    Available
+                                </span>
+
+                            </div>
+
+                        `
+
+                            :
+
+                        `
+
+                            <div class="property-photo">
+
+                                <div class="property-photo-placeholder">
+                                    🏠
+                                </div>
+
+                                <span class="property-status">
+                                    Available
+                                </span>
+
+                            </div>
+
+                        `;
+
+
+                    /*
+                     * Complete card.
+                     */
+
+                    card.innerHTML = `
+
+                        ${photoHTML}
+
+                        <div class="property-content">
+
+                            <h3>
+                                ${escapeHtml(title)}
+                            </h3>
+
+                            <p class="property-location">
+                                📍 ${escapeHtml(location)}
+                            </p>
+
+                            <p class="property-price">
+
+                                KSh ${rent}
+
+                                <span
+                                    style="
+                                        color:#64748b;
+                                        font-size:12px;
+                                        font-weight:500;
+                                    "
+                                >
+                                    / month
+                                </span>
+
+                            </p>
+
+                            <div class="property-meta">
+
+                                <span>
+                                    🛏 ${bedrooms}
+                                    bedroom${bedrooms === 1 ? "" : "s"}
+                                </span>
+
+                                <span>
+                                    🚿 ${bathrooms}
+                                    bathroom${bathrooms === 1 ? "" : "s"}
+                                </span>
+
+                            </div>
+
+                            <a
+                                href="property-details.html?id=${encodeURIComponent(property.id)}"
+                                class="property-button"
+                            >
+                                View Details
+                            </a>
+
+                        </div>
+                    `;
+
+
+                    container.appendChild(card);
 
                 }
             );
@@ -2192,15 +2129,200 @@ document.addEventListener(
         }
 
 
-        loadFeaturedProperties();
+        catch (error) {
 
+            console.error(
+                "Featured properties error:",
+                error
+            );
+
+
+            container.innerHTML = `
+
+                <div class="empty-properties">
+
+                    <div class="icon">
+                        🏠
+                    </div>
+
+                    <h3>
+                        Properties Coming Soon
+                    </h3>
+
+                    <p>
+                        Browse the Properties page to see
+                        current NichoLink 254 listings.
+                    </p>
+
+                    <a
+                        href="properties.html"
+                        class="primary-button"
+                    >
+                        Browse Properties
+                    </a>
+
+                </div>
+
+            `;
+
+        }
     }
-);
+
+
+    /* =====================================================
+       MOBILE MENU
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+
+            const hamburger =
+                document.getElementById(
+                    "hamburger"
+                );
+
+            const mobileMenu =
+                document.getElementById(
+                    "mobileMenu"
+                );
+
+
+            if (
+                !hamburger ||
+                !mobileMenu
+            ) {
+                return;
+            }
+
+
+            /*
+             * Open / close menu.
+             */
+
+            hamburger.addEventListener(
+                "click",
+                function(event) {
+
+                    event.stopPropagation();
+
+                    const isOpen =
+                        mobileMenu.classList.toggle(
+                            "open"
+                        );
+
+
+                    hamburger.setAttribute(
+                        "aria-expanded",
+                        isOpen
+                            ? "true"
+                            : "false"
+                    );
+
+
+                    hamburger.setAttribute(
+                        "aria-label",
+                        isOpen
+                            ? "Close navigation"
+                            : "Open navigation"
+                    );
+
+
+                    hamburger.textContent =
+                        isOpen
+                            ? "✕"
+                            : "☰";
+
+                }
+            );
+
+
+            /*
+             * Close menu when link is clicked.
+             */
+
+            mobileMenu
+                .querySelectorAll("a")
+                .forEach(
+                    function(link) {
+
+                        link.addEventListener(
+                            "click",
+                            function() {
+
+                                mobileMenu.classList.remove(
+                                    "open"
+                                );
+
+                                hamburger.setAttribute(
+                                    "aria-expanded",
+                                    "false"
+                                );
+
+                                hamburger.setAttribute(
+                                    "aria-label",
+                                    "Open navigation"
+                                );
+
+                                hamburger.textContent =
+                                    "☰";
+
+                            }
+                        );
+
+                    }
+                );
+
+
+            /*
+             * Close menu when clicking outside.
+             */
+
+            document.addEventListener(
+                "click",
+                function(event) {
+
+                    if (
+                        !mobileMenu.contains(
+                            event.target
+                        ) &&
+                        !hamburger.contains(
+                            event.target
+                        )
+                    ) {
+
+                        mobileMenu.classList.remove(
+                            "open"
+                        );
+
+                        hamburger.setAttribute(
+                            "aria-expanded",
+                            "false"
+                        );
+
+                        hamburger.setAttribute(
+                            "aria-label",
+                            "Open navigation"
+                        );
+
+                        hamburger.textContent =
+                            "☰";
+                    }
+
+                }
+            );
+
+
+            /*
+             * Load real properties.
+             */
+
+            loadFeaturedProperties();
+
+        }
+    );
 
 </script>
 
-
 </body>
-
 </html>
-```

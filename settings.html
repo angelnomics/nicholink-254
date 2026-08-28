@@ -1,0 +1,1484 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Settings | NichoLink 254
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <style>
+
+        :root {
+            --navy: #172033;
+            --blue: #2563eb;
+            --green: #00843d;
+            --green-dark: #006b31;
+            --red: #dc2626;
+            --muted: #64748b;
+            --bg: #f5f7fa;
+            --white: #ffffff;
+            --border: #e5e7eb;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: #334155;
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+
+        /* =========================================
+           NAVIGATION
+        ========================================= */
+
+        .settings-topbar {
+            min-height: 72px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 25px;
+
+            padding:
+                12px 30px;
+
+            background:
+                #ffffff;
+
+            border-bottom:
+                1px solid var(--border);
+
+            box-shadow:
+                0 4px 18px rgba(15,23,42,.05);
+        }
+
+
+        .settings-brand {
+            color:
+                var(--navy);
+
+            font-size:
+                22px;
+
+            font-weight:
+                900;
+        }
+
+
+        .settings-brand span {
+            color:
+                var(--navy);
+        }
+
+
+        .settings-brand strong {
+            color:
+                var(--green);
+        }
+
+
+        .settings-nav {
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                7px;
+
+            margin-left:
+                auto;
+        }
+
+
+        .settings-nav a {
+            padding:
+                9px 12px;
+
+            border-radius:
+                9px;
+
+            color:
+                var(--navy);
+
+            text-decoration:
+                none;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+        }
+
+
+        .settings-nav a:hover {
+            background:
+                #eff6ff;
+
+            color:
+                var(--blue);
+        }
+
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        .settings-page {
+            width:
+                min(1050px, calc(100% - 30px));
+
+            margin:
+                40px auto 70px;
+        }
+
+
+        .settings-header {
+            margin-bottom:
+                25px;
+        }
+
+
+        .settings-header-label {
+            margin: 0 0 8px;
+
+            color:
+                var(--blue);
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                .13em;
+        }
+
+
+        .settings-header h1 {
+            margin:
+                0 0 8px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                clamp(30px, 5vw, 44px);
+        }
+
+
+        .settings-header p {
+            margin:
+                0;
+
+            color:
+                var(--muted);
+
+            line-height:
+                1.7;
+        }
+
+
+        /* =========================================
+           ACCOUNT SUMMARY
+        ========================================= */
+
+        .settings-account-card {
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                18px;
+
+            padding:
+                22px;
+
+            margin-bottom:
+                22px;
+
+            background:
+                var(--white);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                18px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(15,23,42,.06);
+        }
+
+
+        .settings-avatar {
+            width:
+                72px;
+
+            height:
+                72px;
+
+            flex-shrink:
+                0;
+
+            overflow:
+                hidden;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                50%;
+
+            background:
+                #eaf6ee;
+
+            color:
+                var(--green);
+
+            font-size:
+                24px;
+
+            font-weight:
+                900;
+        }
+
+
+        .settings-avatar img {
+            width:
+                100%;
+
+            height:
+                100%;
+
+            object-fit:
+                cover;
+
+            display:
+                block;
+        }
+
+
+        .settings-account-info h2 {
+            margin:
+                0 0 5px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                20px;
+        }
+
+
+        .settings-account-info p {
+            margin:
+                0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+        }
+
+
+        /* =========================================
+           SETTINGS GRID
+        ========================================= */
+
+        .settings-grid {
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+
+            gap:
+                20px;
+        }
+
+
+        .settings-card {
+            background:
+                var(--white);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                18px;
+
+            padding:
+                23px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(15,23,42,.05);
+        }
+
+
+        .settings-card h2 {
+            margin:
+                0 0 5px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                18px;
+        }
+
+
+        .settings-card-subtitle {
+            margin:
+                0 0 20px;
+
+            color:
+                var(--blue);
+
+            font-size:
+                12px;
+
+            line-height:
+                1.5;
+        }
+
+
+        /* =========================================
+           SETTING ROW
+        ========================================= */
+
+        .setting-row {
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            padding:
+                14px 0;
+
+            border-bottom:
+                1px solid #eef0f3;
+        }
+
+
+        .setting-row:last-child {
+            border-bottom:
+                none;
+        }
+
+
+        .setting-row-text {
+            min-width:
+                0;
+        }
+
+
+        .setting-row-text strong {
+            display:
+                block;
+
+            margin-bottom:
+                4px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                14px;
+        }
+
+
+        .setting-row-text span {
+            display:
+                block;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            line-height:
+                1.5;
+        }
+
+
+        /* =========================================
+           BUTTONS
+        ========================================= */
+
+        .settings-action {
+            flex-shrink:
+                0;
+
+            min-height:
+                36px;
+
+            padding:
+                0 12px;
+
+            border:
+                none;
+
+            border-radius:
+                8px;
+
+            background:
+                var(--green);
+
+            color:
+                #ffffff;
+
+            cursor:
+                pointer;
+
+            font-size:
+                11px;
+
+            font-weight:
+                800;
+        }
+
+
+        .settings-action:hover {
+            background:
+                var(--green-dark);
+        }
+
+
+        .settings-danger {
+            background:
+                #fee2e2;
+
+            color:
+                var(--red);
+        }
+
+
+        .settings-danger:hover {
+            background:
+                #fecaca;
+        }
+
+
+        /* =========================================
+           MESSAGE
+        ========================================= */
+
+        #settings-message {
+            min-height:
+                20px;
+
+            margin-top:
+                18px;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .settings-footer {
+            margin-top:
+                35px;
+
+            padding-top:
+                22px;
+
+            border-top:
+                1px solid var(--border);
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            text-align:
+                center;
+        }
+
+
+        .settings-footer a {
+            color:
+                var(--blue);
+
+            text-decoration:
+                none;
+
+            font-weight:
+                700;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 760px) {
+
+            .settings-topbar {
+                padding:
+                    12px 17px;
+
+                flex-wrap:
+                    wrap;
+            }
+
+
+            .settings-nav {
+                width:
+                    100%;
+
+                margin-left:
+                    0;
+
+                overflow-x:
+                    auto;
+            }
+
+
+            .settings-grid {
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .settings-page {
+                width:
+                    min(
+                        calc(100% - 20px),
+                        1050px
+                    );
+
+                margin-top:
+                    25px;
+            }
+
+
+            .settings-account-card {
+                align-items:
+                    flex-start;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .setting-row {
+                align-items:
+                    flex-start;
+
+                flex-direction:
+                    column;
+            }
+
+
+            .settings-action {
+                width:
+                    100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================================
+     NAVIGATION
+========================================= -->
+
+<header class="settings-topbar">
+
+
+    <div class="settings-brand">
+
+        <span>
+            NichoLink
+        </span>
+
+        <strong>
+            254
+        </strong>
+
+    </div>
+
+
+    <nav class="settings-nav">
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+        <a
+            href="javascript:history.back()"
+        >
+            ← Back
+        </a>
+
+    </nav>
+
+
+</header>
+
+
+
+<!-- =========================================
+     MAIN
+========================================= -->
+
+<main class="settings-page">
+
+
+    <section class="settings-header">
+
+        <p class="settings-header-label">
+            ACCOUNT SETTINGS
+        </p>
+
+
+        <h1>
+            Settings
+        </h1>
+
+
+        <p>
+            Manage your NichoLink 254 account preferences,
+            security and account information.
+        </p>
+
+    </section>
+
+
+
+    <!-- =========================================
+         ACCOUNT SUMMARY
+    ========================================= -->
+
+    <section class="settings-account-card">
+
+
+        <div
+            id="settings-avatar"
+            class="settings-avatar"
+        >
+            U
+        </div>
+
+
+        <div class="settings-account-info">
+
+            <h2 id="settings-name">
+                Loading...
+            </h2>
+
+
+            <p id="settings-account-type">
+                Loading account...
+            </p>
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =========================================
+         SETTINGS CARDS
+    ========================================= -->
+
+    <section class="settings-grid">
+
+
+        <!-- ACCOUNT -->
+
+        <div class="settings-card">
+
+            <h2>
+                Account
+            </h2>
+
+
+            <p class="settings-card-subtitle">
+                Manage your account information.
+            </p>
+
+
+            <div class="setting-row">
+
+                <div class="setting-row-text">
+
+                    <strong>
+                        Profile
+                    </strong>
+
+                    <span>
+                        View your name, email and phone details.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="settings-action"
+                    onclick="openProfile()"
+                >
+                    Open
+                </button>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <div class="setting-row-text">
+
+                    <strong>
+                        Profile Photo
+                    </strong>
+
+                    <span>
+                        Update your real profile picture.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="settings-action"
+                    onclick="openProfile()"
+                >
+                    Manage
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- SECURITY -->
+
+        <div class="settings-card">
+
+            <h2>
+                Security
+            </h2>
+
+
+            <p class="settings-card-subtitle">
+                Protect your NichoLink 254 account.
+            </p>
+
+
+            <div class="setting-row">
+
+                <div class="setting-row-text">
+
+                    <strong>
+                        Password
+                    </strong>
+
+                    <span>
+                        Update your account password through
+                        your secure authentication flow.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="settings-action"
+                    onclick="changePassword()"
+                >
+                    Change
+                </button>
+
+            </div>
+
+
+            <div class="setting-row">
+
+                <div class="setting-row-text">
+
+                    <strong>
+                        Sign Out
+                    </strong>
+
+                    <span>
+                        Sign out of your current NichoLink account.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="settings-action settings-danger"
+                    onclick="logoutUser()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- NOTIFICATIONS -->
+
+        <div class="settings-card">
+
+            <h2>
+                Notifications
+            </h2>
+
+
+            <p class="settings-card-subtitle">
+                Manage how you access account activity.
+            </p>
+
+
+            <div class="setting-row">
+
+                <div class="setting-row-text">
+
+                    <strong>
+                        Notifications
+                    </strong>
+
+                    <span>
+                        View messages, viewing requests and
+                        account updates.
+                    </span>
+
+                </div>
+
+
+                <a
+                    href="notifications.html"
+                    class="settings-action"
+                    style="text-decoration:none;display:inline-flex;align-items:center;"
+                >
+                    Open
+                </a>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TRUST -->
+
+        <div class="settings-card">
+
+            <h2>
+                Trust & Safety
+            </h2>
+
+
+            <p class="settings-card-subtitle">
+                Find important safety and account information.
+            </p>
+
+
+            <div class="setting-row">
+
+                <div class="setting-row-text">
+
+                    <strong>
+                        Trust & Information Center
+                    </strong>
+
+                    <span>
+                        Privacy, terms, safety, help and reporting.
+                    </span>
+
+                </div>
+
+
+                <a
+                    href="trust-center.html"
+                    class="settings-action"
+                    style="text-decoration:none;display:inline-flex;align-items:center;"
+                >
+                    Open
+                </a>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+
+
+    <div
+        id="settings-message"
+    ></div>
+
+
+
+    <footer class="settings-footer">
+
+        <p>
+            © 2026 NichoLink 254.
+            All rights reserved.
+        </p>
+
+
+        <p>
+
+            <a href="trust-center.html">
+                Trust & Information Center
+            </a>
+
+        </p>
+
+    </footer>
+
+
+</main>
+
+
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+let currentUser = null;
+
+let currentProfile = null;
+
+
+/* =========================================
+   LOAD SETTINGS
+========================================= */
+
+async function loadSettings() {
+
+    try {
+
+        const {
+            data: {
+                user
+            },
+            error: authError
+        } =
+            await supabaseClient
+                .auth
+                .getUser();
+
+
+        if (authError) {
+            throw authError;
+        }
+
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        currentUser =
+            user;
+
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+
+                .from("profiles")
+
+                .select(`
+                    id,
+                    full_name,
+                    email,
+                    phone,
+                    account_type,
+                    avatar_url,
+                    is_active
+                `)
+
+                .eq(
+                    "id",
+                    user.id
+                )
+
+                .maybeSingle();
+
+
+        if (profileError) {
+            throw profileError;
+        }
+
+
+        if (!profile) {
+
+            throw new Error(
+                "Your profile could not be found."
+            );
+
+        }
+
+
+        if (
+            profile.is_active === false
+        ) {
+
+            await supabaseClient
+                .auth
+                .signOut();
+
+            window.location.href =
+                "login.html";
+
+            return;
+        }
+
+
+        currentProfile =
+            profile;
+
+
+        const name =
+            profile.full_name ||
+            "User";
+
+
+        document.getElementById(
+            "settings-name"
+        ).textContent =
+            name;
+
+
+        const accountType =
+            String(
+                profile.account_type ||
+                "user"
+            )
+                .trim()
+                .toLowerCase();
+
+
+        document.getElementById(
+            "settings-account-type"
+        ).textContent =
+            accountType.charAt(0).toUpperCase() +
+            accountType.slice(1) +
+            " Account";
+
+
+        updateSettingsAvatar(
+            profile
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Settings error:",
+            error
+        );
+
+
+        showSettingsMessage(
+            error.message ||
+            "Unable to load settings.",
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   PROFILE
+========================================= */
+
+function openProfile() {
+
+    const accountType =
+        String(
+            currentProfile?.account_type ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    if (
+        accountType ===
+        "landlord"
+    ) {
+
+        window.location.href =
+            "landlord-dashboard.html";
+
+        return;
+    }
+
+
+    if (
+        accountType ===
+        "tenant"
+    ) {
+
+        window.location.href =
+            "tenant-dashboard.html";
+
+        return;
+    }
+
+
+    window.location.href =
+        "index.html";
+
+}
+
+
+
+/* =========================================
+   CHANGE PASSWORD
+========================================= */
+
+async function changePassword() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const email =
+        currentUser.email;
+
+
+    if (!email) {
+
+        showSettingsMessage(
+            "Your account email could not be found.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .auth
+            .resetPasswordForEmail(
+                email,
+                {
+                    redirectTo:
+                        window.location.origin +
+                        "/reset-password.html"
+                }
+            );
+
+
+    if (error) {
+
+        showSettingsMessage(
+            error.message ||
+            "Unable to send the password reset email.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    showSettingsMessage(
+        "A password reset link has been sent to your email address.",
+        "success"
+    );
+
+}
+
+
+
+/* =========================================
+   LOGOUT
+========================================= */
+
+async function logoutUser() {
+
+    try {
+
+        await supabaseClient
+            .auth
+            .signOut();
+
+    }
+
+    finally {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+}
+
+
+
+/* =========================================
+   AVATAR
+========================================= */
+
+function updateSettingsAvatar(
+    profile
+) {
+
+    const avatar =
+        document.getElementById(
+            "settings-avatar"
+        );
+
+
+    if (!avatar) {
+        return;
+    }
+
+
+    const name =
+        profile.full_name ||
+        "User";
+
+
+    const initial =
+        String(name)
+            .trim()
+            .charAt(0)
+            .toUpperCase() ||
+        "U";
+
+
+    if (
+        profile.avatar_url
+    ) {
+
+        avatar.innerHTML = `
+
+            <img
+                src="${escapeHtml(
+                    addCacheBuster(
+                        profile.avatar_url
+                    )
+                )}"
+                alt="Profile photo"
+            >
+
+        `;
+
+    }
+
+    else {
+
+        avatar.textContent =
+            initial;
+
+    }
+
+}
+
+
+
+/* =========================================
+   MESSAGE
+========================================= */
+
+function showSettingsMessage(
+    text,
+    type
+) {
+
+    const message =
+        document.getElementById(
+            "settings-message"
+        );
+
+
+    if (!message) {
+        return;
+    }
+
+
+    message.textContent =
+        text;
+
+
+    message.style.color =
+        type === "error"
+            ? "#b91c1c"
+            : "#15803d";
+
+}
+
+
+
+/* =========================================
+   HELPERS
+========================================= */
+
+function addCacheBuster(
+    url
+) {
+
+    if (!url) {
+        return url;
+    }
+
+
+    return (
+        url +
+        (
+            url.includes("?")
+                ? "&"
+                : "?"
+        ) +
+        "v=" +
+        Date.now()
+    );
+
+}
+
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+/* =========================================
+   START
+========================================= */
+
+loadSettings();
+
+</script>
+
+
+</body>
+
+</html>
+```

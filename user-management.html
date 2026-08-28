@@ -1,595 +1,511 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>User Management | NichoLink 254</title>
+<title>User Management | NichoLink 254</title>
 
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="style.css">
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #172033;
-        }
+<style>
 
-        .admin-page {
-            max-width: 1400px;
-            margin: auto;
-            padding: 35px 25px 60px;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        .page-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #172033;
+}
 
-        .page-top h1 {
-            margin: 0 0 8px;
-            font-size: 32px;
-        }
+.admin-page {
+    max-width: 1400px;
+    margin: auto;
+    padding: 35px 25px 60px;
+}
 
-        .page-top p {
-            margin: 0;
-            color: #718096;
-        }
+.page-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
 
-        .back-button {
-            text-decoration: none;
-            background: #172033;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-        }
+.page-top h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+}
 
-        /* STATISTICS */
+.page-top p {
+    margin: 0;
+    color: #718096;
+}
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 18px;
-            margin-bottom: 30px;
-        }
+.back-button {
+    text-decoration: none;
+    background: #172033;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
 
-        .stat-card {
-            background: white;
-            border-radius: 18px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,.06);
-            border: 1px solid #edf0f5;
-        }
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 30px;
+}
 
-        .stat-card span {
-            display: block;
-            color: #718096;
-            font-size: 14px;
-            margin-bottom: 12px;
-        }
+.stat-card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.06);
+    border: 1px solid #edf0f5;
+}
 
-        .stat-card strong {
-            font-size: 34px;
-        }
+.stat-card span {
+    display: block;
+    color: #718096;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
 
-        /* SEARCH / FILTER */
+.stat-card strong {
+    font-size: 34px;
+}
 
-        .control-panel {
-            background: white;
-            padding: 20px;
-            border-radius: 18px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,.05);
-            display: grid;
-            grid-template-columns: 1fr 220px;
-            gap: 15px;
-        }
+.control-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 18px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+    display: grid;
+    grid-template-columns: 1fr 220px;
+    gap: 15px;
+}
 
-        .control-panel input,
-        .control-panel select {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #dfe4ec;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
+.control-panel input,
+.control-panel select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #dfe4ec;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
 
-        .control-panel input:focus,
-        .control-panel select:focus {
-            border-color: #2563eb;
-        }
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+}
 
-        /* USER GRID */
+.user-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    border: 1px solid #edf0f5;
+    box-shadow: 0 8px 25px rgba(0,0,0,.05);
+}
 
-        .users-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-        }
+.user-top {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
 
-        .user-card {
-            background: white;
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid #edf0f5;
-            box-shadow: 0 8px 25px rgba(0,0,0,.05);
-            transition: .2s;
-        }
+.avatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #e8eefc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 21px;
+    font-weight: bold;
+    color: #2563eb;
+    flex-shrink: 0;
+}
 
-        .user-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 14px 30px rgba(0,0,0,.08);
-        }
+.user-name {
+    margin: 0 0 5px;
+    font-size: 18px;
+}
 
-        .user-top {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
+.account-type {
+    font-size: 13px;
+    color: #667085;
+    text-transform: capitalize;
+}
 
-        .avatar {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: #e8eefc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 21px;
-            font-weight: bold;
-            color: #2563eb;
-            flex-shrink: 0;
-        }
+.user-details {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 20px;
+}
 
-        .user-name {
-            margin: 0 0 5px;
-            font-size: 18px;
-        }
+.detail {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    font-size: 14px;
+}
 
-        .account-type {
-            font-size: 13px;
-            color: #667085;
-            text-transform: capitalize;
-        }
+.detail span:first-child {
+    color: #718096;
+}
 
-        .user-details {
-            display: grid;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+.detail span:last-child {
+    text-align: right;
+    word-break: break-word;
+}
 
-        .detail {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            font-size: 14px;
-        }
+.status {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
 
-        .detail span:first-child {
-            color: #718096;
-        }
+.status.active {
+    background: #dcfce7;
+    color: #15803d;
+}
 
-        .detail span:last-child {
-            text-align: right;
-            word-break: break-word;
-        }
+.status.inactive {
+    background: #fee2e2;
+    color: #b91c1c;
+}
 
-        .status {
-            display: inline-block;
-            padding: 6px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-        }
+.user-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
 
-        .status.active {
-            background: #dcfce7;
-            color: #15803d;
-        }
+.user-actions button {
+    border: none;
+    border-radius: 9px;
+    padding: 10px 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
 
-        .status.inactive {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
+.activate-button {
+    background: #dcfce7;
+    color: #15803d;
+}
 
-        .user-actions {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
+.deactivate-button {
+    background: #fee2e2;
+    color: #b91c1c;
+}
 
-        .user-actions button {
-            border: none;
-            border-radius: 9px;
-            padding: 10px 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-        }
+.edit-button {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
 
-        .activate-button {
-            background: #dcfce7;
-            color: #15803d;
-        }
+.delete-button {
+    background: #fee2e2;
+    color: #b91c1c;
+}
 
-        .deactivate-button {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
+.loading,
+.empty {
+    grid-column: 1 / -1;
+    background: white;
+    padding: 50px;
+    text-align: center;
+    border-radius: 18px;
+    color: #718096;
+}
 
-        .edit-button {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
+.error-box {
+    background: #fff1f2;
+    color: #b91c1c;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid #fecdd3;
+}
 
-        .delete-button {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,.65);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
 
-        .loading,
-        .empty {
-            grid-column: 1 / -1;
-            background: white;
-            padding: 50px;
-            text-align: center;
-            border-radius: 18px;
-            color: #718096;
-        }
+.modal.show {
+    display: flex;
+}
 
-        /* MODAL */
+.modal-content {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 20px;
+    padding: 28px;
+}
 
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, .65);
-            z-index: 9999;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+.form-group {
+    margin-bottom: 16px;
+}
 
-        .modal.show {
-            display: flex;
-        }
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 14px;
+    font-weight: 600;
+}
 
-        .modal-content {
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            border-radius: 20px;
-            padding: 28px;
-            box-shadow: 0 20px 60px rgba(0,0,0,.2);
-        }
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dfe4ec;
+    border-radius: 9px;
+    font-size: 15px;
+}
 
-        .modal-content h2 {
-            margin-top: 0;
-            margin-bottom: 22px;
-        }
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
 
-        .form-group {
-            margin-bottom: 16px;
-        }
+.modal-actions button {
+    flex: 1;
+    border: none;
+    border-radius: 9px;
+    padding: 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
 
-        .form-group label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 14px;
-            font-weight: 600;
-        }
+.save-button {
+    background: #2563eb;
+    color: white;
+}
 
-        .form-group input,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #dfe4ec;
-            border-radius: 9px;
-            font-size: 15px;
-            outline: none;
-        }
+.cancel-button {
+    background: #e5e7eb;
+}
 
-        .form-group input:focus,
-        .form-group select:focus {
-            border-color: #2563eb;
-        }
+@media (max-width:1000px) {
 
-        .modal-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 22px;
-        }
+    .users-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
 
-        .modal-actions button {
-            flex: 1;
-            border: none;
-            border-radius: 9px;
-            padding: 12px;
-            cursor: pointer;
-            font-weight: 600;
-        }
+    .stats-grid {
+        grid-template-columns: repeat(2,1fr);
+    }
 
-        .save-button {
-            background: #2563eb;
-            color: white;
-        }
+}
 
-        .cancel-button {
-            background: #e5e7eb;
-            color: #172033;
-        }
+@media (max-width:650px) {
 
-        @media (max-width: 1000px) {
-            .users-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+    .users-grid,
+    .stats-grid,
+    .control-panel {
+        grid-template-columns: 1fr;
+    }
 
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
+    .page-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-        @media (max-width: 650px) {
-            .users-grid,
-            .stats-grid,
-            .control-panel {
-                grid-template-columns: 1fr;
-            }
+    .user-actions {
+        grid-template-columns: 1fr;
+    }
 
-            .page-top {
-                flex-direction: column;
-                align-items: flex-start;
-            }
+}
 
-            .user-actions {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+</style>
 </head>
+
 
 <body>
 
 <header class="navbar">
 
-    <div class="logo">
-        <span>NichoLink</span>
-        <strong>254</strong>
-    </div>
+<div class="logo">
+<span>NichoLink</span>
+<strong>254</strong>
+</div>
 
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="properties.html">Properties</a>
-        <a href="admin-dashboard.html">Admin Dashboard</a>
-    </nav>
+<nav>
+<a href="index.html">Home</a>
+<a href="properties.html">Properties</a>
+<a href="admin-dashboard.html">Admin Dashboard</a>
+</nav>
 
-    <a href="admin-dashboard.html" class="nav-button">
-        Dashboard
-    </a>
-<a href="#"
-   onclick="logoutAdmin(); return false;"
-   class="nav-button">
-
-    Logout
-
+<a href="admin-dashboard.html" class="nav-button">
+Dashboard
 </a>
+
+<a href="#" onclick="logoutAdmin();return false;" class="nav-button">
+Logout
+</a>
+
 </header>
 
 
 <main class="admin-page">
 
-    <section class="page-top">
+<section class="page-top">
 
-        <div>
-            <h1>User Management</h1>
-            <p>Manage tenants, landlords and platform accounts.</p>
-        </div>
+<div>
+<h1>User Management</h1>
+<p>Manage tenants, landlords and platform accounts.</p>
+</div>
 
-        <a href="admin-dashboard.html" class="back-button">
-            ← Admin Dashboard
-        </a>
+<a href="admin-dashboard.html" class="back-button">
+← Admin Dashboard
+</a>
 
-    </section>
-
-
-    <!-- STATISTICS -->
-
-    <section class="stats-grid">
-
-        <div class="stat-card">
-            <span>Total Users</span>
-            <strong id="total-users">0</strong>
-        </div>
-
-        <div class="stat-card">
-            <span>Tenants</span>
-            <strong id="total-tenants">0</strong>
-        </div>
-
-        <div class="stat-card">
-            <span>Landlords</span>
-            <strong id="total-landlords">0</strong>
-        </div>
-
-        <div class="stat-card">
-            <span>Active Users</span>
-            <strong id="active-users">0</strong>
-        </div>
-
-    </section>
+</section>
 
 
-    <!-- SEARCH / FILTER -->
+<section class="stats-grid">
 
-    <section class="control-panel">
+<div class="stat-card">
+<span>Total Users</span>
+<strong id="total-users">...</strong>
+</div>
 
-        <input
-            type="search"
-            id="user-search"
-            placeholder="Search by name, phone or email..."
-            oninput="filterUsers()"
-        >
+<div class="stat-card">
+<span>Tenants</span>
+<strong id="total-tenants">...</strong>
+</div>
 
-        <select id="account-filter" onchange="filterUsers()">
+<div class="stat-card">
+<span>Landlords</span>
+<strong id="total-landlords">...</strong>
+</div>
 
-            <option value="all">All Accounts</option>
-            <option value="tenant">Tenants</option>
-            <option value="landlord">Landlords</option>
+<div class="stat-card">
+<span>Active Users</span>
+<strong id="active-users">...</strong>
+</div>
 
-        </select>
-
-    </section>
+</section>
 
 
-    <!-- USER GRID -->
+<section class="control-panel">
 
-    <section id="users-grid" class="users-grid">
+<input
+type="search"
+id="user-search"
+placeholder="Search by name, phone or email..."
+oninput="filterUsers()">
 
-        <div class="loading">
-            Loading users...
-        </div>
+<select id="account-filter" onchange="filterUsers()">
 
-    </section>
+<option value="all">All Accounts</option>
+<option value="tenant">Tenants</option>
+<option value="landlord">Landlords</option>
+
+</select>
+
+</section>
+
+
+<section id="users-grid" class="users-grid">
+
+<div class="loading">
+Loading users...
+</div>
+
+</section>
 
 </main>
 
 
-<!-- EDIT USER MODAL -->
-
 <div id="edit-user-modal" class="modal">
 
-    <div class="modal-content">
+<div class="modal-content">
 
-        <h2>Edit User</h2>
+<h2>Edit User</h2>
 
-        <form id="edit-user-form">
+<form id="edit-user-form">
 
-            <input
-                type="hidden"
-                id="edit-user-id"
-            >
+<input type="hidden" id="edit-user-id">
 
-            <div class="form-group">
+<div class="form-group">
+<label>Full Name</label>
+<input type="text" id="edit-full-name" required>
+</div>
 
-                <label for="edit-full-name">
-                    Full Name
-                </label>
+<div class="form-group">
+<label>Phone</label>
+<input type="text" id="edit-phone">
+</div>
 
-                <input
-                    type="text"
-                    id="edit-full-name"
-                    required
-                >
+<div class="form-group">
+<label>Email</label>
+<input type="email" id="edit-email">
+</div>
 
-            </div>
+<div class="form-group">
+<label>Account Type</label>
 
+<select id="edit-account-type">
+<option value="tenant">Tenant</option>
+<option value="landlord">Landlord</option>
+</select>
 
-            <div class="form-group">
+</div>
 
-                <label for="edit-phone">
-                    Phone
-                </label>
+<div class="form-group">
+<label>Account Status</label>
 
-                <input
-                    type="text"
-                    id="edit-phone"
-                >
+<select id="edit-active">
+<option value="true">Active</option>
+<option value="false">Inactive</option>
+</select>
 
-            </div>
+</div>
 
+<div class="modal-actions">
 
-            <div class="form-group">
+<button
+type="button"
+class="cancel-button"
+onclick="closeEditModal()">
+Cancel
+</button>
 
-                <label for="edit-email">
-                    Email
-                </label>
+<button
+type="submit"
+class="save-button">
+Save Changes
+</button>
 
-                <input
-                    type="email"
-                    id="edit-email"
-                >
+</div>
 
-            </div>
+</form>
 
-
-            <div class="form-group">
-
-                <label for="edit-account-type">
-                    Account Type
-                </label>
-
-                <select id="edit-account-type">
-
-                    <option value="tenant">
-                        Tenant
-                    </option>
-
-                    <option value="landlord">
-                        Landlord
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="edit-active">
-                    Account Status
-                </label>
-
-                <select id="edit-active">
-
-                    <option value="true">
-                        Active
-                    </option>
-
-                    <option value="false">
-                        Inactive
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <div class="modal-actions">
-
-                <button
-                    type="button"
-                    class="cancel-button"
-                    onclick="closeEditModal()">
-
-                    Cancel
-
-                </button>
-
-                <button
-                    type="submit"
-                    class="save-button">
-
-                    Save Changes
-
-                </button>
-
-            </div>
-
-        </form>
-
-    </div>
+</div>
 
 </div>
 
@@ -598,16 +514,21 @@
 <script src="admin-auth.js"></script>
 
 <script>
+
+let allUsers = [];
+
+
+/* ==============================
+   LOGOUT
+============================== */
+
 async function logoutAdmin() {
 
     await supabaseClient.auth.signOut();
 
     window.location.href = "login.html";
-}
-</script>
-<script>
 
-let allUsers = [];
+}
 
 
 /* ==============================
@@ -619,44 +540,32 @@ async function loadUsers() {
     const container =
         document.getElementById("users-grid");
 
+    container.innerHTML =
+        '<div class="loading">Loading users...</div>';
+
     try {
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-
+        const result =
+            await supabaseClient
             .from("profiles")
-
-            .select(`
-                id,
-                full_name,
-                phone,
-                email,
-                account_type,
-                created_at,
-                updated_at,
-                is_active
-            `)
-
+            .select(
+                "id,full_name,phone,email,account_type,created_at,updated_at,is_active"
+            )
             .order(
                 "created_at",
                 {
-                    ascending: false
+                    ascending:false
                 }
             );
 
-
-        if (error) {
-            throw error;
+        if (result.error) {
+            throw result.error;
         }
 
-
         allUsers =
-            Array.isArray(data)
-                ? data
+            Array.isArray(result.data)
+                ? result.data
                 : [];
-
 
         updateStatistics();
 
@@ -664,29 +573,29 @@ async function loadUsers() {
 
     }
 
-    catch (error) {
+    catch(error) {
 
         console.error(
-            "User loading error:",
+            "User Management error:",
             error
         );
 
         container.innerHTML = `
 
-            <div class="empty">
+        <div class="error-box">
 
-                <h3>
-                    Unable to load users
-                </h3>
+            <h3>
+                Unable to load users
+            </h3>
 
-                <p>
-                    ${escapeHtml(
-                        error.message ||
-                        "Unknown error"
-                    )}
-                </p>
+            <p>
+                ${escapeHtml(
+                    error.message ||
+                    "Unknown Supabase error"
+                )}
+            </p>
 
-            </div>
+        </div>
 
         `;
 
@@ -726,7 +635,6 @@ function updateStatistics() {
                 user.is_active === true
         ).length;
 
-
     document.getElementById(
         "total-users"
     ).textContent = total;
@@ -753,66 +661,55 @@ function updateStatistics() {
 function filterUsers() {
 
     const search =
-        document.getElementById(
-            "user-search"
-        )
+        document
+        .getElementById("user-search")
         .value
         .trim()
         .toLowerCase();
 
-
     const account =
-        document.getElementById(
-            "account-filter"
-        )
+        document
+        .getElementById("account-filter")
         .value;
 
-
     const filtered =
-        allUsers.filter(
-            user => {
+        allUsers.filter(user => {
 
-                const name =
-                    String(
-                        user.full_name || ""
-                    ).toLowerCase();
+            const name =
+                String(
+                    user.full_name || ""
+                ).toLowerCase();
 
-                const phone =
-                    String(
-                        user.phone || ""
-                    ).toLowerCase();
+            const phone =
+                String(
+                    user.phone || ""
+                ).toLowerCase();
 
-                const email =
-                    String(
-                        user.email || ""
-                    ).toLowerCase();
+            const email =
+                String(
+                    user.email || ""
+                ).toLowerCase();
 
-                const type =
-                    normalizeAccount(
-                        user.account_type
-                    );
+            const type =
+                normalizeAccount(
+                    user.account_type
+                );
 
-
-                const matchesSearch =
+            return (
+                (
                     !search ||
                     name.includes(search) ||
                     phone.includes(search) ||
-                    email.includes(search);
-
-
-                const matchesAccount =
+                    email.includes(search)
+                )
+                &&
+                (
                     account === "all" ||
-                    type === account;
+                    type === account
+                )
+            );
 
-
-                return (
-                    matchesSearch &&
-                    matchesAccount
-                );
-
-            }
-        );
-
+        });
 
     renderUsers(filtered);
 
@@ -820,7 +717,7 @@ function filterUsers() {
 
 
 /* ==============================
-   RENDER USER GRID
+   RENDER
 ============================== */
 
 function renderUsers(users) {
@@ -830,218 +727,177 @@ function renderUsers(users) {
             "users-grid"
         );
 
-
     container.innerHTML = "";
-
 
     if (!users.length) {
 
         container.innerHTML = `
 
-            <div class="empty">
+        <div class="empty">
 
-                <h3>
-                    No users found
-                </h3>
+            <h3>No users found</h3>
 
-                <p>
-                    Try changing your search
-                    or account filter.
-                </p>
+            <p>
+                There are no matching user accounts.
+            </p>
 
-            </div>
+        </div>
 
         `;
 
         return;
-
     }
 
+    users.forEach(user => {
 
-    users.forEach(
-        user => {
+        const card =
+            document.createElement("article");
 
-            const card =
-                document.createElement(
-                    "article"
-                );
+        card.className =
+            "user-card";
 
+        const name =
+            user.full_name ||
+            "Unnamed User";
 
-            card.className =
-                "user-card";
+        const account =
+            normalizeAccount(
+                user.account_type
+            ) ||
+            "unknown";
 
+        const active =
+            user.is_active === true;
 
-            const name =
-                user.full_name ||
-                "Unnamed User";
+        card.innerHTML = `
 
+        <div class="user-top">
 
-            const initials =
-                getInitials(name);
+            <div class="avatar">
+                ${escapeHtml(
+                    getInitials(name)
+                )}
+            </div>
 
+            <div>
 
-            const account =
-                normalizeAccount(
-                    user.account_type
-                ) || "unknown";
+                <h3 class="user-name">
+                    ${escapeHtml(name)}
+                </h3>
 
-
-            const active =
-                user.is_active === true;
-
-
-            const created =
-                formatDate(
-                    user.created_at
-                );
-
-
-            card.innerHTML = `
-
-                <div class="user-top">
-
-                    <div class="avatar">
-                        ${escapeHtml(initials)}
-                    </div>
-
-                    <div>
-
-                        <h3 class="user-name">
-                            ${escapeHtml(name)}
-                        </h3>
-
-                        <div class="account-type">
-                            ${escapeHtml(account)}
-                        </div>
-
-                    </div>
-
+                <div class="account-type">
+                    ${escapeHtml(account)}
                 </div>
 
+            </div>
 
-                <div class="user-details">
-
-                    <div class="detail">
-
-                        <span>Email</span>
-
-                        <span>
-                            ${escapeHtml(
-                                user.email ||
-                                "Not provided"
-                            )}
-                        </span>
-
-                    </div>
+        </div>
 
 
-                    <div class="detail">
+        <div class="user-details">
 
-                        <span>Phone</span>
+            <div class="detail">
+                <span>Email</span>
+                <span>
+                    ${escapeHtml(
+                        user.email ||
+                        "Not provided"
+                    )}
+                </span>
+            </div>
 
-                        <span>
-                            ${escapeHtml(
-                                user.phone ||
-                                "Not provided"
-                            )}
-                        </span>
+            <div class="detail">
+                <span>Phone</span>
+                <span>
+                    ${escapeHtml(
+                        user.phone ||
+                        "Not provided"
+                    )}
+                </span>
+            </div>
 
-                    </div>
+            <div class="detail">
+                <span>Joined</span>
+                <span>
+                    ${escapeHtml(
+                        formatDate(
+                            user.created_at
+                        )
+                    )}
+                </span>
+            </div>
 
-
-                    <div class="detail">
-
-                        <span>Joined</span>
-
-                        <span>
-                            ${escapeHtml(created)}
-                        </span>
-
-                    </div>
-
-
-                    <div class="detail">
-
-                        <span>Status</span>
-
-                        <span>
-
-                            <span class="status ${
-                                active
-                                    ? "active"
-                                    : "inactive"
-                            }">
-
-                                ${
-                                    active
-                                        ? "Active"
-                                        : "Inactive"
-                                }
-
-                            </span>
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="user-actions">
-
-                    <button
-                        type="button"
-                        class="edit-button"
-                        onclick="openEditModal('${escapeHtml(user.id)}')">
-
-                        Edit
-
-                    </button>
-
-                    <button
-                        type="button"
-                        class="${
-                            active
-                                ? "deactivate-button"
-                                : "activate-button"
-                        }"
-                        onclick="changeUserStatus(
-                            '${escapeHtml(user.id)}',
-                            ${!active}
-                        )">
-
+            <div class="detail">
+                <span>Status</span>
+                <span>
+                    <span class="status ${
+                        active
+                            ? "active"
+                            : "inactive"
+                    }">
                         ${
                             active
-                                ? "Deactivate"
-                                : "Activate"
+                                ? "Active"
+                                : "Inactive"
                         }
+                    </span>
+                </span>
+            </div>
 
-                    </button>
-
-                    <button
-                        type="button"
-                        class="delete-button"
-                        onclick="deleteUser('${escapeHtml(user.id)}')">
-
-                        Delete
-
-                    </button>
-
-                </div>
-
-            `;
+        </div>
 
 
-            container.appendChild(card);
+        <div class="user-actions">
 
-        }
-    );
+            <button
+                type="button"
+                class="edit-button"
+                onclick="openEditModal('${escapeHtml(user.id)}')">
+                Edit
+            </button>
+
+            <button
+                type="button"
+                class="${
+                    active
+                        ? "deactivate-button"
+                        : "activate-button"
+                }"
+                onclick="changeUserStatus(
+                    '${escapeHtml(user.id)}',
+                    ${!active}
+                )">
+
+                ${
+                    active
+                        ? "Deactivate"
+                        : "Activate"
+                }
+
+            </button>
+
+            <button
+                type="button"
+                class="delete-button"
+                onclick="deleteUser('${escapeHtml(user.id)}')">
+
+                Delete
+
+            </button>
+
+        </div>
+
+        `;
+
+        container.appendChild(card);
+
+    });
 
 }
 
 
 /* ==============================
-   OPEN EDIT MODAL
+   EDIT
 ============================== */
 
 function openEditModal(userId) {
@@ -1053,38 +909,29 @@ function openEditModal(userId) {
                 String(userId)
         );
 
-
     if (!user) {
-
         alert("User not found.");
-
         return;
-
     }
-
 
     document.getElementById(
         "edit-user-id"
     ).value = user.id;
-
 
     document.getElementById(
         "edit-full-name"
     ).value =
         user.full_name || "";
 
-
     document.getElementById(
         "edit-phone"
     ).value =
         user.phone || "";
 
-
     document.getElementById(
         "edit-email"
     ).value =
         user.email || "";
-
 
     document.getElementById(
         "edit-account-type"
@@ -1093,7 +940,6 @@ function openEditModal(userId) {
             user.account_type
         );
 
-
     document.getElementById(
         "edit-active"
     ).value =
@@ -1101,17 +947,12 @@ function openEditModal(userId) {
             ? "true"
             : "false";
 
-
     document.getElementById(
         "edit-user-modal"
     ).classList.add("show");
 
 }
 
-
-/* ==============================
-   CLOSE EDIT MODAL
-============================== */
 
 function closeEditModal() {
 
@@ -1123,129 +964,110 @@ function closeEditModal() {
 
 
 /* ==============================
-   SAVE EDITED USER
+   SAVE USER
 ============================== */
 
-document.getElementById(
-    "edit-user-form"
-).addEventListener(
+document
+.getElementById("edit-user-form")
+.addEventListener(
     "submit",
     async function(event) {
 
         event.preventDefault();
-
 
         const userId =
             document.getElementById(
                 "edit-user-id"
             ).value;
 
-
         const fullName =
             document.getElementById(
                 "edit-full-name"
             ).value.trim();
-
 
         const phone =
             document.getElementById(
                 "edit-phone"
             ).value.trim();
 
-
         const email =
             document.getElementById(
                 "edit-email"
             ).value.trim();
-
 
         const accountType =
             document.getElementById(
                 "edit-account-type"
             ).value;
 
-
         const isActive =
             document.getElementById(
                 "edit-active"
             ).value === "true";
 
-
         if (!userId || !fullName) {
-
-            alert(
-                "Full name is required."
-            );
-
+            alert("Full name is required.");
             return;
-
         }
-
 
         try {
 
-            const {
-                data,
-                error
-            } = await supabaseClient
-
+            const result =
+                await supabaseClient
                 .from("profiles")
-
                 .update({
+
                     full_name: fullName,
-                    phone: phone || null,
-                    email: email || null,
-                    account_type: accountType,
-                    is_active: isActive,
+
+                    phone:
+                        phone || null,
+
+                    email:
+                        email || null,
+
+                    account_type:
+                        accountType,
+
+                    is_active:
+                        isActive,
+
                     updated_at:
                         new Date().toISOString()
-                })
 
+                })
                 .eq(
                     "id",
                     userId
                 )
-
                 .select();
 
-
-            if (error) {
-                throw error;
+            if (result.error) {
+                throw result.error;
             }
 
-
             if (
-                !data ||
-                data.length === 0
+                !result.data ||
+                result.data.length === 0
             ) {
 
                 throw new Error(
-                    "User was not updated. Check your Supabase UPDATE policy."
+                    "User was not updated. Check the Supabase UPDATE policy."
                 );
 
             }
 
-
             closeEditModal();
 
-            requireAdmin().then(function(isAdmin) {
-
-    if (isAdmin) {
-        loadUsers();
-    }
-
-});
-
+            await loadUsers();
 
         }
 
-        catch (error) {
+        catch(error) {
 
             console.error(
-                "Edit user error:",
+                "Edit error:",
                 error
             );
-
 
             alert(
                 "Unable to update user.\n\n" +
@@ -1262,7 +1084,7 @@ document.getElementById(
 
 
 /* ==============================
-   CHANGE USER STATUS
+   STATUS
 ============================== */
 
 async function changeUserStatus(
@@ -1274,75 +1096,64 @@ async function changeUserStatus(
         return;
     }
 
-
     const action =
         newStatus
             ? "activate"
             : "deactivate";
 
-
-    const confirmed =
-        confirm(
+    if (
+        !confirm(
             `Are you sure you want to ${action} this user?`
-        );
-
-
-    if (!confirmed) {
+        )
+    ) {
         return;
     }
 
-
     try {
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-
+        const result =
+            await supabaseClient
             .from("profiles")
-
             .update({
-                is_active: newStatus,
+
+                is_active:
+                    newStatus,
+
                 updated_at:
                     new Date().toISOString()
-            })
 
+            })
             .eq(
                 "id",
                 userId
             )
-
             .select();
 
-
-        if (error) {
-            throw error;
+        if (result.error) {
+            throw result.error;
         }
 
-
         if (
-            !data ||
-            data.length === 0
+            !result.data ||
+            result.data.length === 0
         ) {
 
             throw new Error(
-                "User status was not updated. Check your Supabase UPDATE policy."
+                "User status was not updated. Check the Supabase UPDATE policy."
             );
 
         }
-
 
         await loadUsers();
 
     }
 
-    catch (error) {
+    catch(error) {
 
         console.error(
-            "User status error:",
+            "Status error:",
             error
         );
-
 
         alert(
             "Unable to change user status.\n\n" +
@@ -1358,15 +1169,10 @@ async function changeUserStatus(
 
 
 /* ==============================
-   DELETE USER
+   DELETE
 ============================== */
 
 async function deleteUser(userId) {
-
-    if (!userId) {
-        return;
-    }
-
 
     const user =
         allUsers.find(
@@ -1375,73 +1181,55 @@ async function deleteUser(userId) {
                 String(userId)
         );
 
+    const name =
+        user?.full_name ||
+        "this user";
 
-    const userName =
-        user &&
-        user.full_name
-            ? user.full_name
-            : "this user";
-
-
-    const confirmed =
-        confirm(
-            `Delete ${userName} permanently?\n\nThis action cannot be undone.`
-        );
-
-
-    if (!confirmed) {
+    if (
+        !confirm(
+            `Delete ${name} permanently?\n\nThis action cannot be undone.`
+        )
+    ) {
         return;
     }
 
-
     try {
 
-        const {
-            data,
-            error
-        } = await supabaseClient
-
+        const result =
+            await supabaseClient
             .from("profiles")
-
             .delete()
-
             .eq(
                 "id",
                 userId
             )
-
             .select();
 
-
-        if (error) {
-            throw error;
+        if (result.error) {
+            throw result.error;
         }
 
-
         if (
-            !data ||
-            data.length === 0
+            !result.data ||
+            result.data.length === 0
         ) {
 
             throw new Error(
-                "User was not deleted. Check your Supabase DELETE policy."
+                "User was not deleted. Check the Supabase DELETE policy."
             );
 
         }
 
-
         await loadUsers();
-
 
     }
 
-    catch (error) {
+    catch(error) {
 
         console.error(
-            "Delete user error:",
+            "Delete error:",
             error
         );
-
 
         alert(
             "Unable to delete user.\n\n" +
@@ -1454,29 +1242,6 @@ async function deleteUser(userId) {
     }
 
 }
-
-
-/* ==============================
-   MODAL CLICK OUTSIDE
-============================== */
-
-document.getElementById(
-    "edit-user-modal"
-).addEventListener(
-    "click",
-    function(event) {
-
-        if (
-            event.target ===
-            this
-        ) {
-
-            closeEditModal();
-
-        }
-
-    }
-);
 
 
 /* ==============================
@@ -1498,24 +1263,21 @@ function getInitials(name) {
 
     const parts =
         String(name)
-            .trim()
-            .split(/\s+/)
-            .filter(Boolean);
-
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean);
 
     if (!parts.length) {
         return "?";
     }
 
-
     if (parts.length === 1) {
 
         return parts[0]
-            .substring(0, 2)
-            .toUpperCase();
+        .substring(0,2)
+        .toUpperCase();
 
     }
-
 
     return (
         parts[0][0] +
@@ -1531,28 +1293,23 @@ function formatDate(value) {
         return "Unknown";
     }
 
-
     const date =
         new Date(value);
-
 
     if (
         Number.isNaN(
             date.getTime()
         )
     ) {
-
         return "Unknown";
-
     }
-
 
     return date.toLocaleDateString(
         "en-KE",
         {
-            day: "numeric",
-            month: "short",
-            year: "numeric"
+            day:"numeric",
+            month:"short",
+            year:"numeric"
         }
     );
 
@@ -1561,25 +1318,47 @@ function formatDate(value) {
 
 function escapeHtml(value) {
 
-    return String(value)
-
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
+
+
+document
+.getElementById("edit-user-modal")
+.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target === this
+        ) {
+            closeEditModal();
+        }
+
+    }
+);
 
 
 /* ==============================
    START
 ============================== */
 
-loadUsers();
+requireAdmin().then(
+    function(isAdmin) {
+
+        if (isAdmin) {
+            loadUsers();
+        }
+
+    }
+);
 
 </script>
 
 </body>
 </html>
-```

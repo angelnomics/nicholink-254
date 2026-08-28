@@ -1,0 +1,2939 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Create a photo advertisement on NichoLink 254."
+    >
+
+    <title>
+        Photo Advertising | NichoLink 254
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <style>
+
+        :root {
+            --green: #00843d;
+            --green-dark: #006b31;
+            --green-light: #eaf7ef;
+            --navy: #172033;
+            --text: #17201b;
+            --muted: #64748b;
+            --white: #ffffff;
+            --background: #f7f9f8;
+            --border: #e2e8e5;
+            --danger: #dc2626;
+            --success: #15803d;
+            --gold: #f7c600;
+            --gold-bg: #fffaf0;
+            --shadow:
+                0 10px 30px rgba(15,23,42,.07);
+            --radius: 18px;
+        }
+
+
+        * {
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            margin: 0;
+            background: var(--background);
+            color: var(--text);
+            font-family:
+                Inter,
+                Arial,
+                Helvetica,
+                sans-serif;
+            line-height: 1.6;
+        }
+
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+        }
+
+
+        /* =====================================================
+           NAVIGATION
+        ===================================================== */
+
+        .navbar {
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+
+            min-height: 72px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            padding:
+                0 6%;
+
+            background:
+                rgba(255,255,255,.97);
+
+            border-bottom:
+                1px solid var(--border);
+
+            backdrop-filter:
+                blur(12px);
+        }
+
+
+        .logo a {
+
+            display: inline-flex;
+            align-items: center;
+
+            font-size: 22px;
+            font-weight: 900;
+
+            white-space: nowrap;
+        }
+
+
+        .logo span {
+            color: var(--navy);
+        }
+
+
+        .logo strong {
+            margin-left: 3px;
+            color: var(--green);
+        }
+
+
+        .navbar nav {
+
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+
+        .navbar nav a {
+
+            padding:
+                9px 12px;
+
+            border-radius:
+                9px;
+
+            color:
+                #475569;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+        }
+
+
+        .navbar nav a:hover,
+        .navbar nav a.active {
+
+            background:
+                var(--green-light);
+
+            color:
+                var(--green);
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .advert-hero {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eef8f2 0%,
+                    #ffffff 60%,
+                    #f8fbf9 100%
+                );
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .advert-hero-inner {
+
+            width:
+                min(1100px,92%);
+
+            margin:
+                0 auto;
+
+            padding:
+                65px 0 75px;
+        }
+
+
+        .hero-badge {
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            padding:
+                7px 12px;
+
+            border-radius:
+                999px;
+
+            background:
+                var(--green-light);
+
+            border:
+                1px solid #cfe8d8;
+
+            color:
+                var(--green);
+
+            font-size:
+                11px;
+
+            font-weight:
+                900;
+
+            letter-spacing:
+                1px;
+        }
+
+
+        .advert-hero h1 {
+
+            max-width:
+                750px;
+
+            margin:
+                14px 0 12px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                clamp(34px,5vw,56px);
+
+            line-height:
+                1.05;
+
+            letter-spacing:
+                -1.5px;
+        }
+
+
+        .advert-hero h1 span {
+            color:
+                var(--green);
+        }
+
+
+        .advert-hero p {
+
+            max-width:
+                680px;
+
+            margin:
+                0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                15px;
+
+            line-height:
+                1.75;
+        }
+
+
+        /* =====================================================
+           MAIN
+        ===================================================== */
+
+        .advert-page {
+
+            width:
+                min(1100px,92%);
+
+            margin:
+                0 auto;
+
+            padding:
+                45px 0 80px;
+        }
+
+
+        .advert-layout {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                minmax(0,1fr) 320px;
+
+            gap:
+                24px;
+
+            align-items:
+                start;
+        }
+
+
+        /* =====================================================
+           FORM CARD
+        ===================================================== */
+
+        .advert-form-card {
+
+            background:
+                var(--white);
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            box-shadow:
+                var(--shadow);
+
+            padding:
+                30px;
+        }
+
+
+        .section-title {
+
+            margin:
+                0 0 5px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                21px;
+
+            font-weight:
+                900;
+        }
+
+
+        .section-description {
+
+            margin:
+                0 0 24px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+        }
+
+
+        .form-section {
+
+            margin-bottom:
+                30px;
+
+            padding-bottom:
+                30px;
+
+            border-bottom:
+                1px solid var(--border);
+        }
+
+
+        .form-section:last-of-type {
+
+            margin-bottom:
+                0;
+
+            padding-bottom:
+                0;
+
+            border-bottom:
+                none;
+        }
+
+
+        .form-grid {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(2,minmax(0,1fr));
+
+            gap:
+                18px;
+        }
+
+
+        .form-group {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                7px;
+        }
+
+
+        .form-group.full {
+            grid-column:
+                1 / -1;
+        }
+
+
+        .form-group label {
+
+            color:
+                var(--navy);
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+        }
+
+
+        .form-group label span {
+            color:
+                var(--green);
+        }
+
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+
+            width:
+                100%;
+
+            padding:
+                13px 14px;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                10px;
+
+            background:
+                #fbfdfc;
+
+            color:
+                var(--text);
+
+            outline:
+                none;
+
+            font-size:
+                14px;
+        }
+
+
+        .form-group input,
+        .form-group select {
+
+            min-height:
+                48px;
+        }
+
+
+        .form-group textarea {
+
+            min-height:
+                145px;
+
+            resize:
+                vertical;
+        }
+
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+
+            border-color:
+                var(--green);
+
+            background:
+                #ffffff;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(0,132,61,.08);
+        }
+
+
+        .form-group small {
+
+            color:
+                var(--muted);
+
+            font-size:
+                11px;
+        }
+
+
+        /* =====================================================
+           PHOTO UPLOAD
+        ===================================================== */
+
+        .photo-upload-box {
+
+            position:
+                relative;
+
+            padding:
+                28px;
+
+            border:
+                2px dashed #bfd2c6;
+
+            border-radius:
+                15px;
+
+            background:
+                #f8fbf9;
+
+            text-align:
+                center;
+
+            transition:
+                .2s ease;
+        }
+
+
+        .photo-upload-box:hover {
+
+            border-color:
+                var(--green);
+
+            background:
+                #f4faf6;
+        }
+
+
+        .photo-upload-box.dragover {
+
+            border-color:
+                var(--green);
+
+            background:
+                var(--green-light);
+        }
+
+
+        #photo-files {
+
+            position:
+                absolute;
+
+            width:
+                1px;
+
+            height:
+                1px;
+
+            opacity:
+                0;
+
+            pointer-events:
+                none;
+        }
+
+
+        .choose-photo-button {
+
+            min-height:
+                48px;
+
+            display:
+                inline-flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                0 18px;
+
+            border:
+                none;
+
+            border-radius:
+                10px;
+
+            background:
+                var(--green);
+
+            color:
+                #ffffff;
+
+            font-size:
+                13px;
+
+            font-weight:
+                800;
+
+            cursor:
+                pointer;
+        }
+
+
+        .choose-photo-button:hover {
+
+            background:
+                var(--green-dark);
+        }
+
+
+        .upload-icon {
+
+            margin-bottom:
+                8px;
+
+            font-size:
+                38px;
+        }
+
+
+        .photo-upload-box h3 {
+
+            margin:
+                0 0 5px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                17px;
+        }
+
+
+        .photo-upload-box p {
+
+            margin:
+                0 0 15px;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+        }
+
+
+        .photo-counter {
+
+            margin-top:
+                14px;
+
+            color:
+                var(--green);
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+        }
+
+
+        .photo-preview {
+
+            display:
+                grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fill,
+                    minmax(125px,1fr)
+                );
+
+            gap:
+                12px;
+
+            margin-top:
+                18px;
+        }
+
+
+        .photo-preview-item {
+
+            position:
+                relative;
+
+            aspect-ratio:
+                1 / 1;
+
+            overflow:
+                hidden;
+
+            border-radius:
+                12px;
+
+            background:
+                #e9efeb;
+
+            border:
+                1px solid var(--border);
+        }
+
+
+        .photo-preview-item img {
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            display:
+                block;
+
+            object-fit:
+                cover;
+        }
+
+
+        .remove-photo {
+
+            position:
+                absolute;
+
+            top:
+                7px;
+
+            right:
+                7px;
+
+            width:
+                28px;
+
+            height:
+                28px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border:
+                none;
+
+            border-radius:
+                50%;
+
+            background:
+                rgba(220,38,38,.92);
+
+            color:
+                #ffffff;
+
+            font-size:
+                14px;
+
+            cursor:
+                pointer;
+        }
+
+
+        .photo-number {
+
+            position:
+                absolute;
+
+            bottom:
+                7px;
+
+            left:
+                7px;
+
+            min-width:
+                27px;
+
+            height:
+                27px;
+
+            padding:
+                0 7px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            border-radius:
+                7px;
+
+            background:
+                rgba(23,32,51,.84);
+
+            color:
+                #ffffff;
+
+            font-size:
+                10px;
+
+            font-weight:
+                900;
+        }
+
+
+        /* =====================================================
+           PRICE
+        ===================================================== */
+
+        .price-summary {
+
+            margin-top:
+                25px;
+
+            padding:
+                18px;
+
+            border:
+                1px solid #f1df9a;
+
+            border-radius:
+                12px;
+
+            background:
+                var(--gold-bg);
+        }
+
+
+        .price-row {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                15px;
+
+            padding:
+                5px 0;
+
+            color:
+                #475467;
+
+            font-size:
+                13px;
+        }
+
+
+        .price-row strong {
+
+            color:
+                var(--navy);
+
+            font-size:
+                15px;
+        }
+
+
+        .price-row.total {
+
+            margin-top:
+                8px;
+
+            padding-top:
+                13px;
+
+            border-top:
+                1px solid #ead996;
+        }
+
+
+        .price-row.total strong {
+
+            color:
+                var(--green);
+
+            font-size:
+                20px;
+        }
+
+
+        /* =====================================================
+           PAYMENT
+        ===================================================== */
+
+        .payment-notice {
+
+            margin-top:
+                18px;
+
+            padding:
+                16px;
+
+            border:
+                1px solid #dce8e0;
+
+            border-radius:
+                11px;
+
+            background:
+                #f8fbf9;
+        }
+
+
+        .payment-notice strong {
+
+            display:
+                block;
+
+            margin-bottom:
+                4px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                13px;
+        }
+
+
+        .payment-notice p {
+
+            margin:
+                0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                12px;
+
+            line-height:
+                1.65;
+        }
+
+
+        .submit-button {
+
+            width:
+                100%;
+
+            min-height:
+                54px;
+
+            margin-top:
+                20px;
+
+            border:
+                none;
+
+            border-radius:
+                11px;
+
+            background:
+                var(--green);
+
+            color:
+                #ffffff;
+
+            font-size:
+                14px;
+
+            font-weight:
+                900;
+
+            cursor:
+                pointer;
+        }
+
+
+        .submit-button:hover {
+            background:
+                var(--green-dark);
+        }
+
+
+        .submit-button:disabled {
+
+            opacity:
+                .6;
+
+            cursor:
+                not-allowed;
+        }
+
+
+        .form-message {
+
+            min-height:
+                20px;
+
+            margin-top:
+                15px;
+
+            text-align:
+                center;
+
+            font-size:
+                13px;
+
+            font-weight:
+                700;
+        }
+
+
+        .error-message {
+            color:
+                var(--danger);
+        }
+
+
+        .success-message {
+            color:
+                var(--success);
+        }
+
+
+        /* =====================================================
+           SIDEBAR
+        ===================================================== */
+
+        .sidebar {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                18px;
+        }
+
+
+        .sidebar-card {
+
+            padding:
+                23px;
+
+            background:
+                #ffffff;
+
+            border:
+                1px solid var(--border);
+
+            border-radius:
+                var(--radius);
+
+            box-shadow:
+                var(--shadow);
+        }
+
+
+        .sidebar-card h2 {
+
+            margin:
+                0 0 10px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                19px;
+        }
+
+
+        .sidebar-card p {
+
+            margin:
+                0;
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.65;
+        }
+
+
+        .fee-card {
+
+            background:
+                #f0fdf4;
+
+            border-color:
+                #bbf7d0;
+        }
+
+
+        .fee-card strong.fee {
+
+            display:
+                block;
+
+            margin:
+                10px 0;
+
+            color:
+                var(--green);
+
+            font-size:
+                31px;
+        }
+
+
+        .sidebar-list {
+
+            padding:
+                0;
+
+            margin:
+                14px 0 0;
+
+            list-style:
+                none;
+        }
+
+
+        .sidebar-list li {
+
+            padding:
+                7px 0;
+
+            color:
+                #344054;
+
+            font-size:
+                12px;
+        }
+
+
+        .back-video-button {
+
+            min-height:
+                46px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            margin-top:
+                15px;
+
+            border:
+                1px solid var(--green);
+
+            border-radius:
+                10px;
+
+            color:
+                var(--green);
+
+            font-size:
+                12px;
+
+            font-weight:
+                800;
+        }
+
+
+        .back-video-button:hover {
+
+            background:
+                var(--green-light);
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        footer {
+
+            margin-top:
+                30px;
+
+            padding:
+                50px 6% 20px;
+
+            background:
+                #111916;
+
+            color:
+                #ffffff;
+        }
+
+
+        .footer-content {
+
+            width:
+                min(1100px,100%);
+
+            margin:
+                auto;
+
+            display:
+                grid;
+
+            grid-template-columns:
+                1.4fr 1fr 1fr;
+
+            gap:
+                40px;
+        }
+
+
+        .footer-content h2 {
+
+            margin:
+                0 0 10px;
+
+            font-size:
+                21px;
+        }
+
+
+        .footer-content h2 strong {
+            color:
+                #35b96b;
+        }
+
+
+        .footer-content h3 {
+
+            margin:
+                0 0 12px;
+
+            font-size:
+                14px;
+        }
+
+
+        .footer-content p,
+        .footer-content a {
+
+            color:
+                #aebbb4;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.7;
+        }
+
+
+        .footer-content a {
+
+            display:
+                block;
+
+            margin:
+                6px 0;
+        }
+
+
+        .copyright {
+
+            width:
+                min(1100px,100%);
+
+            margin:
+                30px auto 0;
+
+            padding-top:
+                16px;
+
+            border-top:
+                1px solid
+                rgba(255,255,255,.08);
+
+            text-align:
+                center;
+
+            color:
+                #84928b;
+
+            font-size:
+                11px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width:900px) {
+
+            .navbar nav {
+                display:
+                    none;
+            }
+
+
+            .advert-layout {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .sidebar {
+
+                order:
+                    -1;
+            }
+
+        }
+
+
+        @media (max-width:650px) {
+
+            .navbar {
+
+                padding:
+                    12px 15px;
+
+                min-height:
+                    62px;
+            }
+
+
+            .logo a {
+
+                font-size:
+                    19px;
+            }
+
+
+            .advert-hero-inner,
+            .advert-page {
+
+                width:
+                    94%;
+            }
+
+
+            .advert-hero-inner {
+
+                padding:
+                    45px 0 55px;
+            }
+
+
+            .advert-page {
+
+                padding:
+                    35px 0 55px;
+            }
+
+
+            .advert-form-card {
+
+                padding:
+                    20px 16px;
+            }
+
+
+            .form-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .form-group.full {
+
+                grid-column:
+                    auto;
+            }
+
+
+            .photo-preview {
+
+                grid-template-columns:
+                    repeat(2,1fr);
+            }
+
+
+            .footer-content {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<header class="navbar">
+
+
+    <div class="logo">
+
+        <a href="index.html">
+
+            <span>
+                NichoLink
+            </span>
+
+            <strong>
+                254
+            </strong>
+
+        </a>
+
+    </div>
+
+
+    <nav>
+
+        <a href="index.html">
+            Home
+        </a>
+
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+
+        <a
+            href="adverts.html"
+            class="active"
+        >
+            Adverts
+        </a>
+
+
+        <a href="video-adverts.html">
+            Video Ads
+        </a>
+
+    </nav>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="advert-hero">
+
+
+    <div class="advert-hero-inner">
+
+
+        <span class="hero-badge">
+            📷 PHOTO ADVERTISING
+        </span>
+
+
+        <h1>
+
+            Create a photo advert
+            <span>
+                for KSh 25.
+            </span>
+
+        </h1>
+
+
+        <p>
+
+            Promote your property, business,
+            service, product, event or opportunity
+            with real photos on NichoLink 254.
+
+        </p>
+
+
+    </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<main class="advert-page">
+
+
+    <div class="advert-layout">
+
+
+        <!-- FORM -->
+
+        <div class="advert-form-card">
+
+
+            <section class="form-section">
+
+                <h2 class="section-title">
+                    Your Contact Details
+                </h2>
+
+
+                <p class="section-description">
+                    Tell potential customers how they can reach you.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group full">
+
+                        <label for="advertiser-name">
+
+                            Name or Business Name
+
+                            <span>
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="advertiser-name"
+                            placeholder="Your full name or business name"
+                            autocomplete="name"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="advertiser-phone">
+
+                            Phone Number
+
+                            <span>
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="tel"
+                            id="advertiser-phone"
+                            placeholder="07XXXXXXXX"
+                            autocomplete="tel"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="advertiser-email">
+
+                            Email
+
+                            <small>
+                                (Optional)
+                            </small>
+
+                        </label>
+
+
+                        <input
+                            type="email"
+                            id="advertiser-email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                        >
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <section class="form-section">
+
+                <h2 class="section-title">
+                    Advert Information
+                </h2>
+
+
+                <p class="section-description">
+                    Tell people what you are advertising.
+                </p>
+
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="advert-category">
+
+                            Advert Category
+
+                            <span>
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <select
+                            id="advert-category"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="property">
+                                🏠 Property
+                            </option>
+
+                            <option value="business">
+                                🏪 Business
+                            </option>
+
+                            <option value="service">
+                                🛠️ Service
+                            </option>
+
+                            <option value="product">
+                                📦 Product
+                            </option>
+
+                            <option value="job">
+                                💼 Job
+                            </option>
+
+                            <option value="event">
+                                🎉 Event
+                            </option>
+
+                            <option value="announcement">
+                                📢 Announcement
+                            </option>
+
+                            <option value="other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+
+                    <div class="form-group">
+
+                        <label for="advert-location">
+
+                            Location
+
+                            <small>
+                                (Optional)
+                            </small>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="advert-location"
+                            placeholder="e.g. Kisumu, Mamboleo"
+                        >
+
+                    </div>
+
+
+
+                    <div class="form-group full">
+
+                        <label for="advert-title">
+
+                            Advert Title
+
+                            <span>
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <input
+                            type="text"
+                            id="advert-title"
+                            maxlength="100"
+                            placeholder="e.g. Quality Furniture for Sale"
+                            required
+                        >
+
+                    </div>
+
+
+
+                    <div class="form-group full">
+
+                        <label for="advert-description">
+
+                            Advert Description
+
+                            <span>
+                                *
+                            </span>
+
+                        </label>
+
+
+                        <textarea
+                            id="advert-description"
+                            maxlength="1000"
+                            placeholder="Describe what you are offering..."
+                            required
+                        ></textarea>
+
+
+                        <small>
+
+                            <span id="description-count">
+                                0
+                            </span>
+
+                            / 1000 characters
+
+                        </small>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+
+            <section class="form-section">
+
+                <h2 class="section-title">
+                    Upload Photos
+                </h2>
+
+
+                <p class="section-description">
+
+                    Upload one or several photos.
+                    Use clear, genuine photos of what
+                    you are advertising.
+
+                </p>
+
+
+                <div
+                    id="photo-upload-box"
+                    class="photo-upload-box"
+                >
+
+                    <input
+                        type="file"
+                        id="photo-files"
+                        accept="image/jpeg,image/png,image/webp"
+                        multiple
+                    >
+
+
+                    <div class="upload-icon">
+                        📷
+                    </div>
+
+
+                    <h3>
+                        Choose your photos
+                    </h3>
+
+
+                    <p>
+                        Select multiple photos at once.
+                    </p>
+
+
+                    <label
+                        for="photo-files"
+                        class="choose-photo-button"
+                    >
+                        📷 Choose Photos
+                    </label>
+
+
+                    <div
+                        id="photo-counter"
+                        class="photo-counter"
+                    >
+                        No photos selected
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="photo-preview"
+                    class="photo-preview"
+                ></div>
+
+
+                <small>
+                    Supported: JPG, PNG and WEBP.
+                </small>
+
+            </section>
+
+
+
+            <section class="form-section">
+
+
+                <h2 class="section-title">
+                    Payment
+                </h2>
+
+
+                <p class="section-description">
+                    Your photo advert is published after payment confirmation.
+                </p>
+
+
+                <div class="price-summary">
+
+
+                    <div class="price-row">
+
+                        <span>
+                            Photo Advert
+                        </span>
+
+
+                        <strong>
+                            KSh 25
+                        </strong>
+
+                    </div>
+
+
+                    <div class="price-row total">
+
+                        <span>
+                            Total Amount
+                        </span>
+
+
+                        <strong>
+                            KSh 25
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="payment-notice">
+
+                    <strong>
+                        📱 Payment
+                    </strong>
+
+
+                    <p>
+
+                        After submitting the advert,
+                        payment will be required.
+                        Your advert should only be published
+                        after the KSh 25 payment is successfully
+                        confirmed.
+
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    id="submit-advert-button"
+                    class="submit-button"
+                >
+                    Continue to Payment →
+                </button>
+
+
+                <div
+                    id="form-message"
+                    class="form-message"
+                    aria-live="polite"
+                ></div>
+
+
+            </section>
+
+
+        </div>
+
+
+
+        <!-- SIDEBAR -->
+
+        <aside class="sidebar">
+
+
+            <div class="sidebar-card fee-card">
+
+                <h2>
+                    Photo Advert
+                </h2>
+
+
+                <strong class="fee">
+                    KSh 25
+                </strong>
+
+
+                <p>
+                    Post a general photo advertisement
+                    on NichoLink 254.
+                </p>
+
+
+                <ul class="sidebar-list">
+
+                    <li>
+                        ✓ Multiple photos
+                    </li>
+
+                    <li>
+                        ✓ Business adverts
+                    </li>
+
+                    <li>
+                        ✓ Service adverts
+                    </li>
+
+                    <li>
+                        ✓ Product adverts
+                    </li>
+
+                    <li>
+                        ✓ Property promotion
+                    </li>
+
+                    <li>
+                        ✓ Events and announcements
+                    </li>
+
+                    <li>
+                        ✓ Review before publication
+                    </li>
+
+                </ul>
+
+            </div>
+
+
+
+            <div class="sidebar-card">
+
+                <h2>
+                    Want Video Instead?
+                </h2>
+
+
+                <p>
+
+                    Video adverts allow you to promote
+                    your offer with a video.
+
+                </p>
+
+
+                <p>
+
+                    Video advert:
+
+                    <strong>
+                        KSh 50
+                    </strong>
+
+                </p>
+
+
+                <p>
+
+                    Maximum:
+
+                    <strong>
+                        20 MB / 60 seconds
+                    </strong>
+
+                </p>
+
+
+                <a
+                    href="video-adverts.html"
+                    class="back-video-button"
+                >
+                    🎥 Create Video Advert
+                </a>
+
+            </div>
+
+
+
+            <div class="sidebar-card">
+
+                <h2>
+                    NichoLink Safety
+                </h2>
+
+
+                <p>
+
+                    Advertisers should provide
+                    genuine information and real
+                    photos of what they are offering.
+
+                </p>
+
+
+                <p>
+
+                    Do not upload misleading,
+                    fraudulent or prohibited content.
+
+                </p>
+
+            </div>
+
+
+        </aside>
+
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+
+    <div class="footer-content">
+
+
+        <div>
+
+            <h2>
+
+                NichoLink
+                <strong>
+                    254
+                </strong>
+
+            </h2>
+
+
+            <p>
+
+                Connecting people with
+                properties, services,
+                opportunities and businesses
+                across Kenya.
+
+            </p>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Quick Links
+            </h3>
+
+
+            <a href="index.html">
+                Home
+            </a>
+
+
+            <a href="properties.html">
+                Properties
+            </a>
+
+
+            <a href="adverts.html">
+                Photo Adverts
+            </a>
+
+
+            <a href="video-adverts.html">
+                Video Adverts
+            </a>
+
+        </div>
+
+
+
+        <div>
+
+            <h3>
+                Contact
+            </h3>
+
+
+            <p>
+                📞 0795629436
+            </p>
+
+
+            <p>
+                💬 WhatsApp: 0795629436
+            </p>
+
+
+            <p>
+                ✉️ nicholink254@gmail.com
+            </p>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="copyright">
+
+        © 2026 NichoLink 254.
+        All Rights Reserved.
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script>
+
+
+const photoInput =
+    document.getElementById(
+        "photo-files"
+    );
+
+
+const photoPreview =
+    document.getElementById(
+        "photo-preview"
+    );
+
+
+const photoCounter =
+    document.getElementById(
+        "photo-counter"
+    );
+
+
+const uploadBox =
+    document.getElementById(
+        "photo-upload-box"
+    );
+
+
+const description =
+    document.getElementById(
+        "advert-description"
+    );
+
+
+const descriptionCount =
+    document.getElementById(
+        "description-count"
+    );
+
+
+const submitButton =
+    document.getElementById(
+        "submit-advert-button"
+    );
+
+
+const message =
+    document.getElementById(
+        "form-message"
+    );
+
+
+let selectedPhotos = [];
+
+
+const MAX_PHOTO_SIZE =
+    10 * 1024 * 1024;
+
+
+const ALLOWED_TYPES = [
+
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+
+];
+
+
+
+/* =====================================================
+   PHOTO INPUT
+===================================================== */
+
+photoInput.addEventListener(
+    "change",
+    function() {
+
+        const files =
+            Array.from(
+                photoInput.files || []
+            );
+
+
+        addPhotos(
+            files
+        );
+
+
+        photoInput.value =
+            "";
+
+    }
+);
+
+
+
+/* =====================================================
+   ADD PHOTOS
+===================================================== */
+
+function addPhotos(
+    files
+) {
+
+    let rejected =
+        0;
+
+
+    files.forEach(
+        function(file) {
+
+            if (
+                !ALLOWED_TYPES.includes(
+                    file.type
+                )
+            ) {
+
+                rejected++;
+
+                return;
+
+            }
+
+
+            if (
+                file.size >
+                MAX_PHOTO_SIZE
+            ) {
+
+                rejected++;
+
+                return;
+
+            }
+
+
+            const duplicate =
+                selectedPhotos.some(
+                    function(existing) {
+
+                        return (
+
+                            existing.name ===
+                                file.name &&
+
+                            existing.size ===
+                                file.size &&
+
+                            existing.lastModified ===
+                                file.lastModified
+
+                        );
+
+                    }
+                );
+
+
+            if (
+                duplicate
+            ) {
+
+                return;
+
+            }
+
+
+            selectedPhotos.push(
+                file
+            );
+
+        }
+    );
+
+
+    renderPhotoPreview();
+
+
+    if (
+        rejected > 0
+    ) {
+
+        showMessage(
+            rejected +
+            " photo(s) were rejected. Use JPG, PNG or WEBP images up to 10 MB each.",
+            "error"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   PHOTO PREVIEW
+===================================================== */
+
+function renderPhotoPreview() {
+
+    photoPreview.innerHTML =
+        "";
+
+
+    if (
+        selectedPhotos.length === 0
+    ) {
+
+        photoCounter.textContent =
+            "No photos selected";
+
+        return;
+
+    }
+
+
+    photoCounter.textContent =
+        selectedPhotos.length +
+        (
+            selectedPhotos.length === 1
+                ? " photo selected"
+                : " photos selected"
+        );
+
+
+    selectedPhotos.forEach(
+        function(file,index) {
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.className =
+                "photo-preview-item";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.alt =
+                "Selected advert photo " +
+                (index + 1);
+
+
+            const removeButton =
+                document.createElement(
+                    "button"
+                );
+
+
+            removeButton.type =
+                "button";
+
+
+            removeButton.className =
+                "remove-photo";
+
+
+            removeButton.textContent =
+                "×";
+
+
+            removeButton.title =
+                "Remove photo";
+
+
+            removeButton.addEventListener(
+                "click",
+                function() {
+
+                    selectedPhotos.splice(
+                        index,
+                        1
+                    );
+
+
+                    renderPhotoPreview();
+
+                }
+            );
+
+
+            const number =
+                document.createElement(
+                    "span"
+                );
+
+
+            number.className =
+                "photo-number";
+
+
+            number.textContent =
+                index + 1;
+
+
+            wrapper.appendChild(
+                image
+            );
+
+
+            wrapper.appendChild(
+                removeButton
+            );
+
+
+            wrapper.appendChild(
+                number
+            );
+
+
+            photoPreview.appendChild(
+                wrapper
+            );
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(event) {
+
+                    image.src =
+                        event.target.result;
+
+                };
+
+
+            reader.readAsDataURL(
+                file
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =====================================================
+   DRAG AND DROP
+===================================================== */
+
+uploadBox.addEventListener(
+    "dragover",
+    function(event) {
+
+        event.preventDefault();
+
+        uploadBox.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "dragleave",
+    function() {
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+uploadBox.addEventListener(
+    "drop",
+    function(event) {
+
+        event.preventDefault();
+
+
+        uploadBox.classList.remove(
+            "dragover"
+        );
+
+
+        const files =
+            Array.from(
+                event.dataTransfer.files || []
+            );
+
+
+        addPhotos(
+            files
+        );
+
+    }
+);
+
+
+
+/* =====================================================
+   DESCRIPTION COUNTER
+===================================================== */
+
+description.addEventListener(
+    "input",
+    function() {
+
+        descriptionCount.textContent =
+            description.value.length;
+
+    }
+);
+
+
+
+/* =====================================================
+   MESSAGE
+===================================================== */
+
+function showMessage(
+    text,
+    type
+) {
+
+    message.textContent =
+        text;
+
+
+    message.className =
+        "form-message";
+
+
+    if (
+        type === "error"
+    ) {
+
+        message.classList.add(
+            "error-message"
+        );
+
+    }
+
+
+    if (
+        type === "success"
+    ) {
+
+        message.classList.add(
+            "success-message"
+        );
+
+    }
+
+}
+
+
+
+/* =====================================================
+   SUBMIT
+===================================================== */
+
+submitButton.addEventListener(
+    "click",
+    function() {
+
+        const name =
+    document
+        .getElementById(
+            "advertiser-name"
+        )
+        .value
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+        .trim();
+
+
+const phone =
+    document
+        .getElementById(
+            "advertiser-phone"
+        )
+        .value
+        .trim();
+
+
+const category =
+    document
+        .getElementById(
+            "advert-category"
+        )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+const title =
+    document
+        .getElementById(
+            "advert-title"
+        )
+        .value
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+        .trim();
+
+
+const advertDescription =
+    document
+        .getElementById(
+            "advert-description"
+        )
+        .value
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+        .trim();
+
+
+const allowedCategories = [
+
+    "property",
+    "business",
+    "service",
+    "product",
+    "job",
+    "event",
+    "announcement",
+    "other"
+
+];
+
+
+if (!name) {
+
+    showMessage(
+        "Please enter your name or business name.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (
+    name.length < 2 ||
+    name.length > 150
+) {
+
+    showMessage(
+        "Name or business name must be between 2 and 150 characters.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (
+    !/^[A-Za-zÀ-ÿ0-9\s&.'(),-]+$/.test(name)
+) {
+
+    showMessage(
+        "Please enter a valid name or business name.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (!phone) {
+
+    showMessage(
+        "Please enter your phone number.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (
+    !/^(?:\+254|0)\d{9}$/.test(phone)
+) {
+
+    showMessage(
+        "Please enter a valid Kenyan phone number.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (
+    !allowedCategories.includes(
+        category
+    )
+) {
+
+    showMessage(
+        "Please choose a valid advert category.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (!title) {
+
+    showMessage(
+        "Please enter an advert title.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (
+    title.length < 3 ||
+    title.length > 100
+) {
+
+    showMessage(
+        "Advert title must be between 3 and 100 characters.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (!advertDescription) {
+
+    showMessage(
+        "Please enter an advert description.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (
+    advertDescription.length < 10 ||
+    advertDescription.length > 1000
+) {
+
+    showMessage(
+        "Advert description must be between 10 and 1000 characters.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+        if (
+            selectedPhotos.length === 0
+        ) {
+
+            showMessage(
+                "Please select at least one photo.",
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        submitButton.disabled =
+            true;
+
+
+        submitButton.textContent =
+            "Preparing Payment...";
+
+
+        showMessage(
+            "Your advert is ready. Payment of KSh 25 will be required before publication.",
+            "success"
+        );
+
+
+        submitButton.disabled =
+            false;
+
+
+        submitButton.textContent =
+            "Continue to Payment →";
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>

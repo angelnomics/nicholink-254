@@ -1,0 +1,2055 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Messages | NichoLink 254</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .messages-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .messages-topbar {
+            min-height: 64px;
+            padding: 10px 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .messages-brand {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .messages-brand span {
+            color: #172033;
+        }
+
+        .messages-brand strong {
+            color: #00843d;
+        }
+
+        .messages-back {
+            text-decoration: none;
+            color: #172033;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .messages-container {
+            width: min(1200px, calc(100% - 32px));
+            height: calc(100vh - 96px);
+
+            margin: 16px auto;
+
+            display: grid;
+            grid-template-columns: 330px 1fr;
+
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 12px 35px rgba(0, 0, 0, 0.06);
+        }
+
+        .conversation-sidebar {
+            border-right: 1px solid #e5e7eb;
+
+            display: flex;
+            flex-direction: column;
+
+            min-width: 0;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .sidebar-header h1 {
+            margin: 0 0 5px;
+            font-size: 22px;
+        }
+
+        .sidebar-header p {
+            margin: 0;
+            color: #718096;
+            font-size: 13px;
+        }
+
+        .conversation-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            width: 100%;
+
+            padding: 15px 16px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            background: #ffffff;
+
+            border: 0;
+            border-bottom: 1px solid #f0f2f5;
+
+            text-align: left;
+
+            cursor: pointer;
+        }
+
+        .conversation-item:hover {
+            background: #f8fafc;
+        }
+
+        .conversation-item.active {
+            background: #eef7f1;
+        }
+
+        .conversation-avatar {
+            width: 44px;
+            height: 44px;
+
+            flex-shrink: 0;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #00843d;
+            color: #ffffff;
+
+            font-weight: 800;
+        }
+
+        .conversation-details {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .conversation-name-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .conversation-name {
+            min-width: 0;
+
+            font-size: 14px;
+            font-weight: 800;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversation-preview {
+            margin-top: 4px;
+
+            color: #718096;
+            font-size: 12px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .unread-badge {
+            min-width: 21px;
+            height: 21px;
+
+            padding: 0 6px;
+
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 999px;
+
+            background: #00843d;
+            color: #ffffff;
+
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .empty-conversations {
+            padding: 35px 20px;
+
+            text-align: center;
+
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .chat-panel {
+            min-width: 0;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-header {
+            min-height: 76px;
+
+            padding: 15px 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            border-bottom: 1px solid #edf0f4;
+        }
+
+        .chat-header-avatar {
+            width: 42px;
+            height: 42px;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background: #00843d;
+            color: #ffffff;
+
+            font-weight: 800;
+        }
+
+        .chat-header-info {
+            min-width: 0;
+        }
+
+        .chat-header-info h2 {
+            margin: 0 0 3px;
+            font-size: 17px;
+        }
+
+        .chat-header-info p {
+            margin: 0;
+
+            color: #718096;
+            font-size: 12px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-messages {
+            flex: 1;
+
+            padding: 25px;
+
+            overflow-y: auto;
+
+            background: #f8fafc;
+        }
+
+        .chat-placeholder {
+            height: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            text-align: center;
+
+            color: #718096;
+        }
+
+        .message-row {
+            display: flex;
+            margin-bottom: 14px;
+        }
+
+        .message-row.mine {
+            justify-content: flex-end;
+        }
+
+        .message-bubble {
+            max-width: min(70%, 520px);
+
+            padding: 10px 13px;
+
+            border-radius: 14px;
+
+            font-size: 14px;
+            line-height: 1.5;
+
+            background: #ffffff;
+
+            border: 1px solid #e6e9ee;
+        }
+
+        .message-row.mine .message-bubble {
+            background: #00843d;
+            color: #ffffff;
+            border-color: #00843d;
+        }
+
+        .message-time {
+            margin-top: 5px;
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .message-composer {
+            padding: 14px;
+
+            display: flex;
+            gap: 10px;
+
+            border-top: 1px solid #edf0f4;
+
+            background: #ffffff;
+        }
+
+        .message-input {
+            flex: 1;
+
+            min-height: 46px;
+            max-height: 120px;
+
+            padding: 12px 14px;
+
+            border: 1px solid #dfe4ea;
+            border-radius: 12px;
+
+            outline: none;
+
+            resize: vertical;
+
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .message-input:focus {
+            border-color: #00843d;
+        }
+
+        .send-button {
+            align-self: flex-end;
+
+            min-width: 90px;
+            min-height: 46px;
+
+            border: none;
+            border-radius: 12px;
+
+            background: #00843d;
+            color: #ffffff;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+        .send-button:hover {
+            background: #006b31;
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 800px) {
+
+            .messages-container {
+                width: 100%;
+                height: calc(100vh - 74px);
+
+                margin: 0;
+
+                border: 0;
+                border-radius: 0;
+
+                grid-template-columns: 1fr;
+            }
+
+            .conversation-sidebar {
+                display: none;
+            }
+
+            .chat-header {
+                min-height: 68px;
+            }
+
+            .message-bubble {
+                max-width: 85%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div "messages-page">
+
+
+    <header class="messages-topbar">
+
+        <div class="messages-brand">
+
+            <span>NichoLink</span>
+            <strong>254</strong>
+
+        </div>
+
+
+        <a
+            href="tenant-dashboard.html"
+            id="dashboard-link"
+            class="messages-back"
+        >
+
+            ← Dashboard
+
+        </a>
+
+    </header>
+
+
+
+    <main class="messages-container">
+
+
+        <aside class="conversation-sidebar">
+
+            <div class="sidebar-header">
+
+                <h1>
+                    Messages
+                </h1>
+
+                <p>
+                    Your conversations
+                </p>
+
+            </div>
+
+
+            <div
+                id="conversation-list"
+                class="conversation-list"
+            >
+
+                <div class="empty-conversations">
+                    Loading conversations...
+                </div>
+
+            </div>
+
+        </aside>
+
+
+
+        <section class="chat-panel">
+
+
+            <header class="chat-header">
+
+                <div
+                    id="chat-avatar"
+                    class="chat-header-avatar"
+                >
+                    ?
+                </div>
+
+
+                <div class="chat-header-info">
+
+                    <h2 id="chat-name">
+                        Select a conversation
+                    </h2>
+
+                    <p id="chat-property">
+                        Your messages will appear here.
+                    </p>
+
+                </div>
+
+            </header>
+
+
+
+            <div
+                id="chat-messages"
+                class="chat-messages"
+            >
+
+                <div class="chat-placeholder">
+
+                    <div>
+
+                        <div style="font-size:42px; margin-bottom:10px;">
+                            💬
+                        </div>
+
+                        <strong>
+                            Select a conversation
+                        </strong>
+
+                        <p>
+                            Choose a conversation from the left.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <form
+                id="message-form"
+                class="message-composer"
+            >
+
+                <textarea
+                    id="message-input"
+                    class="message-input"
+                    placeholder="Write a message..."
+                    rows="1"
+                    disabled
+                ></textarea>
+
+
+                <button
+                    id="send-button"
+                    class="send-button"
+                    type="submit"
+                    disabled
+                >
+                    Send
+                </button>
+
+            </form>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+
+<script src="supabase.js"></script>
+
+
+<script>
+
+let currentUser = null;
+let currentProfile = null;
+let currentConversationId = null;
+
+let messagesRealtimeChannel = null;
+let conversationsRealtimeChannel = null;nversationList =
+    document.getElementById(
+        "conversation-list"
+    );
+
+const chatMessages =
+    document.getElementById(
+        "chat-messages"
+    );
+
+const chatName =
+    document.getElementById(
+        "chat-name"
+    );
+
+const chatProperty =
+    document.getElementById(
+        "chat-property"
+    );
+
+const chatAvatar =
+    document.getElementById(
+        "chat-avatar"
+    );
+
+const messageInput =
+    document.getElementById(
+        "message-input"
+    );
+
+const sendButton =
+    document.getElementById(
+        "send-button"
+    );
+
+const messageForm =
+    document.getElementById(
+        "message-form"
+    );
+
+const dashboardLink =
+    document.getElementById(
+        "dashboard-link"
+    );
+
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const requestedConversationId =
+    urlParams.get(
+        "conversation_id"
+    );
+
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+async function initializeMessages() {
+
+    try {
+
+        const {
+            data: {
+                user
+            },
+            error: authError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (authError) {
+            throw authError;
+        }
+
+
+        if (!user) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        currentUser =
+            user;
+
+
+
+        /* =========================
+           LOAD PROFILE
+        ========================= */
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await supabaseClient
+
+                .from("profiles")
+
+                .select(`
+                    id,
+                    full_name,
+                    account_type,
+                    is_active
+                `)
+
+                .eq(
+                    "id",
+                    user.id
+                )
+
+                .maybeSingle();
+
+
+        if (profileError) {
+            throw profileError;
+        }
+
+
+        if (!profile) {
+
+            throw new Error(
+                "Your profile could not be found."
+            );
+
+        }
+
+
+        currentProfile =
+            profile;
+
+
+        if (
+            profile.is_active === false
+        ) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+
+        /* =========================
+           DASHBOARD LINK
+        ========================= */
+
+        const accountType =
+            String(
+                profile.account_type ||
+                ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+        dashboardLink.href =
+            accountType === "landlord"
+                ? "landlord-dashboard.html"
+                : "tenant-dashboard.html";
+
+
+
+        /* =========================
+           LOAD DATA
+        ========================= */
+
+        await loadConversations();
+
+
+        if (
+            requestedConversationId
+        ) {
+
+            await openRequestedConversation(
+                requestedConversationId
+            );
+
+        }
+
+
+
+        /* =========================
+           START REALTIME
+        ========================= */
+
+        subscribeToRealtime();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Messages initialization error:",
+            error
+        );
+
+
+        conversationList.innerHTML = `
+
+            <div class="empty-conversations">
+
+                Unable to load messages.
+
+                <br><br>
+
+                ${escapeHtml(
+                    error.message ||
+                    "Unknown error"
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+
+/* =========================================
+   LOAD CONVERSATIONS
+========================================= */
+
+async function loadConversations() {
+
+    const userId =
+        currentUser.id;
+
+
+    const {
+        data: conversations,
+        error
+    } =
+        await supabaseClient
+
+            .from("conversations")
+
+            .select(`
+                id,
+                participant_1,
+                participant_2,
+                property_id,
+                created_at,
+                updated_at
+            `)
+
+            .or(
+                "participant_1.eq." +
+                userId +
+                ",participant_2.eq." +
+                userId
+            )
+
+            .order(
+                "updated_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    conversationList.innerHTML =
+        "";
+
+
+    if (
+        !conversations ||
+        conversations.length === 0
+    ) {
+
+        conversationList.innerHTML = `
+
+            <div class="empty-conversations">
+
+                No conversations yet.
+
+                <br><br>
+
+                Start a conversation from a property.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    for (
+        const conversation
+        of conversations
+    ) {
+
+        await addConversationToList(
+            conversation
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   ADD CONVERSATION
+========================================= */
+
+async function addConversationToList(
+    conversation
+) {
+
+    const otherUserId =
+        conversation.participant_1 ===
+        currentUser.id
+            ? conversation.participant_2
+            : conversation.participant_1;
+
+
+    const {
+        data: otherProfile,
+        error: profileError
+    } =
+        await supabaseClient
+
+            .from("profiles")
+
+            .select(`
+                id,
+                full_name,
+                account_type
+            `)
+
+            .eq(
+                "id",
+                otherUserId
+            )
+
+            .maybeSingle();
+
+
+    if (profileError) {
+
+        console.error(
+            "Profile loading error:",
+            profileError
+        );
+
+        return;
+
+    }
+
+
+
+    /* LAST MESSAGE */
+
+    const {
+        data: lastMessages
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .select(`
+                message_text,
+                created_at
+            `)
+
+            .eq(
+                "conversation_id",
+                conversation.id
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+
+            .limit(1);
+
+
+
+    /* UNREAD COUNT */
+
+    const {
+        count: unreadCount
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+
+            .eq(
+                "conversation_id",
+                conversation.id
+            )
+
+            .eq(
+                "is_read",
+                false
+            )
+
+            .neq(
+                "sender_id",
+                currentUser.id
+            );
+
+
+
+    const item =
+        document.createElement(
+            "button"
+        );
+
+
+    item.type =
+        "button";
+
+    item.className =
+        "conversation-item";
+
+
+    item.dataset.conversationId =
+        conversation.id;
+
+
+    const otherName =
+        otherProfile &&
+        otherProfile.full_name
+            ? otherProfile.full_name
+            : "User";
+
+
+    const preview =
+        lastMessages &&
+        lastMessages.length
+            ? lastMessages[0].message_text
+            : (
+                otherProfile &&
+                otherProfile.account_type
+                    ? otherProfile.account_type
+                    : "Conversation"
+            );
+
+
+    const unread =
+        unreadCount || 0;
+
+
+    item.innerHTML = `
+
+        <div class="conversation-avatar">
+
+            ${escapeHtml(
+                otherName
+                    .charAt(0)
+                    .toUpperCase()
+            )}
+
+        </div>
+
+
+        <div class="conversation-details">
+
+            <div class="conversation-name-row">
+
+                <div class="conversation-name">
+
+                    ${escapeHtml(
+                        otherName
+                    )}
+
+                </div>
+
+
+                ${
+                    unread > 0
+
+                    ?
+
+                    `
+                    <span class="unread-badge">
+                        ${unread > 99 ? "99+" : unread}
+                    </span>
+                    `
+
+                    :
+
+                    ""
+                }
+
+            </div>
+
+
+            <div class="conversation-preview">
+
+                ${escapeHtml(
+                    preview
+                )}
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    item.addEventListener(
+        "click",
+        async function () {
+
+            document
+                .querySelectorAll(
+                    ".conversation-item"
+                )
+                .forEach(
+                    function (element) {
+
+                        element.classList.remove(
+                            "active"
+                        );
+
+                    }
+                );
+
+
+            item.classList.add(
+                "active"
+            );
+
+
+            await openConversation(
+                conversation,
+                otherProfile
+            );
+
+        }
+    );
+
+
+    conversationList.appendChild(
+        item
+    );
+
+}
+
+
+
+/* =========================================
+   OPEN REQUESTED CONVERSATION
+========================================= */
+
+async function openRequestedConversation(
+    conversationId
+) {
+
+    const {
+        data: conversation,
+        error
+    } =
+        await supabaseClient
+
+            .from("conversations")
+
+            .select(`
+                id,
+                participant_1,
+                participant_2,
+                property_id,
+                created_at,
+                updated_at
+            `)
+
+            .eq(
+                "id",
+                conversationId
+            )
+
+            .maybeSingle();
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    if (!conversation) {
+        return;
+    }
+
+
+    if (
+        conversation.participant_1 !==
+            currentUser.id
+        &&
+        conversation.participant_2 !==
+            currentUser.id
+    ) {
+
+        throw new Error(
+            "You are not a participant in this conversation."
+        );
+
+    }
+
+
+    const otherUserId =
+        conversation.participant_1 ===
+        currentUser.id
+
+            ? conversation.participant_2
+
+            : conversation.participant_1;
+
+
+    const {
+        data: otherProfile,
+        error: profileError
+    } =
+        await supabaseClient
+
+            .from("profiles")
+
+            .select(`
+                id,
+                full_name,
+                account_type
+            `)
+
+            .eq(
+                "id",
+                otherUserId
+            )
+
+            .maybeSingle();
+
+
+    if (profileError) {
+        throw profileError;
+    }
+
+
+    await openConversation(
+        conversation,
+        otherProfile
+    );
+
+
+    const item =
+        document.querySelector(
+            '[data-conversation-id="' +
+            conversationId +
+            '"]'
+        );
+
+
+    if (item) {
+
+        document
+            .querySelectorAll(
+                ".conversation-item"
+            )
+            .forEach(
+                function (element) {
+
+                    element.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+        item.classList.add(
+            "active"
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   OPEN CONVERSATION
+========================================= */
+
+async function openConversation(
+    conversation,
+    otherProfile
+) {
+
+    currentConversationId =
+        conversation.id;
+
+
+    const otherName =
+        otherProfile &&
+        otherProfile.full_name
+
+            ? otherProfile.full_name
+
+            : "User";
+
+
+    chatName.textContent =
+        otherName;
+
+
+    chatAvatar.textContent =
+        otherName
+            .charAt(0)
+            .toUpperCase();
+
+
+    chatProperty.textContent =
+        "Private conversation";
+
+
+
+    /* PROPERTY */
+
+    if (
+        conversation.property_id
+    ) {
+
+        const {
+            data: property
+        } =
+            await supabaseClient
+
+                .from("properties")
+
+                .select(
+                    "id, title, location"
+                )
+
+                .eq(
+                    "id",
+                    conversation.property_id
+                )
+
+                .maybeSingle();
+
+
+        if (property) {
+
+            chatProperty.textContent =
+                property.title +
+                (
+                    property.location
+                        ? " • " +
+                          property.location
+                        : ""
+                );
+
+        }
+
+    }
+
+
+    messageInput.disabled =
+        false;
+
+
+    sendButton.disabled =
+        false;
+
+
+    await loadMessages();
+
+}
+
+
+
+/* =========================================
+   LOAD MESSAGES
+========================================= */
+
+async function loadMessages() {
+
+    if (
+        !currentConversationId
+    ) {
+        return;
+    }
+
+
+    const {
+        data: messages,
+        error
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .select(`
+                id,
+                sender_id,
+                message_text,
+                is_read,
+                created_at
+            `)
+
+            .eq(
+                "conversation_id",
+                currentConversationId
+            )
+
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    chatMessages.innerHTML =
+        "";
+
+
+    if (
+        !messages ||
+        messages.length === 0
+    ) {
+
+        chatMessages.innerHTML = `
+
+            <div class="chat-placeholder">
+
+                <div>
+
+                    <div style="font-size:42px; margin-bottom:10px;">
+                        👋
+                    </div>
+
+                    <strong>
+                        Start the conversation
+                    </strong>
+
+                    <p>
+                        Send the first message below.
+                    </p>
+
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    messages.forEach(
+        function(message) {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "message-row" +
+                (
+                    message.sender_id ===
+                    currentUser.id
+                        ? " mine"
+                        : ""
+                );
+
+
+            const bubble =
+                document.createElement(
+                    "div"
+                );
+
+
+            bubble.className =
+                "message-bubble";
+
+
+            bubble.innerHTML = `
+
+                <div>
+                    ${escapeHtml(
+                        message.message_text
+                    )}
+                </div>
+
+                <div class="message-time">
+
+                    ${formatDateTime(
+                        message.created_at
+                    )}
+
+                </div>
+
+            `;
+
+
+            row.appendChild(
+                bubble
+            );
+
+
+            chatMessages.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    chatMessages.scrollTop =
+        chatMessages.scrollHeight;
+
+
+    await markMessagesRead();
+
+
+    await refreshCurrentConversationBadge();
+
+}
+
+
+
+/* =========================================
+   SEND MESSAGE
+========================================= */
+
+messageForm.addEventListener(
+    "submit",
+    async function(event) {
+
+        event.preventDefault();
+
+
+        if (
+            !currentConversationId ||
+            !currentUser
+        ) {
+            return;
+        }
+
+
+        const content =
+    messageInput.value
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, "")
+        .trim();
+
+
+if (!content) {
+
+    showMessage(
+        "Please enter a message.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+if (content.length > 2000) {
+
+    showMessage(
+        "Message is too long. Maximum 2000 characters.",
+        "error"
+    );
+
+    return;
+
+}
+
+
+            messageInput.value =
+                "";
+
+
+            await loadMessages();
+
+
+            await loadConversations();
+
+        }
+
+        catch(error) {
+
+            console.error(
+                "Send message error:",
+                error
+            );
+
+
+            alert(
+                error.message ||
+                "Unable to send message."
+            );
+
+        }
+
+        finally {
+
+            sendButton.disabled =
+                false;
+
+            messageInput.focus();
+
+        }
+
+    }
+);
+
+
+
+/* =========================================
+   MARK READ
+========================================= */
+
+async function markMessagesRead() {
+
+    if (
+        !currentConversationId ||
+        !currentUser
+    ) {
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .update({
+                is_read: true
+            })
+
+            .eq(
+                "conversation_id",
+                currentConversationId
+            )
+
+            .neq(
+                "sender_id",
+                currentUser.id
+            );
+
+
+    if (error) {
+
+        console.warn(
+            "Could not mark messages as read:",
+            error
+        );
+
+    }
+
+}
+
+
+
+/* =========================================
+   REFRESH CURRENT BADGE
+========================================= */
+
+async function refreshCurrentConversationBadge() {
+
+    const item =
+        document.querySelector(
+            '[data-conversation-id="' +
+            currentConversationId +
+            '"]'
+        );
+
+
+    if (!item) {
+        return;
+    }
+
+
+    const {
+        count
+    } =
+        await supabaseClient
+
+            .from("messages")
+
+            .select(
+                "id",
+                {
+                    count: "exact",
+                    head: true
+                }
+            )
+
+            .eq(
+                "conversation_id",
+                currentConversationId
+            )
+
+            .eq(
+                "is_read",
+                false
+            )
+
+            .neq(
+                "sender_id",
+                currentUser.id
+            );
+
+
+    const existingBadge =
+        item.querySelector(
+            ".unread-badge"
+        );
+
+
+    if (
+        count &&
+        count > 0
+    ) {
+
+        if (existingBadge) {
+
+            existingBadge.textContent =
+                count > 99
+                    ? "99+"
+                    : count;
+
+        } else {
+
+            const row =
+                item.querySelector(
+                    ".conversation-name-row"
+                );
+
+
+            if (row) {
+
+                const badge =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                badge.className =
+                    "unread-badge";
+
+
+                badge.textContent =
+                    count > 99
+                        ? "99+"
+                        : count;
+
+
+                row.appendChild(
+                    badge
+                );
+
+            }
+
+        }
+
+    }
+
+    else if (
+        existingBadge
+    ) {
+
+        existingBadge.remove();
+
+    }
+
+}
+
+
+
+/* =========================================
+   REALTIME
+========================================= */
+
+function subscribeToRealtime() {
+
+    if (
+        messagesRealtimeChannel
+    ) {
+
+        supabaseClient.removeChannel(
+            messagesRealtimeChannel
+        );
+
+    }
+
+
+    if (
+        conversationsRealtimeChannel
+    ) {
+
+        supabaseClient.removeChannel(
+            conversationsRealtimeChannel
+        );
+
+    }
+
+
+
+    /* =========================
+       MESSAGES
+    ========================= */
+
+    messagesRealtimeChannel =
+        supabaseClient
+
+            .channel(
+                "messages-realtime-" +
+                currentUser.id
+            )
+
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "messages"
+                },
+                async function(payload) {
+
+                    const incoming =
+                        payload.new;
+
+
+                    if (
+                        incoming.sender_id ===
+                        currentUser.id
+                    ) {
+                        return;
+                    }
+
+
+                    if (
+                        incoming.conversation_id ===
+                        currentConversationId
+                    ) {
+
+                        await loadMessages();
+
+                    }
+
+                    else {
+
+                        await loadConversations();
+
+                    }
+
+                }
+            )
+
+            .subscribe(
+                function(status) {
+
+                    console.log(
+                        "Message realtime status:",
+                        status
+                    );
+
+                }
+            );
+
+
+
+    /* =========================
+       CONVERSATIONS
+    ========================= */
+
+    conversationsRealtimeChannel =
+        supabaseClient
+
+            .channel(
+                "conversations-realtime-" +
+                currentUser.id
+            )
+
+            .on(
+                "postgres_changes",
+                {
+                    event: "UPDATE",
+                    schema: "public",
+                    table: "conversations"
+                },
+                async function(payload) {
+
+                    const changed =
+                        payload.new;
+
+
+                    if (
+                        changed.participant_1 !==
+                            currentUser.id
+                        &&
+                        changed.participant_2 !==
+                            currentUser.id
+                    ) {
+                        return;
+                    }
+
+
+                    await loadConversations();
+
+                }
+            )
+
+            .subscribe(
+                function(status) {
+
+                    console.log(
+                        "Conversation realtime status:",
+                        status
+                    );
+
+                }
+            );
+
+}
+
+
+
+/* =========================================
+   DATE
+========================================= */
+
+function formatDateTime(
+    value
+) {
+
+    if (!value) {
+        return "";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "";
+
+    }
+
+
+    return date.toLocaleString(
+        "en-KE",
+        {
+            day: "numeric",
+            month: "short",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+
+initializeMessages();
+
+</script>
+
+
+</body>
+
+</html>
+```

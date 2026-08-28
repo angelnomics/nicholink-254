@@ -1,12 +1,63 @@
-css
-/* =========================================
-   NICHO LINK ccc
-   MAIN WEBSITE STYLE
-========================================= */
+/* =========================================================
+   NICHO LINK 254
+   PROFESSIONAL GREEN + GRAY GRADIENT INTERFACE
+   LAYOUT UNCHANGED
+========================================================= */
+
+:root {
+
+    /* BRAND GREEN */
+    --green: #087f3e;
+    --green-dark: #056631;
+    --green-light: #18a957;
+    --green-soft: #e4f2ea;
+
+    /* GRAY SYSTEM */
+    --gray-50: #f5f7f6;
+    --gray-100: #edf1ef;
+    --gray-200: #dfe5e2;
+    --gray-300: #ccd5d0;
+    --gray-400: #aab7b0;
+    --gray-500: #718078;
+    --gray-600: #596760;
+    --gray-700: #3f4c45;
+    --gray-800: #29362f;
+    --gray-900: #17221c;
+
+    /* INTERFACE */
+    --text: #25312b;
+    --muted: #64716b;
+
+    --background: #e9efec;
+    --surface: #f3f6f4;
+    --surface-light: #f7f9f8;
+
+    --white: #ffffff;
+
+    --border: #d4ddd8;
+
+    /* STATUS COLORS */
+    --blue: #2563eb;
+    --blue-soft: #e8f0ff;
+
+    --orange: #d97706;
+    --orange-soft: #fff1d6;
+
+    --red: #c62828;
+    --red-soft: #f8e5e5;
+
+    --radius: 16px;
+
+    --shadow:
+        0 8px 24px rgba(25, 45, 34, 0.07);
+}
+
+
+/* =========================================================
+   GLOBAL PAGE
+========================================================= */
 
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
@@ -15,1296 +66,1545 @@ html {
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    color: #17211c;
-    background: #ffffff;
-    line-height: 1.6;
+
+    margin: 0;
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+    color: var(--text);
+
+    /*
+       PROFESSIONAL GRAY-GREEN BACKGROUND
+       Reduces large areas of bright white
+    */
+
+    background:
+        linear-gradient(
+            135deg,
+            #e7eeea 0%,
+            #f0f4f2 38%,
+            #e4ece7 72%,
+            #dfe9e3 100%
+        );
+
+    min-height: 100vh;
 }
 
-a {
-    text-decoration: none;
-    color: inherit;
-}
 
-button {
-    font-family: inherit;
-}
-
-
-/* =========================================
-   COLOUR SYSTEM
-
-   Main Green:     #00843d
-   Dark Green:     #006b31
-   Gold Accent:    #f7c600
-   Dark Text:      #17211c
-   Soft Background:#f5f8f6
-========================================= */
-
-
-/* =========================================
-   NAVIGATION
-========================================= */
+/* =========================================================
+   TOP BAR — GREEN
+========================================================= */
 
 .navbar {
-    width: 100%;
-    min-height: 75px;
 
-    padding: 0 7%;
+    min-height: 72px;
+
+    padding: 0 5%;
 
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
-    background: #ffffff;
+    gap: 25px;
 
-    border-bottom: 1px solid #e8ece9;
+    /*
+       MAIN BRAND GREEN
+    */
+
+    background:
+        linear-gradient(
+            135deg,
+            #087f3e,
+            #056b34
+        );
+
+    border-bottom:
+        1px solid #04582b;
+
+    box-shadow:
+        0 4px 18px rgba(0, 75, 35, 0.20);
 
     position: sticky;
+
     top: 0;
 
     z-index: 1000;
 }
 
-.logo {
-    font-size: 24px;
+
+/* =========================================================
+   LOGO
+========================================================= */
+
+.navbar .logo {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 22px;
+
     font-weight: 800;
-    white-space: nowrap;
-    color: #17211c;
+
+    letter-spacing: -0.5px;
+
+    text-decoration: none;
+
+    color: #ffffff;
 }
 
-.logo strong {
-    color: #00843d;
+.navbar .logo span {
+
+    color: #ffffff;
 }
+
+.navbar .logo strong {
+
+    color: #c9f0d9;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.navbar nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.navbar nav a {
+
+    padding: 10px 15px;
+
+    color: #e7f6ed;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    border-radius: 9px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.navbar nav a:hover {
+
+    background:
+        rgba(255,255,255,0.13);
+
+    color: #ffffff;
+}
+
+.navbar nav a.active {
+
+    background:
+        #dff3e6;
+
+    color:
+        #087f3e;
+}
+
+
+/* =========================================================
+   NAV BUTTON
+========================================================= */
+
+/* =========================================================
+   TOP NAVIGATION BAR — GREEN
+========================================================= */
+
+.navbar {
+    min-height: 72px;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 25px;
+
+    /* GREEN TOP BAR */
+    background: linear-gradient(
+        135deg,
+        #006b31 0%,
+        #00843d 50%,
+        #0a9f52 100%
+    );
+
+    border-bottom: 1px solid #005a29;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    box-shadow:
+        0 4px 16px rgba(0, 80, 40, 0.20);
+}
+
+
+/* LOGO */
+
+.navbar .logo {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    color: #ffffff;
+
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+
+    text-decoration: none;
+}
+
+.navbar .logo span {
+    color: #ffffff;
+}
+
+.navbar .logo strong {
+    color: #d9f99d;
+}
+
+
+/* NAVIGATION LINKS */
 
 .navbar nav {
     display: flex;
     align-items: center;
-    gap: 28px;
+    gap: 8px;
 }
 
 .navbar nav a {
-    color: #37413b;
-    font-size: 14px;
-    font-weight: 700;
+    padding: 10px 15px;
 
-    transition: 0.2s ease;
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    border-radius: 9px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
 }
+
+
+/* HOVER */
 
 .navbar nav a:hover {
-    color: #00843d;
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
 }
+
+
+/* ACTIVE LINK */
+
+.navbar nav a.active {
+    background: rgba(255, 255, 255, 0.20);
+    color: #ffffff;
+}
+
+
+/* LOGOUT / NAV BUTTON */
 
 .nav-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    padding: 12px 20px;
+    padding: 10px 18px;
 
-    background: #00843d;
+    background: rgba(255, 255, 255, 0.12);
+
     color: #ffffff;
 
-    border-radius: 8px;
-
-    font-size: 14px;
-    font-weight: 700;
-
-    transition: 0.25s ease;
-}
-
-.nav-button:hover {
-    background: #006b31;
-    transform: translateY(-2px);
-}
-
-
-/* =========================================
-   GENERAL BUTTONS
-========================================= */
-
-.primary-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 14px 23px;
-
-    background: #00843d;
-    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.30);
 
     border-radius: 9px;
 
-    font-weight: 700;
-
-    transition: 0.25s ease;
-}
-
-.primary-button:hover {
-    background: #006b31;
-    transform: translateY(-2px);
-}
-
-.secondary-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 12px 22px;
-
-    border: 2px solid #ffffff;
-    color: #ffffff;
-
-    border-radius: 9px;
-
-    font-weight: 700;
-
-    transition: 0.25s ease;
-}
-
-.secondary-button:hover {
-    background: #ffffff;
-    color: #17211c;
-}
-
-
-/* =========================================
-   HERO
-========================================= */
-
-.hero {
-    min-height: 570px;
-
-    padding: 100px 7%;
-
-    display: flex;
-    align-items: center;
-
-    background:
-        linear-gradient(
-            rgba(0, 50, 28, 0.65),
-            rgba(0, 50, 28, 0.65)
-        ),
-        url("images/hero-house.jpg");
-
-    background-size: cover;
-    background-position: center;
-}
-
-.hero-content {
-    max-width: 720px;
-    color: #ffffff;
-}
-
-.hero-tag {
-    display: inline-block;
-
-    margin-bottom: 18px;
-
-    color: #f7c600;
-
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 1px;
-}
-
-.hero h1 {
-    font-size: 60px;
-    line-height: 1.08;
-
-    margin-bottom: 24px;
-
-    max-width: 700px;
-}
-
-.hero h1 span {
-    color: #f7c600;
-}
-
-.hero-description {
-    max-width: 620px;
-
-    margin-bottom: 30px;
-
-    color: #edf7f1;
-
-    font-size: 18px;
-    line-height: 1.7;
-}
-
-.hero-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-}
-
-
-/* =========================================
-   SEARCH AREA
-========================================= */
-
-.search-section {
-    padding: 0 7%;
-
-    margin-top: -45px;
-
-    position: relative;
-    z-index: 10;
-}
-
-.search-box {
-    max-width: 1250px;
-
-    margin: auto;
-
-    padding: 24px;
-
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        1fr
-        1fr
-        auto;
-
-    gap: 15px;
-
-    align-items: center;
-
-    background: #ffffff;
-
-    border: 1px solid #e3e9e5;
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.10);
-}
-
-.search-item {
-    min-height: 55px;
-
-    padding: 4px 18px;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    border-right: 1px solid #e7ebe8;
-}
-
-.search-item label {
-    color: #7a827d;
-
-    font-size: 11px;
-    font-weight: 700;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.5px;
-}
-
-.search-item p {
-    margin-top: 3px;
-
-    color: #17211c;
-
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.search-button {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 14px 22px;
-
-    background: #00843d;
-    color: #ffffff;
-
-    border-radius: 8px;
+    text-decoration: none;
 
     font-size: 14px;
     font-weight: 700;
-
-    white-space: nowrap;
-
-    transition: 0.25s ease;
-}
-
-.search-button:hover {
-    background: #006b31;
-}
-
-
-/* =========================================
-   SECTION GENERAL
-========================================= */
-
-.section-heading {
-    max-width: 720px;
-
-    margin: 0 auto 45px;
-
-    text-align: center;
-}
-
-.section-heading p {
-    color: #00843d;
-
-    font-size: 12px;
-    font-weight: 800;
-
-    letter-spacing: 1.5px;
-}
-
-.section-heading h2 {
-    margin: 8px 0;
-
-    color: #17211c;
-
-    font-size: 38px;
-    line-height: 1.2;
-}
-
-.section-heading span {
-    color: #747c77;
-
-    font-size: 15px;
-}
-
-
-/* =========================================
-   PROPERTY CATEGORIES
-========================================= */
-
-.property-categories {
-    padding: 100px 7% 80px;
-
-    background: #ffffff;
-}
-
-.category-grid {
-    max-width: 1200px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 18px;
-}
-
-.category-card {
-    min-height: 190px;
-
-    padding: 24px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    justify-content: space-between;
-
-    background: #ffffff;
-
-    border: 1px solid #e3e9e5;
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 5px 18px rgba(0, 0, 0, 0.045);
-
-    position: relative;
-
-    overflow: hidden;
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease,
-        border-color 0.25s ease;
-}
-
-.category-card::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 4px;
-
-    background: #00843d;
-}
-
-.category-card:nth-child(2)::before {
-    background: #f7c600;
-}
-
-.category-card:nth-child(3)::before {
-    background: #2563eb;
-}
-
-.category-card:nth-child(4)::before {
-    background: #7c3aed;
-}
-
-.category-card:hover {
-    transform: translateY(-6px);
-
-    border-color: #cbded3;
-
-    box-shadow:
-        0 15px 30px rgba(0, 0, 0, 0.09);
-}
-
-.category-icon {
-    width: 50px;
-    height: 50px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #f0f7f2;
-
-    border-radius: 12px;
-
-    font-size: 25px;
-
-    margin-bottom: 18px;
-}
-
-.category-card:nth-child(2)
-.category-icon {
-    background: #fff8d9;
-}
-
-.category-card:nth-child(3)
-.category-icon {
-    background: #eff6ff;
-}
-
-.category-card:nth-child(4)
-.category-icon {
-    background: #f5f3ff;
-}
-
-.category-card h3 {
-    margin-bottom: 5px;
-
-    color: #17211c;
-
-    font-size: 18px;
-}
-
-.category-card p {
-    color: #747c77;
-
-    font-size: 13px;
-
-    line-height: 1.5;
-}
-
-.category-arrow {
-    align-self: flex-end;
-
-    margin-top: 15px;
-
-    color: #00843d;
-
-    font-size: 22px;
-    font-weight: 800;
-}
-
-
-/* =========================================
-   FEATURED PROPERTIES
-========================================= */
-
-.featured {
-    padding: 90px 7%;
-
-    background: #f5f8f6;
-}
-
-.property-grid {
-    max-width: 1200px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 24px;
-}
-
-.property-card {
-    background: #ffffff;
-
-    border: 1px solid #e2e8e4;
-
-    border-radius: 14px;
-
-    overflow: hidden;
-
-    box-shadow:
-        0 5px 20px rgba(0, 0, 0, 0.05);
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.property-card:hover {
-    transform: translateY(-6px);
-
-    box-shadow:
-        0 14px 32px rgba(0, 0, 0, 0.11);
-}
-
-.property-image {
-    height: 225px;
-
-    position: relative;
-
-    background:
-        linear-gradient(
-            rgba(0, 0, 0, 0.12),
-            rgba(0, 0, 0, 0.12)
-        ),
-        url("images/property-placeholder.jpg");
-
-    background-size: cover;
-    background-position: center;
-}
-
-.property-label {
-    position: absolute;
-
-    top: 15px;
-    left: 15px;
-
-    padding: 6px 12px;
-
-    background: #00843d;
-    color: #ffffff;
-
-    border-radius: 20px;
-
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.property-info {
-    padding: 22px;
-}
-
-.property-type {
-    color: #00843d !important;
-
-    font-size: 11px !important;
-    font-weight: 800 !important;
-
-    text-transform: uppercase;
-
-    letter-spacing: 0.7px;
-}
-
-.property-info h3 {
-    margin-bottom: 6px;
-
-    color: #17211c;
-
-    font-size: 19px;
-}
-
-.property-info p {
-    margin-bottom: 13px;
-
-    color: #737b76;
-
-    font-size: 13px;
-}
-
-.property-info h4 {
-    margin-bottom: 18px;
-
-    color: #17211c;
-
-    font-size: 20px;
-}
-
-.property-info h4 small {
-    color: #777;
-
-    font-size: 12px;
-    font-weight: 400;
-}
-
-.details-button {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    min-height: 43px;
-
-    border: 1px solid #00843d;
-
-    color: #00843d;
-
-    border-radius: 8px;
-
-    font-size: 13px;
-    font-weight: 800;
 
     transition: 0.2s ease;
 }
 
-.details-button:hover {
-    background: #00843d;
-
-    color: #ffffff;
-}
-
-.view-all {
-    margin-top: 35px;
-
-    text-align: center;
-}
-
-.view-all a {
-    color: #00843d;
-
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.view-all a:hover {
+.nav-button:hover {
+    background: #ffffff;
     color: #006b31;
 }
 
 
-/* =========================================
-   WHY NICHO LINK
-========================================= */
+/* =========================================================
+   MAIN DASHBOARD
+========================================================= */
 
-.why-nicholink {
-    padding: 90px 7%;
+.dashboard-page {
 
-    background: #ffffff;
-}
+    width:
+        min(1200px, 92%);
 
-.benefits-grid {
-    max-width: 1200px;
+    margin:
+        0 auto;
 
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 20px;
-}
-
-.benefit-card {
-    padding: 28px 22px;
-
-    background: #ffffff;
-
-    border: 1px solid #e5e9e7;
-
-    border-radius: 14px;
-
-    text-align: center;
-
-    transition: 0.25s ease;
-}
-
-.benefit-card:hover {
-    transform: translateY(-5px);
-
-    box-shadow:
-        0 12px 25px rgba(0, 0, 0, 0.07);
-}
-
-.benefit-icon {
-    width: 55px;
-    height: 55px;
-
-    margin: 0 auto 18px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #f0f7f2;
-
-    border-radius: 50%;
-
-    font-size: 25px;
-}
-
-.benefit-card:nth-child(2)
-.benefit-icon {
-    background: #fff8d9;
-}
-
-.benefit-card:nth-child(3)
-.benefit-icon {
-    background: #eff6ff;
-}
-
-.benefit-card:nth-child(4)
-.benefit-icon {
-    background: #f5f3ff;
-}
-
-.benefit-card h3 {
-    margin-bottom: 9px;
-
-    color: #17211c;
-
-    font-size: 17px;
-}
-
-.benefit-card p {
-    color: #747c77;
-
-    font-size: 13px;
-
-    line-height: 1.6;
+    padding:
+        42px 0 70px;
 }
 
 
-/* =========================================
-   HOW IT WORKS
-========================================= */
+/* =========================================================
+   DASHBOARD HEADER
+========================================================= */
 
-.how-it-works {
-    padding: 90px 7%;
-
-    background: #f5f8f6;
-}
-
-.steps {
-    max-width: 1200px;
-
-    margin: auto;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 20px;
-}
-
-.step {
-    padding: 30px 22px;
-
-    background: #ffffff;
-
-    border: 1px solid #e4e9e6;
-
-    border-radius: 14px;
-
-    text-align: center;
-
-    position: relative;
-}
-
-.step-number {
-    width: 52px;
-    height: 52px;
-
-    margin: 0 auto 18px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #00843d;
-    color: #ffffff;
-
-    border-radius: 50%;
-
-    font-size: 19px;
-    font-weight: 800;
-}
-
-.step:nth-child(2)
-.step-number {
-    background: #f7c600;
-    color: #17211c;
-}
-
-.step:nth-child(3)
-.step-number {
-    background: #2563eb;
-}
-
-.step:nth-child(4)
-.step-number {
-    background: #7c3aed;
-}
-
-.step h3 {
-    margin-bottom: 9px;
-
-    color: #17211c;
-
-    font-size: 17px;
-}
-
-.step p {
-    color: #737b76;
-
-    font-size: 13px;
-
-    line-height: 1.6;
-}
-
-
-/* =========================================
-   LANDLORD CTA
-========================================= */
-
-.landlord-section {
-    max-width: 1200px;
-
-    margin: 70px auto;
-
-    padding: 48px;
+.dashboard-header {
 
     display: flex;
 
     align-items: center;
+
     justify-content: space-between;
 
     gap: 30px;
 
+    margin-bottom: 30px;
+}
+
+.dashboard-header .property-label {
+
+    margin:
+        0 0 8px;
+
+    color:
+        var(--green);
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        1.2px;
+}
+
+.dashboard-header h1 {
+
+    margin: 0;
+
+    color:
+        var(--gray-900);
+
+    font-size:
+        clamp(28px, 4vw, 40px);
+
+    line-height:
+        1.15;
+
+    letter-spacing:
+        -1px;
+}
+
+.dashboard-header p:not(.property-label) {
+
+    margin:
+        10px 0 0;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        15px;
+}
+
+
+/* =========================================================
+   PRIMARY ACTION BUTTON
+========================================================= */
+
+.dashboard-add-button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        44px;
+
+    padding:
+        0 18px;
+
     background:
         linear-gradient(
             135deg,
-            #006b31,
-            #008f52
+            #098b45,
+            #067336
         );
 
-    color: #ffffff;
+    color:
+        #ffffff;
 
-    border-radius: 18px;
+    border:
+        1px solid #087f3e;
+
+    border-radius:
+        10px;
+
+    text-decoration:
+        none;
+
+    font-size:
+        14px;
+
+    font-weight:
+        750;
 
     box-shadow:
-        0 12px 30px rgba(0, 80, 40, 0.15);
+        0 5px 15px rgba(8,127,62,0.20);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.landlord-section p {
-    color: #d5f3e2;
+.dashboard-add-button:hover {
 
-    font-size: 11px;
-    font-weight: 800;
+    background:
+        #056631;
 
-    letter-spacing: 1px;
-}
+    transform:
+        translateY(-1px);
 
-.landlord-section h2 {
-    margin: 7px 0;
-
-    font-size: 30px;
-}
-
-.landlord-section span {
-    color: #e9f8ef;
-
-    font-size: 14px;
-}
-
-.landlord-section .primary-button {
-    background: #ffffff;
-
-    color: #00843d;
-
-    white-space: nowrap;
-}
-
-.landlord-section .primary-button:hover {
-    background: #f7c600;
-
-    color: #17211c;
+    box-shadow:
+        0 8px 20px rgba(8,127,62,0.25);
 }
 
 
-/* =========================================
+/* =========================================================
+   STATISTICS
+========================================================= */
+
+.dashboard-stats {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap:
+        18px;
+
+    margin-bottom:
+        28px;
+}
+
+.dashboard-stat {
+
+    position:
+        relative;
+
+    padding:
+        22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f5f8f6,
+            #eaf0ed
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--shadow);
+
+    overflow:
+        hidden;
+}
+
+.dashboard-stat::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    left:
+        0;
+
+    top:
+        0;
+
+    bottom:
+        0;
+
+    width:
+        4px;
+
+    background:
+        var(--green);
+}
+
+.dashboard-stat:nth-child(2)::before {
+
+    background:
+        #159b50;
+}
+
+.dashboard-stat:nth-child(3)::before {
+
+    background:
+        var(--blue);
+}
+
+.dashboard-stat:nth-child(4)::before {
+
+    background:
+        var(--orange);
+}
+
+.dashboard-stat span {
+
+    display:
+        block;
+
+    margin-bottom:
+        10px;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        13px;
+
+    font-weight:
+        650;
+}
+
+.dashboard-stat strong {
+
+    display:
+        block;
+
+    color:
+        var(--gray-900);
+
+    font-size:
+        30px;
+
+    font-weight:
+        800;
+}
+
+
+/* =========================================================
+   DASHBOARD SECTIONS
+========================================================= */
+
+.dashboard-properties {
+
+    margin-bottom:
+        24px;
+
+    padding:
+        26px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f5f8f6,
+            #eaf0ed
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        var(--radius);
+
+    box-shadow:
+        var(--shadow);
+}
+
+.dashboard-section-header {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap:
+        20px;
+
+    margin-bottom:
+        22px;
+}
+
+.dashboard-section-header h2 {
+
+    margin:
+        0;
+
+    color:
+        var(--gray-900);
+
+    font-size:
+        21px;
+
+    letter-spacing:
+        -0.3px;
+}
+
+.dashboard-section-header p {
+
+    margin:
+        6px 0 0;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.5;
+}
+
+
+/* =========================================================
+   PROFILE SECTION
+========================================================= */
+
+.landlord-profile-picture-section {
+
+    margin-bottom:
+        20px;
+
+    padding:
+        24px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e5eee9,
+            #f0f4f2
+        );
+
+    border:
+        1px solid #cfdad4;
+
+    border-radius:
+        15px;
+}
+
+.landlord-profile-picture-layout {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        22px;
+
+    flex-wrap:
+        wrap;
+}
+
+.landlord-profile-picture-preview {
+
+    width:
+        120px;
+
+    height:
+        120px;
+
+    flex-shrink:
+        0;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        50%;
+
+    background:
+        #dcefe3;
+
+    border:
+        4px solid #f7faf8;
+
+    box-shadow:
+        0 6px 20px rgba(0,0,0,0.10);
+
+    color:
+        var(--green);
+
+    font-size:
+        40px;
+
+    font-weight:
+        800;
+}
+
+.landlord-profile-picture-preview img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    display:
+        block;
+}
+
+.landlord-profile-picture-controls {
+
+    flex:
+        1;
+
+    min-width:
+        240px;
+}
+
+.landlord-profile-picture-controls h3 {
+
+    margin:
+        0 0 7px;
+
+    color:
+        var(--gray-900);
+
+    font-size:
+        19px;
+}
+
+.landlord-profile-picture-controls p {
+
+    margin:
+        0 0 14px;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+
+/* =========================================================
+   UPLOAD BUTTON
+========================================================= */
+
+.landlord-profile-upload-button {
+
+    border:
+        none;
+
+    padding:
+        11px 16px;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--green);
+
+    color:
+        #ffffff;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        0.2s ease;
+}
+
+.landlord-profile-upload-button:hover {
+
+    background:
+        var(--green-dark);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================================================
+   REMOVE BUTTON
+========================================================= */
+
+.landlord-profile-remove-button {
+
+    border:
+        1px solid #e5bcbc;
+
+    padding:
+        11px 16px;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--red-soft);
+
+    color:
+        #a52323;
+
+    font-size:
+        13px;
+
+    font-weight:
+        700;
+
+    cursor:
+        pointer;
+
+    transition:
+        0.2s ease;
+}
+
+.landlord-profile-remove-button:hover {
+
+    background:
+        #f0dada;
+}
+
+
+/* =========================================================
+   PROPERTY GRID
+========================================================= */
+
+.landlord-properties-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap:
+        18px;
+}
+
+
+/* =========================================================
+   PROPERTY CARD
+========================================================= */
+
+.landlord-property-card {
+
+    background:
+        linear-gradient(
+            145deg,
+            #f7f9f8,
+            #e9efec
+        );
+
+    border:
+        1px solid var(--border);
+
+    border-radius:
+        16px;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+        0 4px 16px rgba(16,24,40,0.06);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.landlord-property-card:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        #b9c9c0;
+
+    box-shadow:
+        0 10px 28px rgba(16,24,40,0.10);
+}
+
+
+/* =========================================================
+   PROPERTY IMAGE
+========================================================= */
+
+.landlord-property-image {
+
+    height:
+        190px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dce7e1,
+            #edf2ef
+        );
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        var(--gray-500);
+
+    font-size:
+        13px;
+}
+
+.landlord-property-image img {
+
+    width:
+        100%;
+
+    height:
+        100%;
+
+    object-fit:
+        cover;
+
+    display:
+        block;
+}
+
+
+/* =========================================================
+   PROPERTY CONTENT
+========================================================= */
+
+.landlord-property-content {
+
+    padding:
+        20px;
+}
+
+.landlord-property-content h3 {
+
+    margin:
+        0 0 10px;
+
+    color:
+        var(--gray-900);
+
+    font-size:
+        18px;
+}
+
+.landlord-property-content p {
+
+    margin:
+        8px 0;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.5;
+}
+
+.landlord-property-content > strong {
+
+    display:
+        block;
+
+    margin-top:
+        12px;
+
+    color:
+        var(--green-dark);
+
+    font-size:
+        17px;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+========================================================= */
+
+.property-status-small {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    margin-top:
+        12px;
+
+    padding:
+        6px 10px;
+
+    border-radius:
+        999px;
+
+    font-size:
+        12px;
+
+    font-weight:
+        800;
+}
+
+.property-status-small.available,
+.property-status-small.approved {
+
+    background:
+        #dcefe3;
+
+    color:
+        #08733a;
+}
+
+.property-status-small.pending {
+
+    background:
+        var(--orange-soft);
+
+    color:
+        #a66200;
+}
+
+.property-status-small.occupied {
+
+    background:
+        var(--blue-soft);
+
+    color:
+        #245bb8;
+}
+
+.property-status-small.rejected {
+
+    background:
+        var(--red-soft);
+
+    color:
+        #a52323;
+}
+
+
+/* =========================================================
+   CARD ACTIONS
+========================================================= */
+
+.landlord-card-actions {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+    margin-top:
+        18px;
+
+    padding-top:
+        15px;
+
+    border-top:
+        1px solid #dce3df;
+}
+
+.landlord-card-actions a,
+.landlord-card-actions button {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height:
+        38px;
+
+    padding:
+        0 13px;
+
+    border-radius:
+        9px;
+
+    font-family:
+        inherit;
+
+    font-size:
+        12px;
+
+    font-weight:
+        750;
+
+    text-decoration:
+        none;
+
+    cursor:
+        pointer;
+
+    transition:
+        0.2s ease;
+}
+
+
+/* VIEW */
+
+.landlord-card-actions a {
+
+    background:
+        #dff0e6;
+
+    color:
+        var(--green-dark);
+
+    border:
+        1px solid #c3dfce;
+}
+
+.landlord-card-actions a:hover {
+
+    background:
+        #d2e9db;
+}
+
+
+/* EDIT */
+
+.landlord-card-actions button:not(.delete-property-button) {
+
+    background:
+        #e5ebe8;
+
+    color:
+        var(--gray-700);
+
+    border:
+        1px solid #d3dcd7;
+}
+
+.landlord-card-actions button:not(.delete-property-button):hover {
+
+    background:
+        #d9e1dd;
+}
+
+
+/* DELETE */
+
+.landlord-card-actions .delete-property-button {
+
+    background:
+        #f5e1e1;
+
+    color:
+        #a52323;
+
+    border:
+        1px solid #e5bcbc;
+}
+
+.landlord-card-actions .delete-property-button:hover {
+
+    background:
+        #efd5d5;
+}
+
+
+/* =========================================================
+   PENDING PROPERTY
+========================================================= */
+
+.landlord-property-card:has(
+    .property-status-small.pending
+) {
+
+    border-left:
+        4px solid var(--orange);
+}
+
+
+/* =========================================================
+   EMPTY STATES
+========================================================= */
+
+.empty-dashboard {
+
+    padding:
+        38px 24px;
+
+    text-align:
+        center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #e7eeea,
+            #f1f4f2
+        );
+
+    border:
+        1px dashed #bbc8c1;
+
+    border-radius:
+        14px;
+}
+
+.empty-dashboard h3 {
+
+    margin:
+        0 0 8px;
+
+    color:
+        var(--gray-900);
+
+    font-size:
+        17px;
+}
+
+.empty-dashboard p {
+
+    margin:
+        0 0 18px;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
+}
+
+.dashboard-loading {
+
+    padding:
+        30px;
+
+    text-align:
+        center;
+
+    color:
+        var(--gray-600);
+
+    font-size:
+        13px;
+}
+
+
+/* =========================================================
    FOOTER
-========================================= */
+========================================================= */
 
 footer {
-    padding: 60px 7% 20px;
 
-    background: #111916;
+    background:
+        linear-gradient(
+            135deg,
+            #14231b,
+            #1d3025
+        );
 
-    color: #ffffff;
+    color:
+        #d5dfd9;
+
+    margin-top:
+        20px;
 }
 
 .footer-content {
-    max-width: 1200px;
 
-    margin: auto;
+    width:
+        min(1200px, 92%);
 
-    display: grid;
+    margin:
+        0 auto;
+
+    padding:
+        45px 0;
+
+    display:
+        grid;
 
     grid-template-columns:
-        2fr
-        1fr
-        1fr;
+        1.5fr 1fr 1fr;
 
-    gap: 50px;
-
-    margin-bottom: 40px;
+    gap:
+        40px;
 }
 
 .footer-content h2 {
-    margin-bottom: 12px;
 
-    font-size: 24px;
+    margin:
+        0 0 10px;
+
+    color:
+        #ffffff;
 }
 
 .footer-content h2 strong {
-    color: #f7c600;
+
+    color:
+        #38c978;
 }
 
 .footer-content h3 {
-    margin-bottom: 15px;
 
-    font-size: 15px;
+    margin:
+        0 0 15px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        15px;
 }
 
 .footer-content p {
-    color: #aeb8b2;
 
-    font-size: 13px;
+    margin:
+        8px 0;
+
+    color:
+        #aebbb4;
+
+    font-size:
+        13px;
+
+    line-height:
+        1.6;
 }
 
 .footer-content a {
-    display: block;
 
-    margin-bottom: 9px;
+    display:
+        block;
 
-    color: #aeb8b2;
+    width:
+        fit-content;
 
-    font-size: 13px;
+    margin:
+        9px 0;
 
-    transition: 0.2s ease;
+    color:
+        #aebbb4;
+
+    text-decoration:
+        none;
+
+    font-size:
+        13px;
 }
 
 .footer-content a:hover {
-    color: #ffffff;
+
+    color:
+        #ffffff;
 }
 
 .copyright {
-    max-width: 1200px;
 
-    margin: auto;
+    padding:
+        18px 5%;
 
-    padding-top: 20px;
+    border-top:
+        1px solid #34453b;
 
-    border-top: 1px solid #2b3530;
+    text-align:
+        center;
 
-    text-align: center;
+    color:
+        #91a098;
 
-    color: #78827c;
-
-    font-size: 12px;
+    font-size:
+        12px;
 }
 
 
-/* =========================================
-   TABLET
-========================================= */
+/* =========================================================
+   MOBILE
+========================================================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 900px) {
 
-    .navbar {
-        padding: 15px 5%;
+    .dashboard-stats {
 
-        flex-wrap: wrap;
-
-        gap: 15px;
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
     }
 
-    .navbar nav {
-        order: 3;
+    .landlord-properties-grid {
 
-        width: 100%;
-
-        justify-content: center;
-
-        gap: 20px;
-    }
-
-    .hero {
-        padding: 85px 5%;
-    }
-
-    .hero h1 {
-        font-size: 48px;
-    }
-
-    .search-section {
-        padding: 0 5%;
-    }
-
-    .search-box {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .search-item {
-        border-right: none;
-        border-bottom: 1px solid #e7ebe8;
-
-        padding-bottom: 12px;
-    }
-
-    .category-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .property-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .benefits-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .steps {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .property-categories,
-    .featured,
-    .why-nicholink,
-    .how-it-works {
-        padding-left: 5%;
-        padding-right: 5%;
-    }
-
-    .landlord-section {
-        margin-left: 5%;
-        margin-right: 5%;
+        grid-template-columns:
+            1fr;
     }
 
     .footer-content {
-        grid-template-columns: 1fr 1fr;
-    }
 
+        grid-template-columns:
+            1fr 1fr;
+    }
 }
 
-
-/* =========================================
-   MOBILE
-========================================= */
 
 @media (max-width: 650px) {
 
     .navbar {
-        justify-content: center;
 
-        padding: 15px 5%;
-    }
+        padding:
+            12px 4%;
 
-    .logo {
-        width: 100%;
+        flex-wrap:
+            wrap;
 
-        text-align: center;
+        min-height:
+            auto;
     }
 
     .navbar nav {
-        flex-wrap: wrap;
 
-        gap: 12px;
+        order:
+            3;
+
+        width:
+            100%;
+
+        justify-content:
+            center;
     }
 
     .navbar nav a {
-        font-size: 13px;
+
+        padding:
+            8px 10px;
+
+        font-size:
+            12px;
     }
 
-    .nav-button {
-        width: 100%;
+    .dashboard-page {
+
+        width:
+            92%;
+
+        padding-top:
+            28px;
     }
 
+    .dashboard-header {
 
-    .hero {
-        min-height: 520px;
+        flex-direction:
+            column;
 
-        padding: 75px 5%;
+        align-items:
+            flex-start;
     }
 
-    .hero h1 {
-        font-size: 38px;
+    .dashboard-header .dashboard-add-button {
+
+        width:
+            100%;
     }
 
-    .hero-description {
-        font-size: 15px;
+    .dashboard-stats {
+
+        grid-template-columns:
+            1fr;
+
+        gap:
+            12px;
     }
 
-    .hero-buttons {
-        flex-direction: column;
+    .dashboard-properties {
 
-        align-items: stretch;
+        padding:
+            18px;
+
+        border-radius:
+            14px;
     }
-
-    .primary-button,
-    .secondary-button {
-        width: 100%;
-    }
-
-
-    .search-section {
-        margin-top: -25px;
-    }
-
-    .search-box {
-        grid-template-columns: 1fr;
-
-        padding: 18px;
-    }
-
-    .search-item {
-        border-bottom: 1px solid #e7ebe8;
-
-        padding: 10px 5px;
-    }
-
-    .search-button {
-        width: 100%;
-    }
-
-
-    .property-categories,
-    .featured,
-    .why-nicholink,
-    .how-it-works {
-        padding-top: 65px;
-        padding-bottom: 65px;
-    }
-
-
-    .section-heading {
-        margin-bottom: 30px;
-    }
-
-    .section-heading h2 {
-        font-size: 29px;
-    }
-
-
-    .category-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .category-card {
-        min-height: 160px;
-    }
-
-
-    .property-grid {
-        grid-template-columns: 1fr;
-    }
-
-
-    .benefits-grid {
-        grid-template-columns: 1fr;
-    }
-
-
-    .steps {
-        grid-template-columns: 1fr;
-    }
-
-
-    .landlord-section {
-        margin: 45px 5%;
-
-        padding: 32px 25px;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-    }
-
-    .landlord-section h2 {
-        font-size: 25px;
-    }
-
-    .landlord-section .primary-button {
-        width: 100%;
-    }
-
 
     .footer-content {
-        grid-template-columns: 1fr;
 
-        gap: 30px;
-    }
-
-}
-
-
-/* =========================================
-   SMALL PHONES
-========================================= */
-
-@media (max-width: 400px) {
-
-    .hero h1 {
-        font-size: 34px;
-    }
-
-    .section-heading h2 {
-        font-size: 26px;
-    }
-
-    .category-card {
-        padding: 20px;
-    }
-
-    .property-info {
-        padding: 19px;
-    }
-
-}/* =========================================
-   NICHO LINK 254 OFFICIAL LOGO
-========================================= */
-
-.logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    flex-shrink: 0;
-}
-
-.logo img {
-    display: block;
-    width: 145px;
-    height: auto;
-    object-fit: contain;
-}
-
-@media (max-width: 700px) {
-    .logo img {
-        width: 120px;
+        grid-template-columns:
+            1fr;
     }
 }
-
