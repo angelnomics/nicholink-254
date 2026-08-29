@@ -1,1381 +1,947 @@
-
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
+```
+<meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
-    <title id="page-title">
-        Add Property | NichoLink 254
-    </title>
+<title id="page-title">
+    Add Property | NichoLink 254
+</title>
 
-    <meta
-        name="description"
-        content="Add or update a property on NichoLink 254."
-    >
+<meta
+    name="description"
+    content="Add or update a property on NichoLink 254."
+>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+<link
+    rel="stylesheet"
+    href="style.css"
+>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<style>
 
-    <style>
+    :root {
+        --navy: #172033;
+        --blue: #2563eb;
+        --green: #00843d;
+        --green-dark: #006b31;
+        --red: #dc2626;
+        --red-light: #fef2f2;
+        --text: #17211c;
+        --muted: #64748b;
+        --white: #ffffff;
+        --background: #f5f8f6;
+        --border: #e2e9e5;
+        --success: #15803d;
+        --gold: #f7c600;
 
-        :root {
+        --shadow:
+            0 18px 45px
+            rgba(15,23,42,.09);
+    }
 
-            --navy: #172033;
-            --blue: #2563eb;
-            --green: #00843d;
-            --green-dark: #006b31;
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
 
-            --red: #dc2626;
-            --red-light: #fef2f2;
+    html {
+        scroll-behavior: smooth;
+    }
 
-            --text: #17211c;
-            --muted: #64748b;
+    body {
+        min-height: 100vh;
 
-            --white: #ffffff;
-            --background: #f5f8f6;
-            --border: #e2e9e5;
+        font-family:
+            Inter,
+            Arial,
+            Helvetica,
+            sans-serif;
 
-            --success: #15803d;
+        color: var(--text);
 
-            --gold: #f7c600;
+        background:
+            linear-gradient(
+                180deg,
+                #ffffff,
+                var(--background) 300px
+            );
 
-            --shadow:
-                0 18px 45px
-                rgba(15,23,42,.09);
-        }
+        line-height: 1.6;
+    }
 
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-
-        body {
-
-            min-height: 100vh;
-
-            font-family:
-                Inter,
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            color:
-                var(--text);
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #ffffff,
-                    var(--background) 300px
-                );
-
-            line-height: 1.6;
-        }
-
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
+    button,
+    input,
+    textarea,
+    select {
+        font: inherit;
+    }
 
 
-        button,
-        input,
-        textarea,
-        select {
-            font: inherit;
-        }
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+
+        min-height: 70px;
+
+        padding:
+            12px
+            clamp(16px,5vw,60px);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 20px;
+
+        background:
+            rgba(255,255,255,.97);
+
+        border-bottom:
+            1px solid #e8eeea;
+
+        box-shadow:
+            0 3px 18px
+            rgba(15,23,42,.04);
+    }
+
+    .logo {
+        font-size: 21px;
+        font-weight: 900;
+        white-space: nowrap;
+    }
+
+    .logo span {
+        color: var(--navy);
+    }
+
+    .logo strong {
+        color: var(--green);
+    }
+
+    .navbar nav {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .navbar nav a {
+        padding: 8px 12px;
+        border-radius: 9px;
+
+        color: var(--muted);
+
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .navbar nav a:hover {
+        background: #eff6ff;
+        color: var(--blue);
+    }
+
+    .nav-button {
+        min-height: 40px;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0 15px;
+
+        border-radius: 9px;
+
+        background: var(--red-light);
+
+        border:
+            1px solid #fecaca;
+
+        color: var(--red);
+
+        font-size: 12px;
+        font-weight: 800;
+    }
 
 
-        /* =====================================================
-           NAVIGATION
-        ===================================================== */
+    /* =====================================================
+       PAGE
+    ===================================================== */
 
-        .navbar {
+    .page {
+        width: min(1050px,100%);
 
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        margin: 0 auto;
 
-            min-height: 70px;
+        padding:
+            55px 18px 90px;
+    }
 
-            padding:
-                12px
-                clamp(16px,5vw,60px);
+    .page-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
 
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+    .portal-badge {
+        display: inline-flex;
 
-            gap: 20px;
+        padding: 7px 12px;
 
-            background:
-                rgba(255,255,255,.97);
+        border-radius: 999px;
 
-            border-bottom:
-                1px solid #e8eeea;
+        background: #edf8f1;
 
-            box-shadow:
-                0 3px 18px
-                rgba(15,23,42,.04);
-        }
+        border:
+            1px solid #d4eadb;
+
+        color: var(--green);
+
+        font-size: 10px;
+        font-weight: 900;
+
+        letter-spacing: 1.2px;
+
+        text-transform: uppercase;
+
+        margin-bottom: 12px;
+    }
+
+    .page-header h1 {
+        color: var(--navy);
+
+        font-size:
+            clamp(30px,5vw,44px);
+
+        line-height: 1.1;
+
+        margin-bottom: 9px;
+    }
+
+    .page-header p {
+        max-width: 700px;
+
+        margin: 0 auto;
+
+        color: var(--muted);
+
+        font-size: 14px;
+    }
 
 
-        .logo {
+    /* =====================================================
+       FORM
+    ===================================================== */
 
-            font-size: 21px;
-            font-weight: 900;
+    #property-form {
+        background: var(--white);
 
-            white-space: nowrap;
-        }
+        border:
+            1px solid var(--border);
+
+        border-radius: 22px;
+
+        padding:
+            clamp(20px,4vw,40px);
+
+        box-shadow: var(--shadow);
+    }
+
+    .section-title {
+        margin:
+            8px 0 20px;
+
+        padding-bottom: 10px;
+
+        border-bottom:
+            1px solid #eef2f0;
+
+        color: var(--navy);
+
+        font-size: 20px;
+        font-weight: 900;
+    }
+
+    .section-description {
+        margin:
+            -10px 0 20px;
+
+        color: var(--muted);
+
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .form-grid {
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 20px;
+    }
+
+    .full-width {
+        grid-column: 1 / -1;
+    }
+
+    .form-group {
+        margin-bottom: 8px;
+    }
+
+    .form-group label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: var(--navy);
+
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .required {
+        color: var(--green);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+
+        border:
+            1px solid var(--border);
+
+        border-radius: 10px;
+
+        padding:
+            13px 14px;
+
+        background: #fbfdfc;
+
+        color: var(--text);
+
+        outline: none;
+
+        font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select {
+        min-height: 48px;
+    }
+
+    .form-group textarea {
+        min-height: 125px;
+        resize: vertical;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: var(--green);
+
+        box-shadow:
+            0 0 0 4px
+            rgba(0,132,61,.08);
+
+        background: #ffffff;
+    }
+
+    .form-group small {
+        display: block;
+
+        margin-top: 6px;
+
+        color: var(--muted);
+
+        font-size: 11px;
+    }
 
 
-        .logo span {
-            color: var(--navy);
-        }
+    /* =====================================================
+       TRANSPORT & AMENITIES
+    ===================================================== */
+
+    .location-section {
+        margin-top: 28px;
+
+        padding: 22px;
+
+        background: #f8faf9;
+
+        border:
+            1px solid var(--border);
+
+        border-radius: 16px;
+    }
+
+    .location-heading {
+        margin-bottom: 18px;
+    }
+
+    .location-heading h3 {
+        margin-bottom: 5px;
+
+        color: var(--navy);
+
+        font-size: 18px;
+    }
+
+    .location-heading p {
+        color: var(--muted);
+
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .subsection-label {
+        margin:
+            17px 0 13px;
+
+        padding-bottom: 7px;
+
+        border-bottom:
+            1px solid #e8eeea;
+
+        color: var(--blue);
+
+        font-size: 12px;
+        font-weight: 900;
+
+        letter-spacing: .6px;
+
+        text-transform: uppercase;
+    }
 
 
-        .logo strong {
-            color: var(--green);
-        }
+    /* =====================================================
+       MEDIA
+    ===================================================== */
 
+    .media-section {
+        margin-top: 28px;
+    }
+
+    .media-grid {
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 20px;
+    }
+
+    .media-card {
+        padding: 22px;
+
+        border:
+            1px solid var(--border);
+
+        border-radius: 16px;
+
+        background: #f8faf9;
+    }
+
+    .media-card h3 {
+        color: var(--navy);
+
+        font-size: 17px;
+
+        margin-bottom: 5px;
+    }
+
+    .media-card-description {
+        color: var(--muted);
+
+        font-size: 12px;
+        line-height: 1.6;
+
+        margin-bottom: 16px;
+    }
+
+    .upload-input {
+        display: none;
+    }
+
+    .upload-button {
+        width: 100%;
+
+        min-height: 52px;
+
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        gap: 8px;
+
+        border: 0;
+
+        border-radius: 11px;
+
+        background: var(--green);
+
+        color: #ffffff;
+
+        font-size: 13px;
+        font-weight: 900;
+
+        cursor: pointer;
+    }
+
+    .upload-button:hover {
+        background: var(--green-dark);
+    }
+
+    .video-upload-button {
+        background: var(--navy);
+    }
+
+    .video-upload-button:hover {
+        background: #25334d;
+    }
+
+
+    /* =====================================================
+       PHOTO PREVIEW
+    ===================================================== */
+
+    .photo-preview {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fill,
+                minmax(120px,1fr)
+            );
+
+        gap: 10px;
+
+        margin-top: 15px;
+    }
+
+    .photo-preview-item {
+        position: relative;
+
+        overflow: hidden;
+
+        aspect-ratio: 1 / 1;
+
+        border-radius: 11px;
+
+        background: #e8eeea;
+
+        border:
+            1px solid var(--border);
+    }
+
+    .photo-preview-item img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+
+        display: block;
+    }
+
+    .photo-number {
+        position: absolute;
+
+        left: 7px;
+        top: 7px;
+
+        min-width: 24px;
+        height: 24px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background:
+            rgba(23,32,51,.82);
+
+        color: #ffffff;
+
+        font-size: 10px;
+        font-weight: 900;
+    }
+
+    .photo-count {
+        margin-top: 10px;
+
+        color: var(--green);
+
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+
+    /* =====================================================
+       VIDEO
+    ===================================================== */
+
+    .video-preview {
+        display: none;
+
+        margin-top: 15px;
+
+        overflow: hidden;
+
+        border-radius: 13px;
+
+        background: #000000;
+    }
+
+    .video-preview video {
+        width: 100%;
+
+        max-height: 350px;
+
+        display: block;
+    }
+
+    .video-file-info {
+        margin-top: 9px;
+
+        color: var(--muted);
+
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       EXISTING PHOTOS
+    ===================================================== */
+
+    #existing-photos-section {
+        display: none;
+
+        margin-top: 25px;
+
+        padding: 20px;
+
+        border:
+            1px solid var(--border);
+
+        border-radius: 15px;
+
+        background: #f8faf9;
+    }
+
+    #existing-photo-preview {
+        display: grid;
+
+        grid-template-columns:
+            repeat(
+                auto-fill,
+                minmax(120px,1fr)
+            );
+
+        gap: 10px;
+
+        margin-top: 12px;
+    }
+
+    .existing-photo {
+        width: 100%;
+
+        aspect-ratio: 1 / 1;
+
+        object-fit: cover;
+
+        border-radius: 10px;
+
+        display: block;
+    }
+
+
+    /* =====================================================
+       PAYMENT
+    ===================================================== */
+
+    .payment-notice {
+        margin: 28px 0;
+
+        padding: 17px;
+
+        display: flex;
+
+        gap: 12px;
+
+        align-items: flex-start;
+
+        border:
+            1px solid #f1df9a;
+
+        border-radius: 12px;
+
+        background: #fffaf0;
+    }
+
+    .payment-icon {
+        width: 38px;
+        height: 38px;
+
+        min-width: 38px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9px;
+
+        background: var(--gold);
+
+        font-size: 17px;
+    }
+
+    .payment-notice h3 {
+        color: var(--navy);
+
+        font-size: 13px;
+
+        margin-bottom: 3px;
+    }
+
+    .payment-notice p {
+        color: var(--muted);
+
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       SUBMIT
+    ===================================================== */
+
+    .submit-area {
+        padding-top: 10px;
+
+        border-top:
+            1px solid #edf1ee;
+    }
+
+    .save-button {
+        width: 100%;
+
+        min-height: 54px;
+
+        border: 0;
+
+        border-radius: 11px;
+
+        background: var(--green);
+
+        color: #ffffff;
+
+        font-size: 14px;
+        font-weight: 900;
+
+        cursor: pointer;
+    }
+
+    .save-button:hover:not(:disabled) {
+        background: var(--green-dark);
+    }
+
+    .save-button:disabled {
+        opacity: .6;
+        cursor: not-allowed;
+    }
+
+
+    /* =====================================================
+       MESSAGE
+    ===================================================== */
+
+    #form-message {
+        min-height: 20px;
+
+        margin-top: 18px;
+
+        text-align: center;
+
+        font-size: 13px;
+    }
+
+    .success-message {
+        color: var(--success);
+    }
+
+    .error-message {
+        color: var(--red);
+    }
+
+    .info-message {
+        color: var(--blue);
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    footer {
+        padding:
+            50px 20px 20px;
+
+        margin-top: 30px;
+
+        background: var(--navy);
+
+        color: #cbd5e1;
+    }
+
+    .footer-content {
+        width: min(1100px,100%);
+
+        margin: auto;
+
+        display: grid;
+
+        grid-template-columns:
+            1.5fr 1fr 1fr;
+
+        gap: 35px;
+    }
+
+    .footer-content h2 {
+        color: #ffffff;
+
+        margin-bottom: 10px;
+    }
+
+    .footer-content h2 strong {
+        color: #4ade80;
+    }
+
+    .footer-content h3 {
+        color: #ffffff;
+
+        margin-bottom: 10px;
+
+        font-size: 14px;
+    }
+
+    .footer-content a,
+    .footer-content p {
+        color: #cbd5e1;
+
+        font-size: 12px;
+
+        line-height: 1.7;
+    }
+
+    .footer-content a {
+        display: block;
+        margin-bottom: 6px;
+    }
+
+    .copyright {
+        width: min(1100px,100%);
+
+        margin:
+            30px auto 0;
+
+        padding-top: 16px;
+
+        border-top:
+            1px solid
+            rgba(255,255,255,.1);
+
+        color: #94a3b8;
+
+        text-align: center;
+
+        font-size: 11px;
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width:800px) {
 
         .navbar nav {
-
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            display: none;
         }
 
-
-        .navbar nav a {
-
-            padding:
-                8px 12px;
-
-            border-radius:
-                9px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-
-            font-weight:
-                700;
+        .form-grid,
+        .media-grid {
+            grid-template-columns: 1fr;
         }
-
-
-        .navbar nav a:hover {
-
-            background:
-                #eff6ff;
-
-            color:
-                var(--blue);
-        }
-
-
-        .nav-button {
-
-            min-height:
-                40px;
-
-            display:
-                inline-flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            padding:
-                0 15px;
-
-            border-radius:
-                9px;
-
-            background:
-                var(--red-light);
-
-            border:
-                1px solid #fecaca;
-
-            color:
-                var(--red);
-
-            font-size:
-                12px;
-
-            font-weight:
-                800;
-        }
-
-
-        /* =====================================================
-           PAGE
-        ===================================================== */
-
-        .page {
-
-            width:
-                min(1050px,100%);
-
-            margin:
-                0 auto;
-
-            padding:
-                55px 18px 90px;
-        }
-
-
-        .page-header {
-
-            text-align:
-                center;
-
-            margin-bottom:
-                30px;
-        }
-
-
-        .portal-badge {
-
-            display:
-                inline-flex;
-
-            padding:
-                7px 12px;
-
-            border-radius:
-                999px;
-
-            background:
-                #edf8f1;
-
-            border:
-                1px solid #d4eadb;
-
-            color:
-                var(--green);
-
-            font-size:
-                10px;
-
-            font-weight:
-                900;
-
-            letter-spacing:
-                1.2px;
-
-            text-transform:
-                uppercase;
-
-            margin-bottom:
-                12px;
-        }
-
-
-        .page-header h1 {
-
-            color:
-                var(--navy);
-
-            font-size:
-                clamp(30px,5vw,44px);
-
-            line-height:
-                1.1;
-
-            margin-bottom:
-                9px;
-        }
-
-
-        .page-header p {
-
-            max-width:
-                700px;
-
-            margin:
-                0 auto;
-
-            color:
-                var(--muted);
-
-            font-size:
-                14px;
-        }
-
-
-        /* =====================================================
-           FORM
-        ===================================================== */
-
-        #property-form {
-
-            background:
-                var(--white);
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                22px;
-
-            padding:
-                clamp(20px,4vw,40px);
-
-            box-shadow:
-                var(--shadow);
-        }
-
-
-        .section-title {
-
-            margin:
-                8px 0 20px;
-
-            padding-bottom:
-                10px;
-
-            border-bottom:
-                1px solid #eef2f0;
-
-            color:
-                var(--navy);
-
-            font-size:
-                20px;
-
-            font-weight:
-                900;
-        }
-
-
-        .section-description {
-
-            margin:
-                -10px 0 20px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
-            line-height:
-                1.6;
-        }
-
-
-        .form-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap:
-                20px;
-        }
-
 
         .full-width {
-
-            grid-column:
-                1 / -1;
+            grid-column: auto;
         }
-
-
-        .form-group {
-
-            margin-bottom:
-                8px;
-        }
-
-
-        .form-group label {
-
-            display:
-                block;
-
-            margin-bottom:
-                7px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                13px;
-
-            font-weight:
-                800;
-        }
-
-
-        .required {
-
-            color:
-                var(--green);
-        }
-
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-
-            width:
-                100%;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                10px;
-
-            padding:
-                13px 14px;
-
-            background:
-                #fbfdfc;
-
-            color:
-                var(--text);
-
-            outline:
-                none;
-
-            font-size:
-                14px;
-        }
-
-
-        .form-group input,
-        .form-group select {
-
-            min-height:
-                48px;
-        }
-
-
-        .form-group textarea {
-
-            min-height:
-                125px;
-
-            resize:
-                vertical;
-        }
-
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-
-            border-color:
-                var(--green);
-
-            box-shadow:
-                0 0 0 4px
-                rgba(0,132,61,.08);
-
-            background:
-                #ffffff;
-        }
-
-
-        .form-group small {
-
-            display:
-                block;
-
-            margin-top:
-                6px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-        }
-
-
-        /* =====================================================
-           TRANSPORT & AMENITIES
-        ===================================================== */
-
-        .location-section {
-
-            margin-top:
-                28px;
-
-            padding:
-                22px;
-
-            background:
-                #f8faf9;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                16px;
-        }
-
-
-        .location-heading {
-
-            margin-bottom:
-                18px;
-        }
-
-
-        .location-heading h3 {
-
-            margin-bottom:
-                5px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                18px;
-        }
-
-
-        .location-heading p {
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
-            line-height:
-                1.6;
-        }
-
-
-        .subsection-label {
-
-            margin:
-                17px 0 13px;
-
-            padding-bottom:
-                7px;
-
-            border-bottom:
-                1px solid #e8eeea;
-
-            color:
-                var(--blue);
-
-            font-size:
-                12px;
-
-            font-weight:
-                900;
-
-            letter-spacing:
-                .6px;
-
-            text-transform:
-                uppercase;
-        }
-
-
-        /* =====================================================
-           MEDIA
-        ===================================================== */
-
-        .media-section {
-
-            margin-top:
-                28px;
-        }
-
-
-        .media-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1fr 1fr;
-
-            gap:
-                20px;
-        }
-
-
-        .media-card {
-
-            padding:
-                22px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                16px;
-
-            background:
-                #f8faf9;
-        }
-
-
-        .media-card h3 {
-
-            color:
-                var(--navy);
-
-            font-size:
-                17px;
-
-            margin-bottom:
-                5px;
-        }
-
-
-        .media-card-description {
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
-            line-height:
-                1.6;
-
-            margin-bottom:
-                16px;
-        }
-
-
-        .upload-input {
-
-            display:
-                none;
-        }
-
-
-        .upload-button {
-
-            width:
-                100%;
-
-            min-height:
-                52px;
-
-            display:
-                inline-flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            gap:
-                8px;
-
-            border:
-                0;
-
-            border-radius:
-                11px;
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-
-            font-size:
-                13px;
-
-            font-weight:
-                900;
-
-            cursor:
-                pointer;
-        }
-
-
-        .upload-button:hover {
-
-            background:
-                var(--green-dark);
-        }
-
-
-        .video-upload-button {
-
-            background:
-                var(--navy);
-        }
-
-
-        .video-upload-button:hover {
-
-            background:
-                #25334d;
-        }
-
-
-        /* =====================================================
-           PHOTO PREVIEW
-        ===================================================== */
-
-        .photo-preview {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(120px,1fr)
-                );
-
-            gap:
-                10px;
-
-            margin-top:
-                15px;
-        }
-
-
-        .photo-preview-item {
-
-            position:
-                relative;
-
-            overflow:
-                hidden;
-
-            aspect-ratio:
-                1 / 1;
-
-            border-radius:
-                11px;
-
-            background:
-                #e8eeea;
-
-            border:
-                1px solid var(--border);
-        }
-
-
-        .photo-preview-item img {
-
-            width:
-                100%;
-
-            height:
-                100%;
-
-            object-fit:
-                cover;
-
-            display:
-                block;
-        }
-
-
-        .photo-number {
-
-            position:
-                absolute;
-
-            left:
-                7px;
-
-            top:
-                7px;
-
-            min-width:
-                24px;
-
-            height:
-                24px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            border-radius:
-                50%;
-
-            background:
-                rgba(23,32,51,.82);
-
-            color:
-                #ffffff;
-
-            font-size:
-                10px;
-
-            font-weight:
-                900;
-        }
-
-
-        .photo-count {
-
-            margin-top:
-                10px;
-
-            color:
-                var(--green);
-
-            font-size:
-                12px;
-
-            font-weight:
-                800;
-        }
-
-
-        /* =====================================================
-           VIDEO
-        ===================================================== */
-
-        .video-preview {
-
-            display:
-                none;
-
-            margin-top:
-                15px;
-
-            overflow:
-                hidden;
-
-            border-radius:
-                13px;
-
-            background:
-                #000000;
-        }
-
-
-        .video-preview video {
-
-            width:
-                100%;
-
-            max-height:
-                350px;
-
-            display:
-                block;
-        }
-
-
-        .video-file-info {
-
-            margin-top:
-                9px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                11px;
-        }
-
-
-        /* =====================================================
-           EXISTING PHOTOS
-        ===================================================== */
-
-        #existing-photos-section {
-
-            display:
-                none;
-
-            margin-top:
-                25px;
-
-            padding:
-                20px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                15px;
-
-            background:
-                #f8faf9;
-        }
-
-
-        #existing-photo-preview {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fill,
-                    minmax(120px,1fr)
-                );
-
-            gap:
-                10px;
-
-            margin-top:
-                12px;
-        }
-
-
-        .existing-photo {
-
-            width:
-                100%;
-
-            aspect-ratio:
-                1 / 1;
-
-            object-fit:
-                cover;
-
-            border-radius:
-                10px;
-
-            display:
-                block;
-        }
-
-
-        /* =====================================================
-           PAYMENT
-        ===================================================== */
-
-        .payment-notice {
-
-            margin:
-                28px 0;
-
-            padding:
-                17px;
-
-            display:
-                flex;
-
-            gap:
-                12px;
-
-            align-items:
-                flex-start;
-
-            border:
-                1px solid #f1df9a;
-
-            border-radius:
-                12px;
-
-            background:
-                #fffaf0;
-        }
-
-
-        .payment-icon {
-
-            width:
-                38px;
-
-            height:
-                38px;
-
-            min-width:
-                38px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            border-radius:
-                9px;
-
-            background:
-                var(--gold);
-
-            font-size:
-                17px;
-        }
-
-
-        .payment-notice h3 {
-
-            color:
-                var(--navy);
-
-            font-size:
-                13px;
-
-            margin-bottom:
-                3px;
-        }
-
-
-        .payment-notice p {
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
-            line-height:
-                1.6;
-        }
-
-
-        /* =====================================================
-           SUBMIT
-        ===================================================== */
-
-        .submit-area {
-
-            padding-top:
-                10px;
-
-            border-top:
-                1px solid #edf1ee;
-        }
-
-
-        .save-button {
-
-            width:
-                100%;
-
-            min-height:
-                54px;
-
-            border:
-                0;
-
-            border-radius:
-                11px;
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-
-            font-size:
-                14px;
-
-            font-weight:
-                900;
-
-            cursor:
-                pointer;
-        }
-
-
-        .save-button:hover:not(:disabled) {
-
-            background:
-                var(--green-dark);
-        }
-
-
-        .save-button:disabled {
-
-            opacity:
-                .6;
-
-            cursor:
-                not-allowed;
-        }
-
-
-        /* =====================================================
-           MESSAGE
-        ===================================================== */
-
-        #form-message {
-
-            min-height:
-                20px;
-
-            margin-top:
-                18px;
-
-            text-align:
-                center;
-
-            font-size:
-                13px;
-        }
-
-
-        .success-message {
-            color:
-                var(--success);
-        }
-
-
-        .error-message {
-            color:
-                var(--red);
-        }
-
-
-        .info-message {
-            color:
-                var(--blue);
-        }
-
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        footer {
-
-            padding:
-                50px 20px 20px;
-
-            margin-top:
-                30px;
-
-            background:
-                var(--navy);
-
-            color:
-                #cbd5e1;
-        }
-
 
         .footer-content {
+            grid-template-columns: 1fr 1fr;
+        }
 
-            width:
-                min(1100px,100%);
+    }
 
-            margin:
-                auto;
+    @media (max-width:550px) {
 
-            display:
-                grid;
+        .page {
+            padding:
+                35px 12px 60px;
+        }
 
+        #property-form {
+            padding:
+                18px 14px;
+
+            border-radius: 17px;
+        }
+
+        .page-header h1 {
+            font-size: 31px;
+        }
+
+        .photo-preview {
             grid-template-columns:
-                1.5fr 1fr 1fr;
-
-            gap:
-                35px;
+                repeat(2,1fr);
         }
 
-
-        .footer-content h2 {
-
-            color:
-                #ffffff;
-
-            margin-bottom:
-                10px;
+        .footer-content {
+            grid-template-columns: 1fr;
         }
 
+    }
 
-        .footer-content h2 strong {
-
-            color:
-                #4ade80;
-        }
-
-
-        .footer-content h3 {
-
-            color:
-                #ffffff;
-
-            margin-bottom:
-                10px;
-
-            font-size:
-                14px;
-        }
-
-
-        .footer-content a,
-        .footer-content p {
-
-            color:
-                #cbd5e1;
-
-            font-size:
-                12px;
-
-            line-height:
-                1.7;
-        }
-
-
-        .footer-content a {
-
-            display:
-                block;
-
-            margin-bottom:
-                6px;
-        }
-
-
-        .copyright {
-
-            width:
-                min(1100px,100%);
-
-            margin:
-                30px auto 0;
-
-            padding-top:
-                16px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.1);
-
-            color:
-                #94a3b8;
-
-            text-align:
-                center;
-
-            font-size:
-                11px;
-        }
-
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media (max-width:800px) {
-
-            .navbar nav {
-                display:
-                    none;
-            }
-
-
-            .form-grid,
-            .media-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .full-width {
-
-                grid-column:
-                    auto;
-            }
-
-
-            .footer-content {
-
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-        }
-
-
-        @media (max-width:550px) {
-
-            .page {
-
-                padding:
-                    35px 12px 60px;
-            }
-
-
-            #property-form {
-
-                padding:
-                    18px 14px;
-
-                border-radius:
-                    17px;
-            }
-
-
-            .page-header h1 {
-
-                font-size:
-                    31px;
-            }
-
-
-            .photo-preview {
-
-                grid-template-columns:
-                    repeat(
-                        2,
-                        1fr
-                    );
-            }
-
-
-            .footer-content {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-        }
-
-    </style>
+</style>
+```
 
 </head>
 
-
 <body>
-
 
 <!-- =====================================================
      NAVIGATION
@@ -1383,54 +949,41 @@
 
 <header class="navbar">
 
+```
+<a
+    href="index.html"
+    class="logo"
+>
+    <span>NichoLink</span>
+    <strong>254</strong>
+</a>
 
-    <a
-        href="index.html"
-        class="logo"
-    >
+<nav>
 
-        <span>
-            NichoLink
-        </span>
-
-        <strong>
-            254
-        </strong>
-
+    <a href="index.html">
+        Home
     </a>
 
-
-    <nav>
-
-        <a href="index.html">
-            Home
-        </a>
-
-
-        <a href="properties.html">
-            Properties
-        </a>
-
-
-        <a href="landlord-dashboard.html">
-            Dashboard
-        </a>
-
-    </nav>
-
-
-    <a
-        href="#"
-        onclick="logoutLandlord(); return false;"
-        class="nav-button"
-    >
-        Logout
+    <a href="properties.html">
+        Properties
     </a>
 
+    <a href="landlord-dashboard.html">
+        Dashboard
+    </a>
+
+</nav>
+
+<a
+    href="#"
+    onclick="logoutLandlord(); return false;"
+    class="nav-button"
+>
+    Logout
+</a>
+```
 
 </header>
-
-
 
 <!-- =====================================================
      MAIN PAGE
@@ -1438,701 +991,561 @@
 
 <main class="page">
 
+```
+<div class="page-header">
 
-    <div class="page-header">
+    <span class="portal-badge">
+        LANDLORD PORTAL
+    </span>
+
+    <h1 id="form-title">
+        Add a Property
+    </h1>
+
+    <p id="form-subtitle">
+        Create a professional property advert with
+        real details, photos, video, transport and nearby amenities.
+    </p>
+
+</div>
 
 
-        <span class="portal-badge">
-            LANDLORD PORTAL
-        </span>
+<form id="property-form">
 
 
-        <h1 id="form-title">
-            Add a Property
-        </h1>
+    <!-- =================================================
+         PROPERTY INFORMATION
+    ================================================= -->
+
+    <h2 class="section-title">
+        Property Information
+    </h2>
+
+    <div class="form-grid">
+
+        <div class="form-group full-width">
+
+            <label for="title">
+                Property Title
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="text"
+                id="title"
+                placeholder="e.g. Modern 2 Bedroom Apartment"
+                required
+            >
+
+        </div>
 
 
-        <p id="form-subtitle">
-            Create a professional property advert with
-            real details, photos, video, transport and nearby amenities.
-        </p>
+        <div class="form-group">
 
+            <label for="location">
+                Location
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="text"
+                id="location"
+                placeholder="e.g. Milimani, Kisumu"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="rent">
+                Monthly Rent (KSh)
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="number"
+                id="rent"
+                min="0"
+                placeholder="e.g. 25000"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="bedrooms">
+                Bedrooms
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="number"
+                id="bedrooms"
+                min="0"
+                placeholder="e.g. 2"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="bathrooms">
+                Bathrooms
+                <span class="required">*</span>
+            </label>
+
+            <input
+                type="number"
+                id="bathrooms"
+                min="0"
+                placeholder="e.g. 2"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="status">
+                Property Status
+            </label>
+
+            <select id="status">
+
+                <option value="Available">
+                    Available
+                </option>
+
+                <option value="Occupied">
+                    Occupied
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group full-width">
+
+            <label for="description">
+                Property Description
+                <span class="required">*</span>
+            </label>
+
+            <textarea
+                id="description"
+                placeholder="Describe the property, surroundings, security, accessibility and other important information..."
+                required
+            ></textarea>
+
+        </div>
+
+
+        <div class="form-group full-width">
+
+            <label for="amenities">
+                Amenities
+            </label>
+
+            <input
+                type="text"
+                id="amenities"
+                placeholder="e.g. Parking, WiFi, Security, Water"
+            >
+
+            <small>
+                Separate amenities with commas.
+            </small>
+
+        </div>
 
     </div>
 
 
+    <!-- =================================================
+         TRANSPORT & NEARBY AMENITIES
+    ================================================= -->
 
-    <form id="property-form">
+    <section class="location-section">
+
+        <div class="location-heading">
+
+            <h3>
+                📍 Transport & Nearby Amenities
+            </h3>
+
+            <p>
+                Add information that helps tenants understand
+                how convenient the property is.
+            </p>
+
+        </div>
 
 
-        <!-- =================================================
-             PROPERTY INFORMATION
-        ================================================= -->
-
-        <h2 class="section-title">
-            Property Information
-        </h2>
+        <div class="subsection-label">
+            Transport Information
+        </div>
 
 
         <div class="form-grid">
 
+            <div class="form-group">
 
-            <div class="form-group full-width">
-
-                <label for="title">
-
-                    Property Title
-
-                    <span class="required">
-                        *
-                    </span>
-
+                <label for="nearest_matatu_stage">
+                    Nearest Matatu Stage
                 </label>
-
 
                 <input
                     type="text"
-                    id="title"
-                    placeholder="e.g. Modern 2 Bedroom Apartment"
-                    required
+                    id="nearest_matatu_stage"
+                    placeholder="e.g. Kondele Stage"
                 >
 
             </div>
 
 
-
             <div class="form-group">
 
-                <label for="location">
-
-                    Location
-
-                    <span class="required">
-                        *
-                    </span>
-
+                <label for="transport_distance">
+                    Distance from Property
                 </label>
-
 
                 <input
                     type="text"
-                    id="location"
-                    placeholder="e.g. Milimani, Kisumu"
-                    required
+                    id="transport_distance"
+                    placeholder="e.g. 500 metres"
                 >
 
             </div>
-
-
-
-            <div class="form-group">
-
-                <label for="rent">
-
-                    Monthly Rent (KSh)
-
-                    <span class="required">
-                        *
-                    </span>
-
-                </label>
-
-
-                <input
-                    type="number"
-                    id="rent"
-                    min="0"
-                    placeholder="e.g. 25000"
-                    required
-                >
-
-            </div>
-
-
-
-            <div class="form-group">
-
-                <label for="bedrooms">
-
-                    Bedrooms
-
-                    <span class="required">
-                        *
-                    </span>
-
-                </label>
-
-
-                <input
-                    type="number"
-                    id="bedrooms"
-                    min="0"
-                    placeholder="e.g. 2"
-                    required
-                >
-
-            </div>
-
-
-
-            <div class="form-group">
-
-                <label for="bathrooms">
-
-                    Bathrooms
-
-                    <span class="required">
-                        *
-                    </span>
-
-                </label>
-
-
-                <input
-                    type="number"
-                    id="bathrooms"
-                    min="0"
-                    placeholder="e.g. 2"
-                    required
-                >
-
-            </div>
-
-
-
-            <div class="form-group">
-
-                <label for="status">
-                    Property Status
-                </label>
-
-
-                <select id="status">
-
-                    <option value="Available">
-                        Available
-                    </option>
-
-
-                    <option value="Occupied">
-                        Occupied
-                    </option>
-
-                </select>
-
-            </div>
-
 
 
             <div class="form-group full-width">
 
-                <label for="description">
-
-                    Property Description
-
-                    <span class="required">
-                        *
-                    </span>
-
+                <label for="transport_route">
+                    Route / Destinations
                 </label>
 
+                <input
+                    type="text"
+                    id="transport_route"
+                    placeholder="e.g. CBD, Kondele, Mamboleo, Otonglo"
+                >
+
+            </div>
+
+
+            <div class="form-group full-width">
+
+                <label for="transport_notes">
+                    Transport Notes
+                </label>
 
                 <textarea
-                    id="description"
-                    placeholder="Describe the property, surroundings, security, accessibility and other important information..."
-                    required
+                    id="transport_notes"
+                    placeholder="Describe available transport, common routes, operating times or other useful information..."
                 ></textarea>
 
             </div>
 
+        </div>
+
+
+        <div class="subsection-label">
+            Nearby Amenities
+        </div>
+
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label for="nearby_hospital">
+                    🏥 Hospital / Clinic
+                </label>
+
+                <input
+                    type="text"
+                    id="nearby_hospital"
+                    placeholder="e.g. Aga Khan Hospital — 10 min"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="nearby_school">
+                    🏫 School / College
+                </label>
+
+                <input
+                    type="text"
+                    id="nearby_school"
+                    placeholder="e.g. ICS College Kisumu"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="nearby_supermarket">
+                    🛒 Supermarket / Shop
+                </label>
+
+                <input
+                    type="text"
+                    id="nearby_supermarket"
+                    placeholder="e.g. Carrefour — 7 min"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="nearby_bank_atm">
+                    🏦 Bank / ATM
+                </label>
+
+                <input
+                    type="text"
+                    id="nearby_bank_atm"
+                    placeholder="e.g. Equity Bank — 5 min"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="nearby_petrol_station">
+                    ⛽ Petrol Station
+                </label>
+
+                <input
+                    type="text"
+                    id="nearby_petrol_station"
+                    placeholder="e.g. Shell — 6 min"
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="nearby_restaurant">
+                    🍽️ Restaurant
+                </label>
+
+                <input
+                    type="text"
+                    id="nearby_restaurant"
+                    placeholder="e.g. Java House — 8 min"
+                >
+
+            </div>
 
 
             <div class="form-group full-width">
 
-                <label for="amenities">
-                    Amenities
+                <label for="nearby_market">
+                    🏪 Market / Shopping Centre
                 </label>
-
 
                 <input
                     type="text"
-                    id="amenities"
-                    placeholder="e.g. Parking, WiFi, Security, Water"
+                    id="nearby_market"
+                    placeholder="e.g. Kibuye Market — 12 min"
                 >
 
-
-                <small>
-                    Separate amenities with commas.
-                </small>
-
             </div>
-
 
         </div>
 
+    </section>
 
 
-        <!-- =================================================
-             TRANSPORT & NEARBY AMENITIES
-        ================================================= -->
+    <!-- =================================================
+         EXISTING PHOTOS
+    ================================================= -->
 
-        <section
-            class="location-section"
-        >
+    <div id="existing-photos-section">
 
-            <div class="location-heading">
+        <h3>
+            Existing Property Photos
+        </h3>
+
+        <div id="existing-photo-preview"></div>
+
+    </div>
+
+
+    <!-- =================================================
+         MEDIA
+    ================================================= -->
+
+    <div class="media-section">
+
+        <h2 class="section-title">
+            Property Media
+        </h2>
+
+        <div class="media-grid">
+
+
+            <!-- PHOTOS -->
+
+            <div class="media-card">
 
                 <h3>
-                    📍 Transport & Nearby Amenities
+                    📷 Property Photos
                 </h3>
 
-
-                <p>
-                    Add information that helps tenants understand
-                    how convenient the property is. Later we can
-                    connect these fields to Google Maps.
+                <p class="media-card-description">
+                    Upload several real photos of
+                    the property.
                 </p>
 
-            </div>
+                <input
+                    type="file"
+                    id="property-photos"
+                    class="upload-input"
+                    accept="image/jpeg,image/png,image/webp"
+                    multiple
+                >
 
+                <label
+                    for="property-photos"
+                    class="upload-button"
+                >
+                    📷 Choose Multiple Photos
+                </label>
 
+                <div
+                    id="photo-count"
+                    class="photo-count"
+                ></div>
 
-            <!-- TRANSPORT -->
-
-            <div class="subsection-label">
-                Transport Information
-            </div>
-
-
-            <div class="form-grid">
-
-
-                <div class="form-group">
-
-                    <label for="nearest_matatu_stage">
-                        Nearest Matatu Stage
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearest_matatu_stage"
-                        placeholder="e.g. Kondele Stage"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label for="transport_distance">
-                        Distance from Property
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="transport_distance"
-                        placeholder="e.g. 500 metres"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group full-width">
-
-                    <label for="transport_route">
-                        Route / Destinations
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="transport_route"
-                        placeholder="e.g. CBD, Kondele, Mamboleo, Otonglo"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group full-width">
-
-                    <label for="transport_notes">
-                        Transport Notes
-                    </label>
-
-
-                    <textarea
-                        id="transport_notes"
-                        placeholder="Describe available transport, common routes, operating times or other useful information..."
-                    ></textarea>
-
-                </div>
-
+                <div
+                    id="photo-preview"
+                    class="photo-preview"
+                ></div>
 
             </div>
 
 
+            <!-- VIDEO -->
 
-            <!-- NEARBY AMENITIES -->
+            <div class="media-card">
 
-            <div class="subsection-label">
-                Nearby Amenities
-            </div>
+                <h3>
+                    🎥 Property Video
+                </h3>
 
+                <p class="media-card-description">
+                    Upload a real video tour of
+                    the property.
+                </p>
 
-            <div class="form-grid">
+                <input
+                    type="file"
+                    id="property-video"
+                    class="upload-input"
+                    accept="video/mp4,video/webm,video/quicktime"
+                >
 
+                <label
+                    for="property-video"
+                    class="upload-button video-upload-button"
+                >
+                    🎥 Choose Property Video
+                </label>
 
-                <div class="form-group">
+                <div
+                    id="video-preview"
+                    class="video-preview"
+                >
 
-                    <label for="nearby_hospital">
-                        🏥 Hospital / Clinic
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_hospital"
-                        placeholder="e.g. Aga Khan Hospital — 10 min"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label for="nearby_school">
-                        🏫 School / College
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_school"
-                        placeholder="e.g. ICS College Kisumu"
-                    >
+                    <video
+                        id="video-player"
+                        controls
+                        playsinline
+                    ></video>
 
                 </div>
 
-
-
-                <div class="form-group">
-
-                    <label for="nearby_supermarket">
-                        🛒 Supermarket / Shop
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_supermarket"
-                        placeholder="e.g. Carrefour — 7 min"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label for="nearby_bank_atm">
-                        🏦 Bank / ATM
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_bank_atm"
-                        placeholder="e.g. Equity Bank — 5 min"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label for="nearby_petrol_station">
-                        ⛽ Petrol Station
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_petrol_station"
-                        placeholder="e.g. Shell — 6 min"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group">
-
-                    <label for="nearby_restaurant">
-                        🍽️ Restaurant
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_restaurant"
-                        placeholder="e.g. Java House — 8 min"
-                    >
-
-                </div>
-
-
-
-                <div class="form-group full-width">
-
-                    <label for="nearby_market">
-                        🏪 Market / Shopping Centre
-                    </label>
-
-
-                    <input
-                        type="text"
-                        id="nearby_market"
-                        placeholder="e.g. Kibuye Market — 12 min"
-                    >
-
-                </div>
-
+                <div
+                    id="video-file-info"
+                    class="video-file-info"
+                ></div>
 
             </div>
 
+        </div>
 
-        </section>
+    </div>
 
 
+    <!-- =================================================
+         PAYMENT
+    ================================================= -->
 
-        <!-- =================================================
-             EXISTING PHOTOS
-        ================================================= -->
+    <div class="payment-notice">
 
-        <div
-            id="existing-photos-section"
-        >
+        <div class="payment-icon">
+            💳
+        </div>
+
+        <div>
 
             <h3>
-                Existing Property Photos
+                Property Listing Fee
             </h3>
 
-
-            <div
-                id="existing-photo-preview"
-            ></div>
-
-        </div>
-
-
-
-        <!-- =================================================
-             MEDIA
-        ================================================= -->
-
-        <div class="media-section">
-
-
-            <h2 class="section-title">
-                Property Media
-            </h2>
-
-
-            <div class="media-grid">
-
-
-                <!-- PHOTOS -->
-
-                <div class="media-card">
-
-
-                    <h3>
-                        📷 Property Photos
-                    </h3>
-
-
-                    <p class="media-card-description">
-
-                        Upload several real photos of
-                        the property. You can select
-                        multiple photos at once.
-
-                    </p>
-
-
-                    <input
-                        type="file"
-                        id="property-photos"
-                        class="upload-input"
-                        accept="image/jpeg,image/png,image/webp"
-                        multiple
-                    >
-
-
-                    <label
-                        for="property-photos"
-                        class="upload-button"
-                    >
-
-                        📷
-                        Choose Multiple Photos
-
-                    </label>
-
-
-                    <div
-                        id="photo-count"
-                        class="photo-count"
-                    ></div>
-
-
-                    <div
-                        id="photo-preview"
-                        class="photo-preview"
-                    ></div>
-
-
-                </div>
-
-
-
-                <!-- VIDEO -->
-
-                <div class="media-card">
-
-
-                    <h3>
-                        🎥 Property Video
-                    </h3>
-
-
-                    <p class="media-card-description">
-
-                        Upload a real video tour of
-                        the property.
-
-                    </p>
-
-
-                    <input
-                        type="file"
-                        id="property-video"
-                        class="upload-input"
-                        accept="video/mp4,video/webm,video/quicktime"
-                    >
-
-
-                    <label
-                        for="property-video"
-                        class="upload-button video-upload-button"
-                    >
-
-                        🎥
-                        Choose Property Video
-
-                    </label>
-
-
-                    <div
-                        id="video-preview"
-                        class="video-preview"
-                    >
-
-                        <video
-                            id="video-player"
-                            controls
-                            playsinline
-                        ></video>
-
-                    </div>
-
-
-                    <div
-                        id="video-file-info"
-                        class="video-file-info"
-                    ></div>
-
-
-                </div>
-
-
-            </div>
-
+            <p>
+                New property listings require
+                a <strong>KSh 250</strong>
+                M-Pesa payment before publication.
+            </p>
 
         </div>
 
+    </div>
 
 
-        <!-- =================================================
-             PAYMENT
-        ================================================= -->
+    <!-- =================================================
+         SAVE
+    ================================================= -->
 
-        <div class="payment-notice">
+    <div class="submit-area">
 
+        <button
+            type="submit"
+            id="save-property-button"
+            class="save-button"
+        >
+            Save Property
+        </button>
 
-            <div class="payment-icon">
-                💳
-            </div>
+    </div>
 
+    <div
+        id="form-message"
+        aria-live="polite"
+    ></div>
 
-            <div>
-
-                <h3>
-                    Property Listing Fee
-                </h3>
-
-
-                <p>
-                    New property listings require
-                    a <strong>KSh 250</strong>
-                    M-Pesa payment before publication.
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-
-        <!-- =================================================
-             SAVE
-        ================================================= -->
-
-        <div class="submit-area">
-
-
-            <button
-                type="submit"
-                id="save-property-button"
-                class="save-button"
-            >
-                Save Property
-            </button>
-
-
-        </div>
-
-
-        <div
-            id="form-message"
-            aria-live="polite"
-        ></div>
-
-
-    </form>
-
+</form>
+```
 
 </main>
-
-
 
 <!-- =====================================================
      FOOTER
@@ -2140,88 +1553,77 @@
 
 <footer>
 
+```
+<div class="footer-content">
 
-    <div class="footer-content">
+    <div>
 
+        <h2>
+            NichoLink
+            <strong>254</strong>
+        </h2>
 
-        <div>
-
-            <h2>
-                NichoLink
-                <strong>254</strong>
-            </h2>
-
-
-            <p>
-                Connecting tenants with properties
-                across Kenya.
-            </p>
-
-        </div>
-
-
-        <div>
-
-            <h3>
-                Quick Links
-            </h3>
-
-
-            <a href="index.html">
-                Home
-            </a>
-
-
-            <a href="properties.html">
-                Properties
-            </a>
-
-
-            <a href="landlord-dashboard.html">
-                Landlord Dashboard
-            </a>
-
-        </div>
-
-
-        <div>
-
-            <h3>
-                Contact
-            </h3>
-
-
-            <p>
-                📞 0795629436
-            </p>
-
-
-            <p>
-                💬 WhatsApp: 0795629436
-            </p>
-
-
-            <p>
-                ✉️ nicholink254@gmail.com
-            </p>
-
-        </div>
-
+        <p>
+            Connecting tenants with properties
+            across Kenya.
+        </p>
 
     </div>
 
 
-    <div class="copyright">
+    <div>
 
-        © 2026 NichoLink 254.
-        All Rights Reserved.
+        <h3>
+            Quick Links
+        </h3>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="properties.html">
+            Properties
+        </a>
+
+        <a href="landlord-dashboard.html">
+            Landlord Dashboard
+        </a>
 
     </div>
 
+
+    <div>
+
+        <h3>
+            Contact
+        </h3>
+
+        <p>
+            📞 0795629436
+        </p>
+
+        <p>
+            💬 WhatsApp: 0795629432
+        </p>
+
+        <p>
+            ✉️ nicholink254@gmail.com
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="copyright">
+
+    © 2026 NichoLink 254.
+    All Rights Reserved.
+
+</div>
+```
 
 </footer>
-
-
 
 <!-- =====================================================
      SUPABASE
@@ -2229,89 +1631,82 @@
 
 <script src="supabase.js"></script>
 
-
-
 <script>
+
+/* =====================================================
+   URL / EDIT MODE
+===================================================== */
 
 const urlParams =
     new URLSearchParams(
         window.location.search
     );
 
-
 const propertyId =
     urlParams.get("id");
-
 
 const editMode =
     Boolean(propertyId);
 
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
 
 const form =
     document.getElementById(
         "property-form"
     );
 
-
 const message =
     document.getElementById(
         "form-message"
     );
-
 
 const saveButton =
     document.getElementById(
         "save-property-button"
     );
 
-
 const photoInput =
     document.getElementById(
         "property-photos"
     );
-
 
 const photoPreview =
     document.getElementById(
         "photo-preview"
     );
 
-
 const photoCount =
     document.getElementById(
         "photo-count"
     );
-
 
 const videoInput =
     document.getElementById(
         "property-video"
     );
 
-
 const videoPreview =
     document.getElementById(
         "video-preview"
     );
-
 
 const videoPlayer =
     document.getElementById(
         "video-player"
     );
 
-
 const videoFileInfo =
     document.getElementById(
         "video-file-info"
     );
 
-
 const existingSection =
     document.getElementById(
         "existing-photos-section"
     );
-
 
 const existingPreview =
     document.getElementById(
@@ -2319,16 +1714,18 @@ const existingPreview =
     );
 
 
-let selectedVideoFile =
-    null;
-
+let selectedVideoFile = null;
 
 
 /* =====================================================
-   M-PESA
+   M-PESA FUNCTION
 ===================================================== */
+
 const MPESA_FUNCTION_URL =
-    "https://nicholink254.netlify.app/.netlify/functions/stk-push";/* =====================================================
+    "https://nicholink254.netlify.app/.netlify/functions/stk-push";
+
+
+/* =====================================================
    MESSAGE
 ===================================================== */
 
@@ -2344,7 +1741,6 @@ function showMessage(
         text;
 
 }
-
 
 
 /* =====================================================
@@ -2383,14 +1779,11 @@ async function getCurrentLandlord() {
 }
 
 
-
 /* =====================================================
    VERIFY LANDLORD
 ===================================================== */
 
-async function verifyLandlord(
-    user
-) {
+async function verifyLandlord(user) {
 
     const {
         data: profile,
@@ -2457,7 +1850,6 @@ async function verifyLandlord(
 }
 
 
-
 /* =====================================================
    EDIT MODE
 ===================================================== */
@@ -2488,7 +1880,6 @@ if (editMode) {
 }
 
 
-
 /* =====================================================
    PHOTO PREVIEW
 ===================================================== */
@@ -2497,73 +1888,83 @@ photoInput.addEventListener(
     "change",
     function() {
 
-        photoPreview.innerHTML =
-            "";
+        photoPreview.innerHTML = "";
 
-
-        photoCount.textContent =
-            "";
+        photoCount.textContent = "";
 
 
         const files =
-    Array.from(
-        photoInput.files || []
-    );
+            Array.from(
+                photoInput.files || []
+            );
 
 
-/* =====================================================
-   PHOTO UPLOAD SECURITY
-===================================================== */
+        const maxPhotos = 10;
 
-const maxPhotos = 10;
-const maxPhotoSize = 5 * 1024 * 1024; // 5 MB
+        const maxPhotoSize =
+            5 * 1024 * 1024;
 
 
-if (files.length > maxPhotos) {
+        if (
+            files.length >
+            maxPhotos
+        ) {
 
-    alert(
-        "You can upload a maximum of 10 property photos."
-    );
+            alert(
+                "You can upload a maximum of 10 property photos."
+            );
 
-    photoInput.value = "";
-    return;
+            photoInput.value = "";
 
-}
+            return;
 
-
-const allowedPhotoTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-];
+        }
 
 
-for (const file of files) {
-
-    if (!allowedPhotoTypes.includes(file.type)) {
-
-        alert(
-            "Invalid photo format. Please use JPG, PNG, or WebP."
-        );
-
-        photoInput.value = "";
-        return;
-
-    }
+        const allowedPhotoTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
 
 
-    if (file.size > maxPhotoSize) {
+        for (
+            const file of files
+        ) {
 
-        alert(
-            "One or more photos are too large. Maximum size is 5 MB per photo."
-        );
+            if (
+                !allowedPhotoTypes.includes(
+                    file.type
+                )
+            ) {
 
-        photoInput.value = "";
-        return;
+                alert(
+                    "Invalid photo format. Please use JPG, PNG, or WebP."
+                );
 
-    }
+                photoInput.value = "";
 
-}
+                return;
+
+            }
+
+
+            if (
+                file.size >
+                maxPhotoSize
+            ) {
+
+                alert(
+                    "One or more photos are too large. Maximum size is 5 MB per photo."
+                );
+
+                photoInput.value = "";
+
+                return;
+
+            }
+
+        }
 
 
         if (!files.length) {
@@ -2571,26 +1972,8 @@ for (const file of files) {
         }
 
 
-        let count =
-            0;
-
-
         files.forEach(
             function(file,index) {
-
-                if (
-                    !file.type.startsWith(
-                        "image/"
-                    )
-                ) {
-
-                    return;
-
-                }
-
-
-                count++;
-
 
                 const reader =
                     new FileReader();
@@ -2617,7 +2000,7 @@ for (const file of files) {
                             >
 
                             <span class="photo-number">
-                                ${count}
+                                ${index + 1}
                             </span>
 
                         `;
@@ -2639,16 +2022,15 @@ for (const file of files) {
 
 
         photoCount.textContent =
-            count +
+            files.length +
             (
-                count === 1
+                files.length === 1
                     ? " photo selected"
                     : " photos selected"
             );
 
     }
 );
-
 
 
 /* =====================================================
@@ -2664,29 +2046,32 @@ videoInput.addEventListener(
             videoInput.files[0];
 
 
+        videoPreview.style.display =
+            "none";
 
 
-            videoPreview.style.display =
-                "none";
+        videoPlayer.removeAttribute(
+            "src"
+        );
 
-            videoPlayer.removeAttribute(
-                "src"
-            );
 
-            videoFileInfo.textContent =
-                "";
+        videoFileInfo.textContent =
+            "";
 
+
+        selectedVideoFile =
+            null;
+
+
+        if (!file) {
             return;
-
         }
 
 
         const allowedTypes = [
-
             "video/mp4",
             "video/webm",
             "video/quicktime"
-
         ];
 
 
@@ -2705,9 +2090,6 @@ videoInput.addEventListener(
             videoInput.value =
                 "";
 
-
-            selectedVideoFile =
-                null;
 
             return;
 
@@ -2729,12 +2111,13 @@ videoInput.addEventListener(
                 "";
 
 
-            selectedVideoFile =
-                null;
-
             return;
 
         }
+
+
+        selectedVideoFile =
+            file;
 
 
         const url =
@@ -2760,7 +2143,6 @@ videoInput.addEventListener(
 
     }
 );
-
 
 
 /* =====================================================
@@ -2857,8 +2239,6 @@ async function loadPropertyForEdit() {
             "Available";
 
 
-        /* TRANSPORT */
-
         document.getElementById(
             "nearest_matatu_stage"
         ).value =
@@ -2882,8 +2262,6 @@ async function loadPropertyForEdit() {
         ).value =
             property.transport_notes || "";
 
-
-        /* AMENITIES */
 
         document.getElementById(
             "nearby_hospital"
@@ -2971,7 +2349,6 @@ async function loadPropertyForEdit() {
 }
 
 
-
 /* =====================================================
    EXISTING PHOTOS
 ===================================================== */
@@ -2992,8 +2369,7 @@ async function loadExistingPhotos() {
             .order(
                 "created_at",
                 {
-                    ascending:
-                        true
+                    ascending: true
                 }
             );
 
@@ -3006,6 +2382,7 @@ async function loadExistingPhotos() {
         );
 
         return;
+
     }
 
 
@@ -3058,7 +2435,6 @@ async function loadExistingPhotos() {
 }
 
 
-
 /* =====================================================
    UPLOAD PHOTOS
 ===================================================== */
@@ -3068,62 +2444,65 @@ async function uploadPhotos(
 ) {
 
     const files =
-    Array.from(
-        photoInput.files || []
-    );
+        Array.from(
+            photoInput.files || []
+        );
 
 
-/* =====================================================
-   SERVER-SIDE UPLOAD PROTECTION
-===================================================== */
+    const maxPhotos = 10;
 
-const maxPhotos = 10;
-const maxPhotoSize =
-    5 * 1024 * 1024; // 5 MB
+    const maxPhotoSize =
+        5 * 1024 * 1024;
 
-
-if (files.length > maxPhotos) {
-
-    throw new Error(
-        "Maximum of 10 property photos allowed."
-    );
-
-}
-
-
-const allowedPhotoTypes = [
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-];
-
-
-for (const file of files) {
 
     if (
-        !allowedPhotoTypes.includes(
-            file.type
-        )
+        files.length >
+        maxPhotos
     ) {
 
         throw new Error(
-            "Invalid photo format. Only JPG, PNG and WebP are allowed."
+            "Maximum of 10 property photos allowed."
         );
 
     }
 
 
-    if (
-        file.size > maxPhotoSize
+    const allowedPhotoTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+
+    for (
+        const file of files
     ) {
 
-        throw new Error(
-            "Photo is too large. Maximum size is 5 MB per photo."
-        );
+        if (
+            !allowedPhotoTypes.includes(
+                file.type
+            )
+        ) {
+
+            throw new Error(
+                "Invalid photo format. Only JPG, PNG and WebP are allowed."
+            );
+
+        }
+
+
+        if (
+            file.size >
+            maxPhotoSize
+        ) {
+
+            throw new Error(
+                "Photo is too large. Maximum size is 5 MB per photo."
+            );
+
+        }
 
     }
-
-}
 
 
     if (!files.length) {
@@ -3143,17 +2522,6 @@ for (const file of files) {
 
         const file =
             files[index];
-
-
-        if (
-            !file.type.startsWith(
-                "image/"
-            )
-        ) {
-
-            continue;
-
-        }
 
 
         showMessage(
@@ -3187,8 +2555,7 @@ for (const file of files) {
 
 
         const {
-            error:
-                uploadError
+            error: uploadError
         } =
             await supabaseClient
                 .storage
@@ -3217,8 +2584,7 @@ for (const file of files) {
 
 
         const {
-            data:
-                publicUrlData
+            data: publicUrlData
         } =
             supabaseClient
                 .storage
@@ -3243,8 +2609,7 @@ for (const file of files) {
 
 
         const {
-            error:
-                recordError
+            error: recordError
         } =
             await supabaseClient
                 .from(
@@ -3273,11 +2638,6 @@ for (const file of files) {
 }
 
 
-
-/* =====================================================
-   UPLOAD VIDEO
-===================================================== */
-
 /* =====================================================
    UPLOAD VIDEO
 ===================================================== */
@@ -3290,55 +2650,16 @@ async function uploadVideo(
         return null;
     }
 
-    /* =====================================================
-       VIDEO INPUT PROTECTION
-    ===================================================== */
 
     const maxVideoSize =
-        50 * 1024 * 1024; // 50 MB
+        50 * 1024 * 1024;
+
 
     const allowedVideoTypes = [
         "video/mp4",
         "video/webm",
         "video/quicktime"
     ];
-
-    if (
-        !allowedVideoTypes.includes(
-            selectedVideoFile.type
-        )
-    ) {
-
-        throw new Error(
-            "Invalid video format. Please upload MP4, WebM or MOV."
-        );
-
-    }
-
-    if (
-        selectedVideoFile.size >
-        maxVideoSize
-    ) {
-
-        throw new Error(
-            "Video is too large. Maximum allowed size is 50 MB."
-        );
-
-    }
-
-
-    /* =====================================================
-       VIDEO UPLOAD SECURITY
-    ===================================================== */
-
-    const allowedVideoTypes = [
-        "video/mp4",
-        "video/webm",
-        "video/quicktime"
-    ];
-
-    const maxVideoSize =
-        50 * 1024 * 1024; // 50 MB
 
 
     if (
@@ -3385,7 +2706,7 @@ async function uploadVideo(
         "-" +
         Math.random()
             .toString(36)
-            .substring(2, 10) +
+            .substring(2,10) +
         "." +
         extension;
 
@@ -3396,7 +2717,9 @@ async function uploadVideo(
     } =
         await supabaseClient
             .storage
-            .from("property-videos")
+            .from(
+                "property-videos"
+            )
             .upload(
                 filePath,
                 selectedVideoFile,
@@ -3423,18 +2746,17 @@ async function uploadVideo(
     } =
         supabaseClient
             .storage
-            .from("property-videos")
+            .from(
+                "property-videos"
+            )
             .getPublicUrl(
                 data.path
             );
 
 
-    return (
-        publicData.publicUrl
-    );
+    return publicData.publicUrl;
 
 }
-
 
 
 /* =====================================================
@@ -3491,7 +2813,6 @@ function askForMpesaPhone() {
     return phone;
 
 }
-
 
 
 /* =====================================================
@@ -3606,7 +2927,6 @@ async function startPayment(
 }
 
 
-
 /* =====================================================
    WAIT FOR PAYMENT
 ===================================================== */
@@ -3707,7 +3027,6 @@ async function waitForPayment(
     );
 
 }
-
 
 
 /* =====================================================
@@ -3920,60 +3239,76 @@ form.addEventListener(
                     .value
                     .trim();
 
-/* =================================================
-   NEARBY INPUT VALIDATION
-================================================= */
 
-const nearbyFields = [
-    {
-        value: nearbyHospital,
-        name: "Nearby hospital",
-        max: 150
-    },
-    {
-        value: nearbySchool,
-        name: "Nearby school",
-        max: 150
-    },
-    {
-        value: nearbySupermarket,
-        name: "Nearby supermarket",
-        max: 150
-    },
-    {
-        value: nearbyBankAtm,
-        name: "Nearby bank/ATM",
-        max: 150
-    },
-    {
-        value: nearbyPetrolStation,
-        name: "Nearby petrol station",
-        max: 150
-    },
-    {
-        value: nearbyRestaurant,
-        name: "Nearby restaurant",
-        max: 150
-    },
-    {
-        value: nearbyMarket,
-        name: "Nearby market",
-        max: 150
-    }
-];
+            /* =================================================
+               VALIDATION
+            ================================================= */
+
+            const nearbyFields = [
+
+                {
+                    value: nearbyHospital,
+                    name: "Nearby hospital",
+                    max: 150
+                },
+
+                {
+                    value: nearbySchool,
+                    name: "Nearby school",
+                    max: 150
+                },
+
+                {
+                    value: nearbySupermarket,
+                    name: "Nearby supermarket",
+                    max: 150
+                },
+
+                {
+                    value: nearbyBankAtm,
+                    name: "Nearby bank/ATM",
+                    max: 150
+                },
+
+                {
+                    value: nearbyPetrolStation,
+                    name: "Nearby petrol station",
+                    max: 150
+                },
+
+                {
+                    value: nearbyRestaurant,
+                    name: "Nearby restaurant",
+                    max: 150
+                },
+
+                {
+                    value: nearbyMarket,
+                    name: "Nearby market",
+                    max: 150
+                }
+
+            ];
 
 
-for (const field of nearbyFields) {
+            for (
+                const field of nearbyFields
+            ) {
 
-    if (field.value.length > field.max) {
+                if (
+                    field.value.length >
+                    field.max
+                ) {
 
-        throw new Error(
-            `${field.name} information is too long. Maximum ${field.max} characters.`
-        );
+                    throw new Error(
+                        `${field.name} information is too long. Maximum ${field.max} characters.`
+                    );
 
-    }
+                }
 
-}
+            }
+
+
             if (!title) {
 
                 throw new Error(
@@ -3993,41 +3328,41 @@ for (const field of nearbyFields) {
 
 
             if (
-    !Number.isFinite(rent) ||
-    rent < 0
-) {
+                !Number.isFinite(rent) ||
+                rent < 0
+            ) {
 
-    throw new Error(
-        "Please enter a valid monthly rent."
-    );
+                throw new Error(
+                    "Please enter a valid monthly rent."
+                );
 
-}
-
-
-if (
-    !Number.isInteger(bedrooms) ||
-    bedrooms < 0 ||
-    bedrooms > 50
-) {
-
-    throw new Error(
-        "Please enter a valid number of bedrooms."
-    );
-
-}
+            }
 
 
-if (
-    !Number.isInteger(bathrooms) ||
-    bathrooms < 0 ||
-    bathrooms > 50
-) {
+            if (
+                !Number.isInteger(bedrooms) ||
+                bedrooms < 0 ||
+                bedrooms > 50
+            ) {
 
-    throw new Error(
-        "Please enter a valid number of bathrooms."
-    );
+                throw new Error(
+                    "Please enter a valid number of bedrooms."
+                );
 
-}
+            }
+
+
+            if (
+                !Number.isInteger(bathrooms) ||
+                bathrooms < 0 ||
+                bathrooms > 50
+            ) {
+
+                throw new Error(
+                    "Please enter a valid number of bathrooms."
+                );
+
+            }
 
 
             /* =================================================
@@ -4097,7 +3432,7 @@ if (
 
 
             /* =================================================
-               EDIT
+               EDIT PROPERTY
             ================================================= */
 
             if (editMode) {
@@ -4121,8 +3456,7 @@ if (
 
 
                 const {
-                    error:
-                        updateError
+                    error: updateError
                 } =
                     await supabaseClient
                         .from(
@@ -4155,8 +3489,7 @@ if (
                 if (firstImageUrl) {
 
                     const {
-                        error:
-                            imageError
+                        error: imageError
                     } =
                         await supabaseClient
                             .from(
@@ -4223,8 +3556,7 @@ if (
 
             const {
                 data: property,
-                error:
-                    createError
+                error: createError
             } =
                 await supabaseClient
                     .from(
@@ -4340,8 +3672,7 @@ if (
 
 
             const {
-                error:
-                    publishError
+                error: publishError
             } =
                 await supabaseClient
                     .from(
@@ -4418,7 +3749,6 @@ if (
 );
 
 
-
 /* =====================================================
    LOGOUT
 ===================================================== */
@@ -4447,7 +3777,6 @@ async function logoutLandlord() {
         "login.html";
 
 }
-
 
 
 /* =====================================================
@@ -4524,7 +3853,6 @@ function formatFileSize(
 }
 
 
-
 /* =====================================================
    START
 ===================================================== */
@@ -4533,8 +3861,6 @@ loadPropertyForEdit();
 
 </script>
 
-
 </body>
 
 </html>
-```
