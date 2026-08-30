@@ -1,3 +1,7 @@
+// =====================================================
+// NICHOLINK 254 — M-PESA STK PUSH
+// =====================================================
+
 const PROPERTY_PUBLISHING_FEE = 250;
 const VIDEO_ADVERT_FEE = 50;
 const PHOTO_ADVERT_FEE = 25;
@@ -12,51 +16,592 @@ const SUPABASE_SERVICE_ROLE_KEY =
     process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 
-/* =====================================================
-   M-PESA ACCESS TOKEN
-===================================================== */
+// =====================================================
+// RATE LIMIT SETTINGS
+// =====================================================
 
-async function getAccessToken() {
+const USER_LIMIT = 5;
+const PHONE_LIMIT = 3;
+const IP_LIMIT = 5;
 
-    const credentials =
-        Buffer.from(
-            `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
-        ).toString("base64");
+const RATE_WINDOW_MINUTES = 10;
 
 
-    const response =
+// =====================================================
+// RESPONSE
+// =====================================================
+
+function response(statusCode, body) {
+
+    return {
+
+        statusCode,
+
+        headers: {
+
+            "Content-Type":
+                "application/json",
+
+            "Access-Control-Allow-Origin":
+                "https://nicholink254.netlify.app",
+
+            "Access-Control-Allow-Headers":
+                "Content-Type, Authorization, apikey",
+
+            "Access-Control-Allow-Methods":
+                "POST, OPTIONS"
+
+        },
+
+        body:
+            JSON.stringify(body)
+
+    };
+}
+
+
+// =====================================================
+// SUPABASE REQUEST
+// =====================================================
+
+async function supabaseRequest(
+    endpoint,
+    options = {}
+) {
+
+    const result =
         await fetch(
-            `${MPESA_BASE_URL}/oauth/v1/generate?grant_type=client_credentials`,
+            `${SUPABASE_URL}/rest/v1/${endpoint}`,
             {
+
+                ...options,
+
                 headers: {
-                    Authorization:
-                        `Basic ${credentials}`
+
+                    "Content-Type":
+                        "application/json",
+
+                    "apikey":
+                        SUPABASE_SERVICE_ROLE_KEY,
+
+                    "Authorization":
+                        `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+
+                    ...(options.headers || {})
+
                 }
+
             }
         );
 
 
-    if (!response.ok) {
+    const text =
+        await result.text();
+
+
+    let data = null;
+
+
+    try {
+
+        data =
+            text
+                ? JSON.parse(text)
+                : null;
+
+    } catch {
+
+        data = text;
+
+    }
+
+
+    if (!result.ok) {
+
+        console.error(
+            "Supabase error:",
+            data
+        );
 
         throw new Error(
-            "Failed to obtain M-Pesa access token"
+            "Supabase request failed."
         );
 
     }
 
 
-    const data =
-        await response.json();
-
-
-    return data.access_token;
-
+    return data;
 }
 
 
-/* =====================================================
-   TIMESTAMP
-===================================================== */
+// =====================================================
+// GET CLIENT IP
+// =====================================================
+
+function getClientIp(event) {
+
+    const headers =
+        event.headers || {};
+
+    return (
+
+        headers["x-nf-client-connection-ip"] ||
+
+        headers["x-forwarded-for"]
+            ?.split(",")[0]
+            ?.trim() ||
+
+        headers["client-ip"] ||
+
+        "unknown"
+
+    );
+}
+
+
+// =====================================================
+// AUTHENTICATED USER
+// =====================================================
+
+async function getAuthenticatedUser(event) {
+
+    const authorization =
+        event.headers?.authorization ||
+        event.headers?.Authorization;
+
+
+    if (
+        !authorization ||
+        !authorization.startsWith("Bearer ")
+    ) {
+
+        return null;
+    }
+
+
+    const accessToken =
+        authorization.substring(7);
+
+
+    const result =
+        await fetch(
+            `${SUPABASE_URL}/auth/v1/user`,
+            {
+
+                method:
+                    "GET",
+
+                headers: {
+
+                    "apikey":
+                        SUPABASE_SERVICE_ROLE_KEY,
+
+                    "Authorization":
+                        `Bearer ${accessToken}`
+
+                }
+
+            }
+        );
+
+
+    if (!result.ok) {
+
+        return null;
+    }
+
+
+    return await result.json();
+}
+
+
+// =====================================================
+// NORMALIZE PHONE
+// =====================================================
+
+function normalizePhone(phone) {
+
+    let number =
+        String(phone || "")
+            .replace(/\D/g, "");
+
+
+    if (
+        number.startsWith("07") ||
+        number.startsWith("01")
+    ) {
+
+        number =
+            "254" +
+            number.substring(1);
+
+    }
+
+
+    return number;
+}
+
+
+// =====================================================
+// VALIDATE PHONE
+// =====================================================
+
+function validatePhone(phone) {
+
+    return /^2547\d{8}$/.test(phone);
+}
+
+
+// =====================================================
+// RATE LIMIT CHECK
+// =====================================================
+
+async function checkRateLimit({
+    userId,
+    phoneNumber,
+    ipAddress
+}) {
+
+    const windowStart =
+        new Date(
+            Date.now() -
+            RATE_WINDOW_MINUTES *
+            60 *
+            1000
+        ).toISOString();
+
+
+    // -------------------------------------------------
+    // USER LIMIT
+    // -------------------------------------------------
+
+    if (userId) {
+
+        const requests =
+            await supabaseRequest(
+
+                `mpesa_rate_limits?user_id=eq.${encodeURIComponent(
+                    userId
+                )}&request_type=eq.stk_push&created_at=gte.${encodeURIComponent(
+                    windowStart
+                )}&select=id`
+
+            );
+
+
+        if (
+            Array.isArray(requests) &&
+            requests.length >= USER_LIMIT
+        ) {
+
+            return {
+
+                allowed: false,
+
+                message:
+                    "Too many payment requests from this account. Please wait a few minutes."
+
+            };
+        }
+    }
+
+
+    // -------------------------------------------------
+    // PHONE LIMIT
+    // -------------------------------------------------
+
+    if (phoneNumber) {
+
+        const requests =
+            await supabaseRequest(
+
+                `mpesa_rate_limits?phone_number=eq.${encodeURIComponent(
+                    phoneNumber
+                )}&request_type=eq.stk_push&created_at=gte.${encodeURIComponent(
+                    windowStart
+                )}&select=id`
+
+            );
+
+
+        if (
+            Array.isArray(requests) &&
+            requests.length >= PHONE_LIMIT
+        ) {
+
+            return {
+
+                allowed: false,
+
+                message:
+                    "Too many M-Pesa requests for this phone number. Please wait a few minutes."
+
+            };
+        }
+    }
+
+
+    // -------------------------------------------------
+    // IP LIMIT
+    // -------------------------------------------------
+
+    if (
+        ipAddress &&
+        ipAddress !== "unknown"
+    ) {
+
+        const requests =
+            await supabaseRequest(
+
+                `mpesa_rate_limits?ip_address=eq.${encodeURIComponent(
+                    ipAddress
+                )}&request_type=eq.stk_push&created_at=gte.${encodeURIComponent(
+                    windowStart
+                )}&select=id`
+
+            );
+
+
+        if (
+            Array.isArray(requests) &&
+            requests.length >= IP_LIMIT
+        ) {
+
+            return {
+
+                allowed: false,
+
+                message:
+                    "Too many payment requests from this connection. Please wait a few minutes."
+
+            };
+        }
+    }
+
+
+    return {
+
+        allowed: true
+
+    };
+}
+
+
+// =====================================================
+// RECORD RATE LIMIT REQUEST
+// =====================================================
+
+async function recordRateLimit({
+    userId,
+    phoneNumber,
+    ipAddress
+}) {
+
+    await supabaseRequest(
+
+        "mpesa_rate_limits",
+
+        {
+
+            method:
+                "POST",
+
+            headers: {
+
+                "Prefer":
+                    "return=minimal"
+
+            },
+
+            body:
+                JSON.stringify({
+
+                    user_id:
+                        userId || null,
+
+                    phone_number:
+                        phoneNumber || null,
+
+                    ip_address:
+                        ipAddress || null,
+
+                    request_type:
+                        "stk_push"
+
+                })
+
+        }
+
+    );
+}
+
+
+// =====================================================
+// GET PAYMENT DETAILS
+// =====================================================
+
+function getPaymentDetails(request) {
+
+    const advertType =
+        request.advert_type || null;
+
+    const propertyId =
+        request.property_id || null;
+
+
+    if (
+        advertType === "video"
+    ) {
+
+        return {
+
+            amount:
+                VIDEO_ADVERT_FEE,
+
+            paymentType:
+                "video_advert",
+
+            description:
+                "NichoLink Video Advert",
+
+            propertyId
+
+        };
+    }
+
+
+    if (
+        advertType === "photo"
+    ) {
+
+        return {
+
+            amount:
+                PHOTO_ADVERT_FEE,
+
+            paymentType:
+                "photo_advert",
+
+            description:
+                "NichoLink Photo Advert",
+
+            propertyId
+
+        };
+    }
+
+
+    return {
+
+        amount:
+            PROPERTY_PUBLISHING_FEE,
+
+        paymentType:
+            "property_listing",
+
+        description:
+            "NichoLink Property Publishing",
+
+        propertyId
+
+    };
+}
+
+
+// =====================================================
+// VERIFY PROPERTY OWNERSHIP
+// =====================================================
+
+async function verifyPropertyOwnership(
+    propertyId,
+    userId
+) {
+
+    if (!propertyId) {
+
+        return false;
+    }
+
+
+    const properties =
+        await supabaseRequest(
+
+            `properties?id=eq.${encodeURIComponent(
+                propertyId
+            )}&landlord_id=eq.${encodeURIComponent(
+                userId
+            )}&select=id,landlord_id,is_published&limit=1`
+
+        );
+
+
+    return (
+        Array.isArray(properties) &&
+        properties.length > 0
+    );
+}
+
+
+// =====================================================
+// M-PESA ACCESS TOKEN
+// =====================================================
+
+async function getAccessToken() {
+
+    const credentials =
+        Buffer.from(
+
+            `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
+
+        ).toString("base64");
+
+
+    const result =
+        await fetch(
+
+            `${MPESA_BASE_URL}/oauth/v1/generate?grant_type=client_credentials`,
+
+            {
+
+                headers: {
+
+                    Authorization:
+                        `Basic ${credentials}`
+
+                }
+
+            }
+
+        );
+
+
+    if (!result.ok) {
+
+        throw new Error(
+            "Failed to obtain M-Pesa access token."
+        );
+    }
+
+
+    const data =
+        await result.json();
+
+
+    if (!data.access_token) {
+
+        throw new Error(
+            "M-Pesa access token was not returned."
+        );
+    }
+
+
+    return data.access_token;
+}
+
+
+// =====================================================
+// TIMESTAMP
+// =====================================================
 
 function getTimestamp() {
 
@@ -89,206 +634,156 @@ function getTimestamp() {
         ).padStart(2, "0")
 
     );
-
 }
 
 
-/* =====================================================
-   PHONE NORMALIZATION
-===================================================== */
+// =====================================================
+// START STK PUSH
+// =====================================================
 
-function normalizePhone(phone) {
+async function startStkPush({
 
-    let number =
-        String(phone)
-            .replace(/\D/g, "");
+    accessToken,
+    phoneNumber,
+    amount,
+    description
 
+}) {
 
-    if (
-        number.startsWith("07") ||
-        number.startsWith("01")
-    ) {
-
-        number =
-            "254" +
-            number.substring(1);
-
-    }
+    const timestamp =
+        getTimestamp();
 
 
-    if (
-        number.startsWith("+254")
-    ) {
-
-        number =
-            number.substring(1);
-
-    }
+    const shortcode =
+        process.env.MPESA_SHORTCODE;
 
 
-    return number;
+    const passkey =
+        process.env.MPESA_PASSKEY;
 
-}
+
+    const password =
+        Buffer.from(
+
+            `${shortcode}${passkey}${timestamp}`
+
+        ).toString("base64");
 
 
-/* =====================================================
-   SUPABASE REQUEST
-===================================================== */
-
-async function supabaseRequest(
-    endpoint,
-    options = {}
-) {
-
-    const response =
+    const result =
         await fetch(
-            `${SUPABASE_URL}/rest/v1/${endpoint}`,
+
+            `${MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest`,
+
             {
 
-                ...options,
+                method:
+                    "POST",
 
                 headers: {
 
+                    Authorization:
+                        `Bearer ${accessToken}`,
+
                     "Content-Type":
-                        "application/json",
+                        "application/json"
 
-                    "apikey":
-                        SUPABASE_SERVICE_ROLE_KEY,
+                },
 
-                    "Authorization":
-                        `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+                body:
+                    JSON.stringify({
 
-                    ...(options.headers || {})
+                        BusinessShortCode:
+                            shortcode,
 
-                }
+                        Password:
+                            password,
+
+                        Timestamp:
+                            timestamp,
+
+                        TransactionType:
+                            "CustomerPayBillOnline",
+
+                        Amount:
+                            amount,
+
+                        PartyA:
+                            phoneNumber,
+
+                        PartyB:
+                            shortcode,
+
+                        PhoneNumber:
+                            phoneNumber,
+
+                        CallBackURL:
+                            process.env.MPESA_CALLBACK_URL,
+
+                        AccountReference:
+                            "NichoLink254",
+
+                        TransactionDesc:
+                            description
+
+                    })
 
             }
+
         );
 
 
-    const text =
-        await response.text();
+    const data =
+        await result.json();
 
 
-    let data = null;
-
-
-    try {
-
-        data =
-            text
-                ? JSON.parse(text)
-                : null;
-
-    } catch {
-
-        data =
-            text;
-
-    }
-
-
-    if (!response.ok) {
+    if (!result.ok) {
 
         console.error(
-            "Supabase error:",
+            "M-Pesa STK error:",
             data
         );
 
         throw new Error(
-            "Supabase request failed"
-        );
 
+            data.errorMessage ||
+
+            data.ResponseDescription ||
+
+            "M-Pesa payment request failed."
+
+        );
+    }
+
+
+    if (
+        data.ResponseCode !== "0"
+    ) {
+
+        throw new Error(
+
+            data.ResponseDescription ||
+
+            "M-Pesa payment request was rejected."
+
+        );
     }
 
 
     return data;
-
 }
 
 
-/* =====================================================
-   DETERMINE PAYMENT
-===================================================== */
-
-function getPaymentDetails(request) {
-
-    const advertType =
-        request.advert_type || null;
-
-
-    const propertyId =
-        request.property_id || null;
-
-
-    let amount;
-
-    let paymentType;
-
-    let description;
-
-
-    if (
-        advertType === "video"
-    ) {
-
-        amount =
-            VIDEO_ADVERT_FEE;
-
-        paymentType =
-            "video_advert";
-
-        description =
-            "NichoLink Video Advert";
-
-    }
-
-    else if (
-        advertType === "photo"
-    ) {
-
-        amount =
-            PHOTO_ADVERT_FEE;
-
-        paymentType =
-            "photo_advert";
-
-        description =
-            "NichoLink Photo Advert";
-
-    }
-
-    else {
-
-        amount =
-            PROPERTY_PUBLISHING_FEE;
-
-        paymentType = "property_listing";
-
-        description =
-            "NichoLink Property Publishing";
-
-    }
-
-
-    return {
-        amount,
-        paymentType,
-        description,
-        propertyId
-    };
-
-}
-
-
-/* =====================================================
-   CREATE PAYMENT RECORD
-===================================================== */
+// =====================================================
+// CREATE PAYMENT RECORD
+// =====================================================
 
 async function createPaymentRecord(data) {
 
     return await supabaseRequest(
+
         "payments",
+
         {
 
             method:
@@ -305,7 +800,7 @@ async function createPaymentRecord(data) {
                 JSON.stringify({
 
                     user_id:
-                        data.userId || null,
+                        data.userId,
 
                     payment_type:
                         data.paymentType,
@@ -331,294 +826,333 @@ async function createPaymentRecord(data) {
                 })
 
         }
-    );
 
+    );
 }
 
 
-/* =====================================================
-   UPDATE PAYMENT AFTER CALLBACK
-===================================================== */
+// =====================================================
+// MAIN HANDLER
+// =====================================================
 
-async function updatePaymentFromCallback(callback) {
+exports.handler =
+async function(event) {
 
-    const checkoutRequestId =
-        callback.CheckoutRequestID;
+    try {
 
-    const resultCode =
-        callback.ResultCode;
+        // -------------------------------------------------
+        // CORS PREFLIGHT
+        // -------------------------------------------------
 
-    const resultDescription =
-        callback.ResultDesc;
+        if (
+            event.httpMethod ===
+            "OPTIONS"
+        ) {
 
-    let receiptNumber = null;
-    let transactionDate = null;
-
-
-    /* =================================================
-       READ CALLBACK METADATA
-    ================================================= */
-
-    if (
-        Array.isArray(
-            callback.CallbackMetadata?.Item
-        )
-    ) {
-
-        const items =
-            callback.CallbackMetadata.Item;
+            return response(
+                204,
+                {}
+            );
+        }
 
 
-        const receiptItem =
-            items.find(
-                item =>
-                    item.Name ===
-                    "MpesaReceiptNumber"
+        // -------------------------------------------------
+        // ONLY POST
+        // -------------------------------------------------
+
+        if (
+            event.httpMethod !==
+            "POST"
+        ) {
+
+            return response(
+                405,
+                {
+                    success: false,
+                    message:
+                        "Method not allowed."
+                }
+            );
+        }
+
+
+        // -------------------------------------------------
+        // AUTHENTICATION
+        // -------------------------------------------------
+
+        const user =
+            await getAuthenticatedUser(event);
+
+
+        if (!user || !user.id) {
+
+            return response(
+                401,
+                {
+                    success: false,
+                    message:
+                        "Authentication required."
+                }
+            );
+        }
+
+
+        const userId =
+            user.id;
+
+
+        // -------------------------------------------------
+        // PARSE REQUEST
+        // -------------------------------------------------
+
+        let request;
+
+        try {
+
+            request =
+                JSON.parse(
+                    event.body || "{}"
+                );
+
+        } catch {
+
+            return response(
+                400,
+                {
+                    success: false,
+                    message:
+                        "Invalid request."
+                }
+            );
+        }
+
+
+        // -------------------------------------------------
+        // PHONE
+        // -------------------------------------------------
+
+        const phoneNumber =
+            normalizePhone(
+                request.phone
             );
 
 
-        const dateItem =
-            items.find(
-                item =>
-                    item.Name ===
-                    "TransactionDate"
+        if (
+            !validatePhone(
+                phoneNumber
+            )
+        ) {
+
+            return response(
+                400,
+                {
+                    success: false,
+                    message:
+                        "Enter a valid Kenyan Safaricom phone number."
+                }
+            );
+        }
+
+
+        // -------------------------------------------------
+        // PAYMENT DETAILS
+        // -------------------------------------------------
+
+        const payment =
+            getPaymentDetails(
+                request
             );
 
 
-        if (receiptItem) {
+        // -------------------------------------------------
+        // PROPERTY OWNERSHIP
+        // -------------------------------------------------
 
-            receiptNumber =
-                receiptItem.Value;
+        if (
+            payment.paymentType ===
+                "property_listing" ||
+
+            payment.paymentType ===
+                "video_advert" ||
+
+            payment.paymentType ===
+                "photo_advert"
+        ) {
+
+            if (
+                !payment.propertyId
+            ) {
+
+                return response(
+                    400,
+                    {
+                        success: false,
+                        message:
+                            "Property ID is required."
+                    }
+                );
+            }
+
+
+            const ownsProperty =
+                await verifyPropertyOwnership(
+                    payment.propertyId,
+                    userId
+                );
+
+
+            if (!ownsProperty) {
+
+                return response(
+                    403,
+                    {
+                        success: false,
+                        message:
+                            "You are not authorized to make a payment for this property."
+                    }
+                );
+            }
 
         }
 
 
-        if (dateItem) {
+        // -------------------------------------------------
+        // RATE LIMIT
+        // -------------------------------------------------
 
-            transactionDate =
-                dateItem.Value;
+        const ipAddress =
+            getClientIp(event);
 
+
+        const rateLimit =
+            await checkRateLimit({
+
+                userId,
+
+                phoneNumber,
+
+                ipAddress
+
+            });
+
+
+        if (!rateLimit.allowed) {
+
+            return response(
+                429,
+                {
+                    success: false,
+                    message:
+                        rateLimit.message
+                }
+            );
         }
 
-    }
+
+        // Record only after authorization
+        // and rate-limit validation.
+
+        await recordRateLimit({
+
+            userId,
+
+            phoneNumber,
+
+            ipAddress
+
+        });
 
 
-    /* =================================================
-       DETERMINE PAYMENT STATUS
-    ================================================= */
+        // -------------------------------------------------
+        // M-PESA
+        // -------------------------------------------------
 
-    const successful =
-        Number(resultCode) === 0;
-
-
-    const status =
-        successful
-            ? "success"
-            : "failed";
+        const accessToken =
+            await getAccessToken();
 
 
-    /* =================================================
-       FIND PAYMENT RECORD
-    ================================================= */
+        const stk =
+            await startStkPush({
 
-    const payments =
-        await supabaseRequest(
-            `payments?checkout_request_id=eq.${encodeURIComponent(
-                checkoutRequestId
-            )}&select=*`,
+                accessToken,
+
+                phoneNumber,
+
+                amount:
+                    payment.amount,
+
+                description:
+                    payment.description
+
+            });
+
+
+        // -------------------------------------------------
+        // SAVE PAYMENT
+        // -------------------------------------------------
+
+        await createPaymentRecord({
+
+            userId,
+
+            paymentType:
+                payment.paymentType,
+
+            amount:
+                payment.amount,
+
+            phoneNumber,
+
+            merchantRequestId:
+                stk.MerchantRequestID,
+
+            checkoutRequestId:
+                stk.CheckoutRequestID,
+
+            propertyId:
+                payment.propertyId
+
+        });
+
+
+        // -------------------------------------------------
+        // SUCCESS RESPONSE
+        // -------------------------------------------------
+
+        return response(
+            200,
             {
-                method:
-                    "GET"
+
+                success: true,
+
+                message:
+                    "M-Pesa payment request sent.",
+
+                checkout_request_id:
+                    stk.CheckoutRequestID,
+
+                merchant_request_id:
+                    stk.MerchantRequestID
+
             }
         );
 
 
-    const payment =
-        Array.isArray(payments) &&
-        payments.length > 0
-            ? payments[0]
-            : null;
-
-
-    if (!payment) {
+    } catch (error) {
 
         console.error(
-            "Payment record not found:",
-            checkoutRequestId
+            "STK Push error:",
+            error
         );
 
-        return;
 
-    }
-
-
-    /* =================================================
-       UPDATE PAYMENT
-    ================================================= */
-
-    await supabaseRequest(
-
-        `payments?checkout_request_id=eq.${encodeURIComponent(
-            checkoutRequestId
-        )}`,
-
-        {
-
-            method:
-                "PATCH",
-
-            headers: {
-
-                "Prefer":
-                    "return=minimal"
-
-            },
-
-            body:
-                JSON.stringify({
-
-                    mpesa_receipt_number:
-                        receiptNumber
-                            ? String(receiptNumber)
-                            : null,
-
-                    transaction_date:
-                        transactionDate
-                            ? String(transactionDate)
-                            : null,
-
-                    result_code:
-                        Number(resultCode),
-
-                    result_description:
-                        resultDescription,
-
-                    status:
-                        status,
-
-                    updated_at:
-                        new Date().toISOString()
-
-                })
-
-        }
-
-    );
-
-
-    console.log(
-        "Payment updated:",
-        checkoutRequestId,
-        status
-    );
-
-
-    /* =================================================
-       STOP IF PAYMENT FAILED
-    ================================================= */
-
-    if (!successful) {
-
-        console.log(
-            "Payment failed. Nothing will be published."
-        );
-
-        return;
-
-    }
-
-
-    /* =================================================
-       PROPERTY PAYMENT
-    ================================================= */
-
-    if (
-        payment.payment_type ===
-        "property_listing"
-    ) {
-
-        const propertyId =
-            payment.property_id;
-
-
-        if (!propertyId) {
-
-            console.error(
-                "Successful property payment has no property_id."
-            );
-
-            return;
-
-        }
-
-
-        /* =============================================
-           PUBLISH PROPERTY
-        ============================================= */
-
-        await supabaseRequest(
-
-            `properties?id=eq.${encodeURIComponent(
-                propertyId
-            )}`,
-
+        return response(
+            500,
             {
-
-                method:
-                    "PATCH",
-
-                headers: {
-
-                    "Prefer":
-                        "return=minimal"
-
-                },
-
-                body:
-                    JSON.stringify({
-
-                        is_published:
-                            true,
-
-                        updated_at:
-                            new Date().toISOString()
-
-                    })
-
+                success: false,
+                message:
+                    "Unable to start M-Pesa payment. Please try again."
             }
-
         );
-
-
-        console.log(
-            "Property published after successful payment:",
-            propertyId
-        );
-
     }
-
-
-    /* =================================================
-       VIDEO / PHOTO ADVERT
-    ================================================= */
-
-    if (
-        payment.payment_type ===
-        "video_advert" ||
-        payment.payment_type ===
-        "photo_advert"
-    ) {
-
-        console.log(
-            "Advert payment confirmed:",
-            payment.payment_type
-        );
-
-        /*
-           Advert publication will be connected
-           when the adverts tables are finalized.
-        */
-
-    }
-
-}
+};

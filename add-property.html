@@ -1553,7 +1553,6 @@
 
 <footer>
 
-```
 <div class="footer-content">
 
     <div>
@@ -1603,7 +1602,7 @@
         </p>
 
         <p>
-            💬 WhatsApp: 0795629432
+            💬 WhatsApp: 0795629436
         </p>
 
         <p>
@@ -2824,6 +2823,47 @@ async function startPayment(
     propertyId
 ) {
 
+    const cooldownKey =
+        "nicholink_mpesa_cooldown";
+
+    const cooldownSeconds =
+        120;
+
+    const lastRequest =
+        Number(
+            sessionStorage.getItem(
+                cooldownKey
+            ) || 0
+        );
+
+
+    const now =
+        Date.now();
+
+
+    const elapsed =
+        Math.floor(
+            (now - lastRequest) / 1000
+        );
+
+
+    if (
+        lastRequest &&
+        elapsed < cooldownSeconds
+    ) {
+
+        const remaining =
+            cooldownSeconds -
+            elapsed;
+
+
+        throw new Error(
+            `Please wait ${remaining} seconds before requesting another M-Pesa payment.`
+        );
+
+    }
+
+
     showMessage(
         "Sending M-Pesa payment request...",
         "info"
@@ -2855,74 +2895,147 @@ async function startPayment(
     }
 
 
-    const response =
-        await fetch(
-            MPESA_FUNCTION_URL,
-            {
+    /*
+       Start browser cooldown BEFORE
+       sending the request.
+    */
 
-                method:
-                    "POST",
-
-                headers: {
-
-                    "Authorization":
-                        "Bearer " +
-                        session.access_token,
-
-                    "apikey":
-                        session.access_token,
-
-                    "Content-Type":
-                        "application/json"
-
-                },
-
-                body:
-                    JSON.stringify({
-
-                        phone:
-                            phone,
-
-                        payment_type:
-                            "property_listing",
-
-                        property_id:
-                            propertyId
-
-                    })
-
-            }
-        );
+    sessionStorage.setItem(
+        cooldownKey,
+        String(Date.now())
+    );
 
 
-    const data =
-        await response.json();
+    try {
+
+        const response =
+            await fetch(
+                MPESA_FUNCTION_URL,
+                {
+
+                    method:
+                        "POST",
+
+                    headers: {
+
+    "Authorization":
+        "Bearer " +
+        session.access_token,
+
+    "Content-Type":
+        "application/json"
+
+},
+
+                    body:
+                        JSON.stringify({
+
+                            phone:
+                                phone,
+
+                            payment_type:
+                                "property_listing",
+
+                            property_id:
+                                propertyId
+
+                        })
+
+                }
+            );
 
 
-    if (!response.ok) {
+        let data;
 
-        throw new Error(
-            data.error ||
-            "Unable to start payment."
-        );
+
+        try {
+
+            data =
+                await response.json();
+
+        }
+
+        catch {
+
+            data = {};
+
+        }
+
+
+        if (
+            response.status ===
+            429
+        ) {
+
+            throw new Error(
+
+                data.error ||
+
+                "Too many payment requests. Please wait before trying again."
+
+            );
+
+        }
+
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                data.error ||
+
+                "Unable to start payment."
+
+            );
+
+        }
+
+
+        if (
+            !data.success ||
+            !data.payment_id
+        ) {
+
+            throw new Error(
+
+                data.error ||
+
+                "Payment could not be started."
+
+            );
+
+        }
+
+
+        return data;
 
     }
 
 
-    if (
-        !data.success ||
-        !data.payment_id
-    ) {
+    catch (error) {
 
-        throw new Error(
-            data.error ||
-            "Payment could not be started."
-        );
+        /*
+           If the request never reached the server,
+           allow the user to try again instead of
+           unnecessarily locking the browser.
+        */
+
+        if (
+            !error.message.includes(
+                "Too many"
+            )
+        ) {
+
+            sessionStorage.removeItem(
+                cooldownKey
+            );
+
+        }
+
+
+        throw error;
 
     }
-
-
-    return data;
 
 }
 
