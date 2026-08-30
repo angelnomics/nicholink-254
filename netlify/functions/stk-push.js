@@ -1,210 +1,698 @@
+```js
+// =====================================================
+// M-PESA STK PUSH
+// RATE LIMITED + INPUT PROTECTION + PAYMENT RECORD
+// =====================================================
 
 const PUBLISHING_FEE = 250;
-const MPESA_BASE_URL = "https://sandbox.safaricom.co.ke";
 
-async function getAccessToken() {
-    const credentials = Buffer.from(
-        `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
-    ).toString("base64");
+const MPESA_BASE_URL =
+    "https://sandbox.safaricom.co.ke";
 
-    const response = await fetch(
-        `${MPESA_BASE_URL}/oauth/v1/generate?grant_type=client_credentials`,
-        {
-            headers: {
-                Authorization: `Basic ${credentials}`
-            }
-        }
-    );
+const SUPABASE_URL =
+    process.env.SUPABASE_URL;
 
-    if (!response.ok) {
-        throw new Error("Failed to obtain M-Pesa access token");
+const SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+
+// =====================================================
+// RATE LIMITING
+// =====================================================
+
+const requests = new Map();
+
+const WINDOW_MS = 10 * 60 * 1000;
+const MAX_REQUESTS = 5;
+
+
+function isRateLimited(ip) {
+
+    const now = Date.now();
+
+    const record = requests.get(ip);
+
+    if (
+        !record ||
+        now - record.start > WINDOW_MS
+    ) {
+
+        requests.set(ip, {
+            count: 1,
+            start: now
+        });
+
+        return false;
     }
 
-    const data = await response.json();
+    record.count++;
+
+    return record.count > MAX_REQUESTS;
+}
+
+
+// =====================================================
+// SUPABASE REQUEST
+// =====================================================
+
+async function supabaseRequest(
+    endpoint,
+    options = {}
+) {
+
+    if (
+        !SUPABASE_URL ||
+        !SUPABASE_SERVICE_ROLE_KEY
+    ) {
+
+        throw new Error(
+            "Supabase environment variables are missing"
+        );
+    }
+
+
+    const response =
+        await fetch(
+            `${SUPABASE_URL}/rest/v1/${endpoint}`,
+            {
+
+                ...options,
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json",
+
+                    "apikey":
+                        SUPABASE_SERVICE_ROLE_KEY,
+
+                    "Authorization":
+                        `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`,
+
+                    ...(options.headers || {})
+
+                }
+
+            }
+        );
+
+
+    const text =
+        await response.text();
+
+    let data = null;
+
+
+    try {
+
+        data =
+            text
+                ? JSON.parse(text)
+                : null;
+
+    } catch {
+
+        data = text;
+
+    }
+
+
+    if (!response.ok) {
+
+        console.error(
+            "Supabase error:",
+            data
+        );
+
+        throw new Error(
+            "Supabase request failed"
+        );
+    }
+
+
+    return data;
+}
+
+
+// =====================================================
+// CREATE PAYMENT RECORD
+// =====================================================
+
+async function createPaymentRecord(data) {
+
+    return await supabaseRequest(
+        "payments",
+        {
+
+            method: "POST",
+
+            headers: {
+
+                "Prefer":
+                    "return=representation"
+
+            },
+
+            body:
+                JSON.stringify({
+
+                    payment_type:
+                        "property_listing",
+
+                    amount:
+                        PUBLISHING_FEE,
+
+                    phone_number:
+                        data.phoneNumber,
+
+                    merchant_request_id:
+                        data.merchantRequestId,
+
+                    checkout_request_id:
+                        data.checkoutRequestId,
+
+                    status:
+                        "pending",
+
+                    property_id:
+                        data.propertyId
+
+                })
+
+        }
+    );
+}
+
+
+// =====================================================
+// M-PESA ACCESS TOKEN
+// =====================================================
+
+async function getAccessToken() {
+
+    const credentials =
+        Buffer.from(
+            `${process.env.MPESA_CONSUMER_KEY}:${process.env.MPESA_CONSUMER_SECRET}`
+        ).toString("base64");
+
+
+    const response =
+        await fetch(
+            `${MPESA_BASE_URL}/oauth/v1/generate?grant_type=client_credentials`,
+            {
+
+                headers: {
+
+                    Authorization:
+                        `Basic ${credentials}`
+
+                }
+
+            }
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            "Failed to obtain M-Pesa access token"
+        );
+    }
+
+
+    const data =
+        await response.json();
+
 
     return data.access_token;
 }
 
+
+// =====================================================
+// TIMESTAMP
+// =====================================================
+
 function getTimestamp() {
+
     const now = new Date();
 
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
+    return (
+        now.getFullYear().toString() +
 
-    return `${year}${month}${day}${hours}${minutes}${seconds}`;
+        String(
+            now.getMonth() + 1
+        ).padStart(2, "0") +
+
+        String(
+            now.getDate()
+        ).padStart(2, "0") +
+
+        String(
+            now.getHours()
+        ).padStart(2, "0") +
+
+        String(
+            now.getMinutes()
+        ).padStart(2, "0") +
+
+        String(
+            now.getSeconds()
+        ).padStart(2, "0")
+    );
 }
 
-function normalizePhone(phone) {
-    let number = String(phone).replace(/\D/g, "");
 
-    if (number.startsWith("07") || number.startsWith("01")) {
-        number = "254" + number.substring(1);
+// =====================================================
+// PHONE NORMALIZATION
+// =====================================================
+
+function normalizePhone(phone) {
+
+    let number =
+        String(phone || "")
+            .replace(/\D/g, "");
+
+
+    if (
+        number.startsWith("07") ||
+        number.startsWith("01")
+    ) {
+
+        number =
+            "254" +
+            number.substring(1);
     }
+
 
     return number;
 }
 
-exports.handler = async (event) => {
-    try {
-        /*
-         * M-Pesa callback
-         */
-        if (event.httpMethod === "POST") {
-            const callback = JSON.parse(event.body || "{}");
 
-            console.log(
-                "M-Pesa callback:",
-                JSON.stringify(callback)
+// =====================================================
+// MAIN FUNCTION
+// =====================================================
+
+exports.handler = async (event) => {
+
+    try {
+
+        // -------------------------------------------------
+        // METHOD CHECK
+        // -------------------------------------------------
+
+        if (event.httpMethod !== "GET") {
+
+            return {
+
+                statusCode: 405,
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    success: false,
+
+                    message:
+                        "Method not allowed"
+
+                })
+
+            };
+        }
+
+
+        // -------------------------------------------------
+        // CLIENT IP
+        // -------------------------------------------------
+
+        const ip =
+            event.headers?.["x-forwarded-for"] ||
+            event.headers?.["X-Forwarded-For"] ||
+            event.requestContext?.http?.sourceIp ||
+            "unknown";
+
+
+        // -------------------------------------------------
+        // RATE LIMIT
+        // -------------------------------------------------
+
+        if (isRateLimited(ip)) {
+
+            console.warn(
+                "STK Push rate limit exceeded:",
+                ip
             );
 
-            return {
-                statusCode: 200,
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    ResultCode: 0,
-                    ResultDesc: "Accepted"
-                })
-            };
-        }
 
-        /*
-         * STK Push request
-         */
-        if (event.httpMethod !== "GET") {
             return {
-                statusCode: 405,
+
+                statusCode: 429,
+
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
+
                 body: JSON.stringify({
+
                     success: false,
-                    message: "Method not allowed"
+
+                    message:
+                        "Too many payment attempts. Please wait 10 minutes and try again."
+
                 })
+
             };
         }
 
-        const phone = event.queryStringParameters?.phone;
-        const propertyId = event.queryStringParameters?.property_id;
+
+        // -------------------------------------------------
+        // INPUT
+        // -------------------------------------------------
+
+        const phone =
+            event.queryStringParameters?.phone;
+
+        const propertyId =
+            event.queryStringParameters?.property_id;
+
 
         if (!phone || !propertyId) {
+
             return {
+
                 statusCode: 400,
+
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
+
                 body: JSON.stringify({
+
                     success: false,
-                    message: "Phone number and property ID are required"
+
+                    message:
+                        "Phone number and property ID are required"
+
                 })
+
             };
         }
 
-        const phoneNumber = normalizePhone(phone);
 
-        if (!/^254\d{9}$/.test(phoneNumber)) {
+        // -------------------------------------------------
+        // PROPERTY ID VALIDATION
+        // -------------------------------------------------
+
+        if (
+            typeof propertyId !== "string" ||
+            propertyId.length > 100
+        ) {
+
             return {
+
                 statusCode: 400,
+
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
+
                 body: JSON.stringify({
+
                     success: false,
-                    message: "Invalid Kenyan phone number"
+
+                    message:
+                        "Invalid property ID"
+
                 })
+
             };
         }
 
-        const timestamp = getTimestamp();
 
-        const password = Buffer.from(
-            `${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`
-        ).toString("base64");
+        // -------------------------------------------------
+        // PHONE
+        // -------------------------------------------------
 
-        const accessToken = await getAccessToken();
+        const phoneNumber =
+            normalizePhone(phone);
+
+
+        if (
+            !/^254\d{9}$/.test(
+                phoneNumber
+            )
+        ) {
+
+            return {
+
+                statusCode: 400,
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    success: false,
+
+                    message:
+                        "Invalid Kenyan phone number"
+
+                })
+
+            };
+        }
+
+
+        // -------------------------------------------------
+        // TIMESTAMP
+        // -------------------------------------------------
+
+        const timestamp =
+            getTimestamp();
+
+
+        // -------------------------------------------------
+        // PASSWORD
+        // -------------------------------------------------
+
+        const password =
+            Buffer.from(
+                `${process.env.MPESA_SHORTCODE}${process.env.MPESA_PASSKEY}${timestamp}`
+            ).toString("base64");
+
+
+        // -------------------------------------------------
+        // ACCESS TOKEN
+        // -------------------------------------------------
+
+        const accessToken =
+            await getAccessToken();
+
+
+        // -------------------------------------------------
+        // CALLBACK
+        // -------------------------------------------------
 
         const callbackUrl =
             "https://nicholink254.netlify.app/.netlify/functions/mpesa-callback";
 
-        const mpesaResponse = await fetch(
-            `${MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest`,
-            {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    BusinessShortCode: process.env.MPESA_SHORTCODE,
-                    Password: password,
-                    Timestamp: timestamp,
-                    TransactionType: "CustomerPayBillOnline",
-                    Amount: PUBLISHING_FEE,
-                    PartyA: phoneNumber,
-                    PartyB: process.env.MPESA_SHORTCODE,
-                    PhoneNumber: phoneNumber,
-                    CallBackURL: callbackUrl,
-                    AccountReference: `NichoLink-${propertyId.substring(0, 8)}`,
-                    TransactionDesc: "NichoLink Property Publishing"
-                })
-            }
-        );
 
-        const result = await mpesaResponse.json();
+        // -------------------------------------------------
+        // SEND STK PUSH
+        // -------------------------------------------------
+
+        const mpesaResponse =
+            await fetch(
+                `${MPESA_BASE_URL}/mpesa/stkpush/v1/processrequest`,
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        Authorization:
+                            `Bearer ${accessToken}`,
+
+                        "Content-Type":
+                            "application/json"
+
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            BusinessShortCode:
+                                process.env.MPESA_SHORTCODE,
+
+                            Password:
+                                password,
+
+                            Timestamp:
+                                timestamp,
+
+                            TransactionType:
+                                "CustomerPayBillOnline",
+
+                            Amount:
+                                PUBLISHING_FEE,
+
+                            PartyA:
+                                phoneNumber,
+
+                            PartyB:
+                                process.env.MPESA_SHORTCODE,
+
+                            PhoneNumber:
+                                phoneNumber,
+
+                            CallBackURL:
+                                callbackUrl,
+
+                            AccountReference:
+                                `NichoLink-${propertyId.substring(0, 8)}`,
+
+                            TransactionDesc:
+                                "NichoLink Property Publishing"
+
+                        })
+
+                }
+            );
+
+
+        const result =
+            await mpesaResponse.json();
+
 
         console.log(
             "M-Pesa response:",
             JSON.stringify(result)
         );
 
-        if (!mpesaResponse.ok) {
+
+        // -------------------------------------------------
+        // M-PESA ERROR
+        // -------------------------------------------------
+
+        if (
+            !mpesaResponse.ok ||
+            !result.CheckoutRequestID
+        ) {
+
             return {
+
                 statusCode: 500,
+
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type":
+                        "application/json"
                 },
+
                 body: JSON.stringify({
+
                     success: false,
-                    message: "M-Pesa request failed",
-                    error: result
+
+                    message:
+                        "M-Pesa request failed"
+
                 })
+
             };
         }
 
+
+        // -------------------------------------------------
+        // SAVE PAYMENT AS PENDING
+        // -------------------------------------------------
+
+        await createPaymentRecord({
+
+            phoneNumber:
+                phoneNumber,
+
+            merchantRequestId:
+                result.MerchantRequestID,
+
+            checkoutRequestId:
+                result.CheckoutRequestID,
+
+            propertyId:
+                propertyId
+
+        });
+
+
+        // -------------------------------------------------
+        // SUCCESS
+        // -------------------------------------------------
+
         return {
+
             statusCode: 200,
+
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type":
+                    "application/json"
             },
+
             body: JSON.stringify({
+
                 success: true,
-                amount: PUBLISHING_FEE,
-                checkout_request_id: result.CheckoutRequestID,
-                merchant_request_id: result.MerchantRequestID,
-                response_description: result.ResponseDescription
+
+                amount:
+                    PUBLISHING_FEE,
+
+                checkout_request_id:
+                    result.CheckoutRequestID,
+
+                merchant_request_id:
+                    result.MerchantRequestID,
+
+                response_description:
+                    result.ResponseDescription
+
             })
+
         };
 
+
     } catch (error) {
+
         console.error(
             "STK Push error:",
             error
         );
 
+
         return {
+
             statusCode: 500,
+
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type":
+                    "application/json"
             },
+
             body: JSON.stringify({
+
                 success: false,
-                message: "Unable to start M-Pesa payment"
+
+                message:
+                    "Unable to start M-Pesa payment"
+
             })
+
         };
+
     }
+
 };
+```
