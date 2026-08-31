@@ -1,4366 +1,1076 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Property Details | NichoLink 254
-    </title>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
-    <style>
-
-        :root {
-
-            --navy: #172033;
-            --blue: #2563eb;
-            --green: #00843d;
-            --green-dark: #006b31;
-
-            --red: #dc2626;
-            --red-light: #fef2f2;
-
-            --muted: #667085;
-            --text: #344054;
-
-            --white: #ffffff;
-            --bg: #f7f9fb;
-
-            --border: #e5e7eb;
-
-            --shadow:
-                0 10px 35px
-                rgba(16,24,40,.08);
-
-            --radius: 18px;
-        }
-
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        body {
-
-            margin: 0;
-
-            background:
-                var(--bg);
-
-            color:
-                var(--navy);
-
-            font-family:
-                Inter,
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            line-height:
-                1.6;
-        }
-
-
-        a {
-            text-decoration: none;
-        }
-
-
-        button,
-        input,
-        textarea,
-        select {
-            font: inherit;
-        }
-
-
-        /* =====================================================
-           NAVBAR
-        ===================================================== */
-
-        .property-navbar {
-
-            position: sticky;
-
-            top: 0;
-
-            z-index: 1000;
-
-            min-height: 72px;
-
-            display: flex;
-
-            align-items: center;
-
-            padding:
-                0 6%;
-
-            background:
-                rgba(255,255,255,.97);
-
-            border-bottom:
-                1px solid var(--border);
-
-            backdrop-filter:
-                blur(12px);
-        }
-
-
-        .property-logo {
-
-            font-size:
-                23px;
-
-            font-weight:
-                900;
-
-            color:
-                var(--navy);
-
-            margin-right:
-                45px;
-
-            white-space:
-                nowrap;
-        }
-
-
-        .property-logo strong {
-            color:
-                var(--green);
-        }
-
-
-        .property-nav-links {
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            gap:
-                27px;
-
-            flex:
-                1;
-        }
-
-
-        .property-nav-links a {
-
-            color:
-                #475467;
-
-            font-size:
-                14px;
-
-            font-weight:
-                600;
-        }
-
-
-        .property-nav-links a:hover,
-        .property-nav-links a.active {
-
-            color:
-                var(--green);
-        }
-
-
-        .property-nav-action {
-
-            min-height:
-                42px;
-
-            display:
-                inline-flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            padding:
-                0 17px;
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-
-            border-radius:
-                10px;
-
-            font-size:
-                13px;
-
-            font-weight:
-                800;
-        }
-
-
-        .property-nav-action:hover {
-
-            background:
-                var(--green-dark);
-        }
-
-
-        /* =====================================================
-           PAGE
-        ===================================================== */
-
-        .professional-property-page {
-
-            width:
-                min(1180px,92%);
-
-            margin:
-                0 auto;
-
-            padding:
-                28px 0 70px;
-        }
-
-
-        /* =====================================================
-           BREADCRUMB
-        ===================================================== */
-
-        .property-breadcrumb {
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            gap:
-                8px;
-
-            margin-bottom:
-                20px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-        }
-
-
-        .property-breadcrumb a {
-
-            color:
-                var(--green);
-
-            font-weight:
-                800;
-        }
-
-
-        /* =====================================================
-           LOADING / ERROR
-        ===================================================== */
-
-        .property-loading,
-        .property-error {
-
-            padding:
-                60px 30px;
-
-            text-align:
-                center;
-
-            background:
-                #ffffff;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            box-shadow:
-                var(--shadow);
-        }
-
-
-        .property-error {
-            display:
-                none;
-        }
-
-
-        .property-error h2,
-        .property-loading h2 {
-
-            margin:
-                0 0 8px;
-
-            color:
-                var(--navy);
-        }
-
-
-        .property-loading p,
-        .property-error p {
-
-            margin:
-                0;
-
-            color:
-                var(--muted);
-
-            font-size:
-                14px;
-        }
-
-
-        /* =====================================================
-           HERO
-        ===================================================== */
-
-        .property-hero-card {
-
-            overflow:
-                hidden;
-
-            background:
-                #ffffff;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            box-shadow:
-                var(--shadow);
-        }
-
-
-        /* =====================================================
-           MAIN PHOTO
-        ===================================================== */
-
-        .property-main-image {
-
-            position:
-                relative;
-
-            width:
-                100%;
-
-            height:
-                520px;
-
-            overflow:
-                hidden;
-
-            background:
-                #e5e7eb;
-        }
-
-
-        .property-main-image img {
-
-            width:
-                100%;
-
-            height:
-                100%;
-
-            display:
-                block;
-
-            object-fit:
-                cover;
-        }
-
-
-        .property-image-placeholder {
-
-            width:
-                100%;
-
-            height:
-                100%;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #dfe7e2,
-                    #f4f6f5
-                );
-
-            color:
-                #667085;
-
-            font-size:
-                55px;
-        }
-
-
-        .property-status {
-
-            position:
-                absolute;
-
-            top:
-                20px;
-
-            left:
-                20px;
-
-            padding:
-                8px 13px;
-
-            border-radius:
-                999px;
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-
-            font-size:
-                11px;
-
-            font-weight:
-                900;
-
-            text-transform:
-                uppercase;
-        }
-
-
-        /* =====================================================
-           GALLERY
-        ===================================================== */
-
-        .property-gallery-thumbnails {
-
-            display:
-                flex;
-
-            gap:
-                10px;
-
-            padding:
-                14px;
-
-            overflow-x:
-                auto;
-
-            background:
-                var(--navy);
-        }
-
-
-        .gallery-thumbnail {
-
-            width:
-                88px;
-
-            height:
-                65px;
-
-            flex:
-                0 0 auto;
-
-            object-fit:
-                cover;
-
-            border-radius:
-                9px;
-
-            cursor:
-                pointer;
-
-            border:
-                2px solid transparent;
-
-            opacity:
-                .75;
-        }
-
-
-        .gallery-thumbnail:hover,
-        .gallery-thumbnail.active {
-
-            opacity:
-                1;
-
-            border-color:
-                var(--green);
-        }
-
-
-        /* =====================================================
-           SUMMARY
-        ===================================================== */
-
-        .property-summary {
-
-            padding:
-                30px 32px;
-
-            border-bottom:
-                1px solid var(--border);
-        }
-
-
-        .property-summary-top {
-
-            display:
-                flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                flex-start;
-
-            gap:
-                25px;
-        }
-
-
-        .property-label {
-
-            margin:
-                0 0 7px;
-
-            color:
-                var(--green);
-
-            font-size:
-                11px;
-
-            font-weight:
-                900;
-
-            letter-spacing:
-                1.2px;
-        }
-
-
-        #property-title {
-
-            margin:
-                0 0 8px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                clamp(27px,4vw,40px);
-
-            line-height:
-                1.15;
-        }
-
-
-        .property-location {
-
-            margin:
-                0;
-
-            color:
-                var(--muted);
-
-            font-size:
-                15px;
-        }
-
-
-        .property-rent-box {
-
-            text-align:
-                right;
-
-            white-space:
-                nowrap;
-        }
-
-
-        .property-rent-box strong {
-
-            display:
-                block;
-
-            color:
-                var(--green);
-
-            font-size:
-                27px;
-        }
-
-
-        .property-rent-box span {
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-        }
-
-
-        /* =====================================================
-           QUICK FACTS
-        ===================================================== */
-
-        .property-quick-facts {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(4,1fr);
-
-            margin-top:
-                28px;
-
-            padding-top:
-                24px;
-
-            border-top:
-                1px solid var(--border);
-
-            gap:
-                15px;
-        }
-
-
-        .property-fact {
-
-            padding-right:
-                18px;
-
-            border-right:
-                1px solid var(--border);
-        }
-
-
-        .property-fact:last-child {
-
-            border-right:
-                none;
-        }
-
-
-        .property-fact strong {
-
-            display:
-                block;
-
-            margin-bottom:
-                4px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                20px;
-        }
-
-
-        .property-fact span {
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-        }
-
-
-        /* =====================================================
-           CONTENT
-        ===================================================== */
-
-        .property-content-layout {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                minmax(0,1fr)
-                340px;
-
-            gap:
-                24px;
-
-            margin-top:
-                24px;
-        }
-
-
-        .property-main-column,
-        .property-sidebar-card {
-
-            background:
-                #ffffff;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            box-shadow:
-                var(--shadow);
-        }
-
-
-        .property-main-column {
-
-            padding:
-                30px;
-        }
-
-
-        .property-section {
-
-            padding-bottom:
-                30px;
-
-            margin-bottom:
-                30px;
-
-            border-bottom:
-                1px solid var(--border);
-        }
-
-
-        .property-section:last-child {
-
-            margin-bottom:
-                0;
-
-            padding-bottom:
-                0;
-
-            border-bottom:
-                none;
-        }
-
-
-        .property-section h2 {
-
-            margin:
-                0 0 11px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                21px;
-        }
-
-
-        .property-section p {
-
-            margin:
-                0;
-
-            color:
-                #475467;
-
-            font-size:
-                14px;
-
-            line-height:
-                1.8;
-        }
-
-
-        /* =====================================================
-           PROPERTY VIDEO
-        ===================================================== */
-
-        .property-video-container {
-
-            margin-top:
-                18px;
-
-            overflow:
-                hidden;
-
-            border-radius:
-                14px;
-
-            background:
-                #000000;
-        }
-
-
-        .property-video-container video {
-
-            width:
-                100%;
-
-            max-height:
-                520px;
-
-            display:
-                block;
-        }
-
-
-        .no-video {
-
-            padding:
-                25px;
-
-            text-align:
-                center;
-
-            background:
-                #f8fafc;
-
-            border:
-                1px dashed #cbd5e1;
-
-            border-radius:
-                12px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-        }
-
-
-        /* =====================================================
-           AMENITIES
-        ===================================================== */
-
-        .amenities-list {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(2,minmax(0,1fr));
-
-            gap:
-                10px;
-
-            margin-top:
-                18px;
-        }
-
-
-        .amenity-item {
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            padding:
-                12px 14px;
-
-            background:
-                #f8fafc;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                10px;
-
-            color:
-                #344054;
-
-            font-size:
-                13px;
-
-            font-weight:
-                600;
-        }
-
-
-        /* =====================================================
-           TRANSPORT
-        ===================================================== */
-
-        .transport-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(2,minmax(0,1fr));
-
-            gap:
-                12px;
-
-            margin-top:
-                18px;
-        }
-
-
-        .transport-card {
-
-            padding:
-                16px;
-
-            background:
-                #eff6ff;
-
-            border:
-                1px solid #dbeafe;
-
-            border-radius:
-                12px;
-        }
-
-
-        .transport-card.full {
-
-            grid-column:
-                1 / -1;
-        }
-
-
-        .transport-card .icon {
-
-            margin-bottom:
-                6px;
-
-            font-size:
-                20px;
-        }
-
-
-        .transport-card strong {
-
-            display:
-                block;
-
-            margin-bottom:
-                4px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                13px;
-        }
-
-
-        .transport-card span {
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-        }
-
-
-        /* =====================================================
-           NEARBY AMENITIES
-        ===================================================== */
-
-        .nearby-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(2,minmax(0,1fr));
-
-            gap:
-                12px;
-
-            margin-top:
-                18px;
-        }
-
-
-        .nearby-card {
-
-            display:
-                flex;
-
-            align-items:
-                flex-start;
-
-            gap:
-                11px;
-
-            padding:
-                15px;
-
-            background:
-                #f8fafc;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                12px;
-        }
-
-
-        .nearby-card .nearby-icon {
-
-            width:
-                38px;
-
-            height:
-                38px;
-
-            min-width:
-                38px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            border-radius:
-                10px;
-
-            background:
-                #eff6ff;
-
-            font-size:
-                18px;
-        }
-
-
-        .nearby-card strong {
-
-            display:
-                block;
-
-            margin-bottom:
-                3px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                13px;
-        }
-
-
-        .nearby-card span {
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
-
-            line-height:
-                1.5;
-        }
-
-
-        .empty-nearby {
-
-            grid-column:
-                1 / -1;
-
-            padding:
-                25px;
-
-            background:
-                #f8fafc;
-
-            border:
-                1px dashed #cbd5e1;
-
-            border-radius:
-                12px;
-
-            text-align:
-                center;
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-        }
-
-
-        /* =====================================================
-           GOOGLE MAPS READY SECTION
-        ===================================================== */
-
-        .map-ready-box {
-
-            margin-top:
-                18px;
-
-            padding:
-                24px;
-
-            background:
-                #f8fafc;
-
-            border:
-                1px dashed #cbd5e1;
-
-            border-radius:
-                13px;
-
-            text-align:
-                center;
-        }
-
-
-        .map-ready-box strong {
-
-            display:
-                block;
-
-            margin-bottom:
-                6px;
-
-            color:
-
-
-
-        /* =====================================================
-           SAVE
-        ===================================================== */
-
-        .property-save-button {
-
-            width:
-                100%;
-
-            min-height:
-                47px;
-
-            margin-top:
-                18px;
-
-            padding:
-                0 18px;
-
-            border:
-                1px solid #d0d5dd;
-
-            border-radius:
-                11px;
-
-            background:
-                #ffffff;
-
-            color:
-                var(--navy);
-
-            font-weight:
-                800;
-
-            cursor:
-                pointer;
-        }
-
-
-        .property-save-button:hover {
-
-            border-color:
-                var(--green);
-
-            color:
-                var(--green);
-        }
-
-
-        .property-save-button.saved {
-
-            background:
-                #eaf8ef;
-
-            border-color:
-                #b9e1c7;
-
-            color:
-                var(--green);
-        }
-
-
-        .property-save-button.loading {
-
-            opacity:
-                .6;
-
-            cursor:
-                wait;
-        }
-
-
-        /* =====================================================
-           SIDEBAR
-        ===================================================== */
-
-        .property-sidebar {
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                18px;
-        }
-
-
-        .property-sidebar-card {
-
-            padding:
-                23px;
-        }
-
-
-        .property-sidebar-card h2 {
-
-            margin:
-                0 0 8px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                19px;
-        }
-
-
-        .property-sidebar-card p {
-
-            margin:
-                0 0 18px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                13px;
-
-            line-height:
-                1.6;
-        }
-
-
-        /* =====================================================
-           CONTACT
-        ===================================================== */
-
-        .contact-buttons {
-
-            display:
-                grid;
-
-            gap:
-                10px;
-        }
-
-
-        .contact-button,
-        .whatsapp-button {
-
-            width:
-                100%;
-
-            min-height:
-                46px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            border:
-                none;
-
-            border-radius:
-                10px;
-
-            font-size:
-                13px;
-
-            font-weight:
-                800;
-
-            cursor:
-                pointer;
-        }
-
-
-        .contact-button {
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-        }
-
-
-        .contact-button:hover {
-
-            background:
-                var(--green-dark);
-        }
-
-
-        .whatsapp-button {
-
-            background:
-                #25d366;
-
-            color:
-                #ffffff;
-        }
-
-
-        /* =====================================================
-           TRUST
-        ===================================================== */
-
-        .trust-card {
-
-            padding:
-                23px;
-
-            background:
-                #f0fdf4;
-
-            border:
-                1px solid #bbf7d0;
-
-            border-radius:
-                var(--radius);
-        }
-
-
-        .trust-card h2 {
-
-            margin:
-                0 0 10px;
-
-            color:
-                var(--navy);
-
-            font-size:
-                18px;
-        }
-
-
-        .trust-card p {
-
-            margin:
-                0 0 13px;
-
-            color:
-                #475467;
-
-            font-size:
-                13px;
-
-            line-height:
-                1.65;
-        }
-
-
-        .trust-list {
-
-            padding:
-                0;
-
-            margin:
-                0;
-
-            list-style:
-                none;
-        }
-
-
-        .trust-list li {
-
-            padding:
-                7px 0;
-
-            color:
-                #344054;
-
-            font-size:
-                13px;
-        }
-
-
-        /* =====================================================
-           VIEWING REQUEST
-        ===================================================== */
-
-        .viewing-form {
-
-            margin-top:
-                20px;
-        }
-
-
-        .form-grid {
-
-            display:
-                grid;
-
-            grid-template-columns:
-                repeat(
-                    2,
-                    minmax(0,1fr)
-                );
-
-            gap:
-                17px;
-        }
-
-
-        .form-field {
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                7px;
-        }
-
-
-        .form-field.full {
-
-            grid-column:
-                1 / -1;
-        }
-
-
-        .form-field label {
-
-            color:
-                #344054;
-
-            font-size:
-                13px;
-
-            font-weight:
-                700;
-        }
-
-
-        .form-field input,
-        .form-field textarea {
-
-            width:
-                100%;
-
-            padding:
-                12px 14px;
-
-            border:
-                1px solid #d0d5dd;
-
-            border-radius:
-                10px;
-
-            outline:
-                none;
-
-            background:
-                #ffffff;
-        }
-
-
-        .form-field textarea {
-
-            min-height:
-                100px;
-
-            resize:
-                vertical;
-        }
-
-
-        .form-field input:focus,
-        .form-field textarea:focus {
-
-            border-color:
-                var(--green);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(0,132,61,.1);
-        }
-
-
-        .primary-action-button {
-
-            min-height:
-                46px;
-
-            margin-top:
-                18px;
-
-            padding:
-                0 21px;
-
-            display:
-                inline-flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            border:
-                none;
-
-            border-radius:
-                10px;
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-
-            font-size:
-                13px;
-
-            font-weight:
-                800;
-
-            cursor:
-                pointer;
-        }
-
-
-        .primary-action-button:hover {
-
-            background:
-                var(--green-dark);
-        }
-
-
-        .request-success,
-        .request-error {
-
-            margin-top:
-                18px;
-
-            padding:
-                15px;
-
-            border-radius:
-                10px;
-
-            font-size:
-                13px;
-        }
-
-
-        .request-success {
-
-            background:
-                #ecfdf3;
-
-            border:
-                1px solid #abefc6;
-
-            color:
-                #067647;
-        }
-
-
-        .request-error {
-
-            background:
-                #fef3f2;
-
-            border:
-                1px solid #fecdca;
-
-            color:
-                #b42318;
-        }
-
-
-        /* =====================================================
-           FOOTER
-        ===================================================== */
-
-        footer {
-
-            margin-top:
-                25px;
-
-            padding:
-                50px 6% 20px;
-
-            background:
-                var(--navy);
-
-            color:
-                #cbd5e1;
-        }
-
-
-        .footer-content {
-
-            width:
-                min(1100px,100%);
-
-            margin:
-                0 auto 35px;
-
-            display:
-                grid;
-
-            grid-template-columns:
-                1.5fr 1fr 1fr;
-
-            gap:
-                35px;
-        }
-
-
-        .footer-content h2 {
-
-            margin-bottom:
-                10px;
-
-            color:
-                #ffffff;
-        }
-
-
-        .footer-content h2 strong {
-
-            color:
-                #4ade80;
-        }
-
-
-        .footer-content h3 {
-
-            margin-bottom:
-                12px;
-
-            color:
-                #ffffff;
-
-            font-size:
-                14px;
-        }
-
-
-        .footer-content p,
-        .footer-content a {
-
-            color:
-                #cbd5e1;
-
-            font-size:
-                12px;
-
-            line-height:
-                1.7;
-        }
-
-
-        .footer-content a {
-
-            display:
-                block;
-
-            margin-bottom:
-                6px;
-        }
-
-
-        .copyright {
-
-            width:
-                min(1100px,100%);
-
-            margin:
-                auto;
-
-            padding-top:
-                16px;
-
-            border-top:
-                1px solid
-                rgba(255,255,255,.1);
-
-            color:
-                #94a3b8;
-
-            font-size:
-                11px;
-
-            text-align:
-                center;
-        }
-
-
-        /* =====================================================
-           MOBILE
-        ===================================================== */
-
-        @media (max-width:900px) {
-
-            .property-nav-links {
-                display:
-                    none;
-            }
-
-
-            .property-content-layout {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .property-sidebar {
-
-                order:
-                    -1;
-            }
-
-
-            .property-quick-facts {
-
-                grid-template-columns:
-                    repeat(2,1fr);
-            }
-
-
-            .property-fact:nth-child(2) {
-
-                border-right:
-                    none;
-            }
-
-        }
-
-
-        @media (max-width:650px) {
-
-            .property-navbar {
-
-                padding:
-                    0 18px;
-            }
-
-
-            .property-logo {
-
-                margin-right:
-                    auto;
-            }
-
-
-            .professional-property-page {
-
-                width:
-                    94%;
-
-                padding-top:
-                    18px;
-            }
-
-
-            .property-main-image {
-
-                height:
-                    300px;
-            }
-
-
-            .property-summary {
-
-                padding:
-                    23px 20px;
-            }
-
-
-            .property-summary-top {
-
-                flex-direction:
-                    column;
-            }
-
-
-            .property-rent-box {
-
-                text-align:
-                    left;
-            }
-
-
-            .property-main-column {
-
-                padding:
-                    22px 18px;
-            }
-
-
-            .amenities-list,
-            .transport-grid,
-            .nearby-grid,
-            .form-grid {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .form-field.full,
-            .transport-card.full {
-
-                grid-column:
-                    auto;
-            }
-
-
-            .property-quick-facts {
-
-                grid-template-columns:
-                    1fr 1fr;
-            }
-
-
-            .footer-content {
-
-                grid-template-columns:
-                    1fr;
-            }
-
-        }
-
-    </style>
-<link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Property details on NichoLink 254 — view photos, amenities, transport info and request a viewing directly from the landlord.">
+<title>Property Details | NichoLink 254</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%225%22 fill=%22%2300843d%22/><path d=%22M6 12L12 7L18 12V18H14V13.5H10V18H6V12Z%22 fill=%22white%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --navy:#172033;
+    --green:#00843d;
+    --green-dark:#006b31;
+    --green-light:#ecfdf5;
+    --green-border:#bbf7d0;
+    --red:#dc2626;
+    --red-light:#fef2f2;
+    --muted:#667085;
+    --text:#344054;
+    --white:#ffffff;
+    --bg:#f7f9fb;
+    --border:#e5e7eb;
+    --shadow:0 10px 35px rgba(16,24,40,.08);
+    --radius:18px;
+  }
+
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; background:var(--bg); color:var(--navy);
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  a{ text-decoration:none; color:inherit; }
+  img,svg{ display:block; }
+  button,input,textarea,select{ font:inherit; }
+  :focus-visible{ outline:3px solid var(--green); outline-offset:2px; }
+  .icon{ width:20px; height:20px; flex-shrink:0; }
+  .icon-sm{ width:16px; height:16px; flex-shrink:0; }
+
+  /* ===================== NAVBAR ===================== */
+  .property-navbar{
+    position:sticky; top:0; z-index:1000;
+    min-height:68px; padding:0 30px;
+    display:flex; align-items:center;
+    background:var(--green);
+    border-bottom:1px solid var(--green-dark);
+    box-shadow:0 3px 15px rgba(15,23,42,.12);
+  }
+  .property-logo{
+    display:flex; align-items:center; gap:10px;
+    font-size:21px; font-weight:900; color:#ffffff;
+    margin-right:40px; white-space:nowrap;
+  }
+  .property-logo .mark{
+    width:34px; height:34px; border-radius:8px;
+    background:#ffffff; color:var(--green);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .property-logo strong{ color:#d7fbe8; }
+  .property-nav-links{ display:none; align-items:center; gap:4px; flex:1; }
+  @media(min-width:900px){ .property-nav-links{ display:flex; } }
+  .property-nav-links a{
+    padding:9px 13px; border-radius:8px;
+    color:#ffffff; font-size:14px; font-weight:600;
+    transition:background .15s;
+  }
+  .property-nav-links a:hover, .property-nav-links a.active{ background:rgba(255,255,255,.16); }
+  .property-nav-actions{ display:none; align-items:center; gap:8px; margin-left:14px; }
+  @media(min-width:900px){ .property-nav-actions{ display:flex; } }
+  .property-nav-actions a{
+    min-height:40px; padding:0 15px; display:inline-flex; align-items:center; justify-content:center;
+    border-radius:8px; font-size:13px; font-weight:700; transition:background .15s, opacity .15s;
+  }
+  .register-btn{ background:var(--navy); color:#fff; }
+  .register-btn:hover{ opacity:.9; }
+  .login-btn{ border:1px solid rgba(255,255,255,.6); background:transparent; color:#fff; }
+  .login-btn:hover{ background:rgba(255,255,255,.14); }
+  .menu-button{
+    display:flex; align-items:center; justify-content:center;
+    width:43px; height:43px; margin-left:auto;
+    border:0; border-radius:9px; background:var(--navy); color:#fff;
+    font-size:22px; cursor:pointer;
+  }
+  @media(min-width:900px){ .menu-button{ display:none; } }
+
+  .mobile-menu{
+    display:none; position:fixed; top:68px; left:0; right:0; z-index:999;
+    padding:14px; background:#fff; border-bottom:1px solid var(--border);
+    box-shadow:0 15px 30px rgba(15,23,42,.12);
+  }
+  .mobile-menu.open{ display:flex; flex-direction:column; gap:6px; }
+  .mobile-menu a{ padding:13px 15px; border-radius:8px; color:var(--navy); font-size:14px; font-weight:600; }
+  .mobile-menu a:hover{ background:var(--green-light); color:var(--green); }
+  .mobile-menu .mobile-register{ background:var(--green); color:#fff; text-align:center; font-weight:700; }
+  .mobile-menu .mobile-login{ border:1px solid var(--border); text-align:center; }
+
+  /* ===================== PAGE ===================== */
+  .professional-property-page{ width:min(1180px,92%); margin:0 auto; padding:28px 0 70px; }
+
+  .property-breadcrumb{ display:flex; align-items:center; gap:8px; margin-bottom:20px; color:var(--muted); font-size:13px; }
+  .property-breadcrumb a{ color:var(--green); font-weight:800; }
+
+  .property-loading, .property-error{
+    padding:60px 30px; text-align:center; background:#fff;
+    border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow);
+  }
+  .property-error{ display:none; }
+  .property-error h2, .property-loading h2{ margin:0 0 8px; color:var(--navy); }
+  .property-loading p, .property-error p{ margin:0; color:var(--muted); font-size:14px; }
+
+  .property-hero-card{ overflow:hidden; background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+
+  .property-main-image{ position:relative; width:100%; height:520px; overflow:hidden; background:#e5e7eb; }
+  .property-main-image img{ width:100%; height:100%; display:block; object-fit:cover; }
+  .property-image-placeholder{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#dfe7e2,#f4f6f5); color:#94a3b8;
+  }
+  .property-image-placeholder svg{ width:64px; height:64px; }
+  .property-status{
+    position:absolute; top:20px; left:20px; padding:8px 13px; border-radius:999px;
+    background:var(--green); color:#fff; font-size:11px; font-weight:900; text-transform:uppercase;
+  }
+
+  .property-gallery-thumbnails{ display:flex; gap:10px; padding:14px; overflow-x:auto; background:var(--navy); }
+  .gallery-thumbnail{
+    width:88px; height:65px; flex:0 0 auto; object-fit:cover; border-radius:9px;
+    cursor:pointer; border:2px solid transparent; opacity:.75;
+  }
+  .gallery-thumbnail:hover, .gallery-thumbnail.active{ opacity:1; border-color:var(--green); }
+
+  .property-summary{ padding:30px 32px; border-bottom:1px solid var(--border); }
+  .property-summary-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:25px; }
+  .property-label{ margin:0 0 7px; color:var(--green); font-size:11px; font-weight:900; letter-spacing:1.2px; text-transform:uppercase; }
+  #property-title{ margin:0 0 8px; color:var(--navy); font-size:clamp(27px,4vw,40px); line-height:1.15; font-weight:900; }
+  .property-location{ display:flex; align-items:center; gap:6px; margin:0; color:var(--muted); font-size:15px; }
+  .property-rent-box{ text-align:right; white-space:nowrap; }
+  .property-rent-box strong{ display:block; color:var(--green); font-size:27px; }
+  .property-rent-box span{ color:var(--muted); font-size:13px; }
+
+  .property-quick-facts{
+    display:grid; grid-template-columns:repeat(4,1fr); margin-top:28px; padding-top:24px;
+    border-top:1px solid var(--border); gap:15px;
+  }
+  .property-fact{ display:flex; flex-direction:column; gap:4px; padding-right:18px; border-right:1px solid var(--border); }
+  .property-fact:last-child{ border-right:none; }
+  .property-fact strong{ display:flex; align-items:center; gap:6px; color:var(--navy); font-size:20px; }
+  .property-fact strong svg{ width:18px; height:18px; color:var(--green); }
+  .property-fact span{ color:var(--muted); font-size:13px; }
+
+  .property-content-layout{ display:grid; grid-template-columns:minmax(0,1fr) 340px; gap:24px; margin-top:24px; }
+  .property-main-column, .property-sidebar-card{ background:#fff; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); }
+  .property-main-column{ padding:30px; }
+  .property-section{ padding-bottom:30px; margin-bottom:30px; border-bottom:1px solid var(--border); }
+  .property-section:last-child{ margin-bottom:0; padding-bottom:0; border-bottom:none; }
+  .property-section h2{ display:flex; align-items:center; gap:9px; margin:0 0 11px; color:var(--navy); font-size:21px; }
+  .property-section h2 svg{ width:20px; height:20px; color:var(--green); }
+  .property-section p{ margin:0; color:#475467; font-size:14px; line-height:1.8; }
+
+  .property-video-container{ margin-top:18px; overflow:hidden; border-radius:14px; background:#000; }
+  .property-video-container video{ width:100%; max-height:520px; display:block; }
+  .no-video{ padding:25px; text-align:center; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; color:var(--muted); font-size:13px; }
+
+  .amenities-list{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:18px; }
+  .amenity-item{
+    display:flex; align-items:center; gap:8px; padding:12px 14px;
+    background:var(--green-light); border:1px solid var(--green-border); border-radius:10px;
+    color:var(--text); font-size:13px; font-weight:600;
+  }
+  .amenity-item svg{ width:15px; height:15px; color:var(--green); flex-shrink:0; }
+
+  .transport-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:18px; }
+  .transport-card{ padding:16px; background:var(--green-light); border:1px solid var(--green-border); border-radius:12px; }
+  .transport-card.full{ grid-column:1/-1; }
+  .transport-card .icon-emoji{ margin-bottom:6px; font-size:19px; }
+  .transport-card strong{ display:block; margin-bottom:4px; color:var(--navy); font-size:13px; }
+  .transport-card span{ color:var(--muted); font-size:13px; }
+
+  .nearby-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:18px; }
+  .nearby-card{ display:flex; align-items:flex-start; gap:11px; padding:15px; background:#f8fafc; border:1px solid var(--border); border-radius:12px; }
+  .nearby-card .nearby-icon{
+    width:38px; height:38px; min-width:38px; display:flex; align-items:center; justify-content:center;
+    border-radius:10px; background:var(--green-light); font-size:18px;
+  }
+  .nearby-card strong{ display:block; margin-bottom:3px; color:var(--navy); font-size:13px; }
+  .nearby-card span{ color:var(--muted); font-size:12px; line-height:1.5; }
+  .empty-nearby{ grid-column:1/-1; padding:25px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:12px; text-align:center; color:var(--muted); font-size:13px; }
+
+  .map-ready-box{ margin-top:18px; padding:24px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:13px; text-align:center; }
+  .map-ready-box strong{ display:block; margin-bottom:6px; color:var(--navy); }
+  .map-ready-box span{ color:var(--muted); font-size:13px; line-height:1.6; }
+
+  .property-save-button{
+    width:100%; min-height:47px; margin-top:18px; padding:0 18px;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border:1px solid #d0d5dd; border-radius:11px; background:#fff; color:var(--navy);
+    font-weight:800; cursor:pointer; transition:border-color .15s, color .15s, background .15s;
+  }
+  .property-save-button svg{ width:18px; height:18px; }
+  .property-save-button:hover{ border-color:var(--green); color:var(--green); }
+  .property-save-button.saved{ background:var(--green-light); border-color:var(--green-border); color:var(--green); }
+  .property-save-button.loading{ opacity:.6; cursor:wait; }
+
+  .property-sidebar{ display:flex; flex-direction:column; gap:18px; }
+  .property-sidebar-card{ padding:23px; }
+  .property-sidebar-card h2{ display:flex; align-items:center; gap:8px; margin:0 0 8px; color:var(--navy); font-size:19px; }
+  .property-sidebar-card p{ margin:0 0 18px; color:var(--muted); font-size:13px; line-height:1.6; }
+
+  .contact-buttons{ display:grid; gap:10px; }
+  .contact-button, .whatsapp-button{
+    width:100%; min-height:46px; display:flex; align-items:center; justify-content:center; gap:8px;
+    border:none; border-radius:10px; font-size:13px; font-weight:800; cursor:pointer;
+    transition:background .15s;
+  }
+  .contact-button svg, .whatsapp-button svg{ width:17px; height:17px; }
+  .contact-button{ background:var(--green); color:#fff; }
+  .contact-button:hover{ background:var(--green-dark); }
+  .whatsapp-button{ background:#25d366; color:#fff; }
+  .whatsapp-button:hover{ background:#1fb959; }
+
+  .trust-card{ padding:23px; background:var(--green-light); border:1px solid var(--green-border); border-radius:var(--radius); }
+  .trust-card h2{ display:flex; align-items:center; gap:8px; margin:0 0 10px; color:var(--navy); font-size:18px; }
+  .trust-card h2 svg{ width:19px; height:19px; color:var(--green); }
+  .trust-card p{ margin:0 0 13px; color:#475467; font-size:13px; line-height:1.65; }
+  .trust-list{ padding:0; margin:0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .trust-list li{ display:flex; align-items:flex-start; gap:8px; color:var(--text); font-size:13px; }
+  .trust-list li svg{ width:15px; height:15px; color:var(--green); margin-top:2px; flex-shrink:0; }
+
+  .viewing-form{ margin-top:20px; }
+  .form-grid{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:17px; }
+  .form-field{ display:flex; flex-direction:column; gap:7px; }
+  .form-field.full{ grid-column:1/-1; }
+  .form-field label{ color:var(--text); font-size:13px; font-weight:700; }
+  .form-field input, .form-field textarea{
+    width:100%; padding:12px 14px; border:1px solid #d0d5dd; border-radius:10px; outline:none; background:#fff;
+  }
+  .form-field textarea{ min-height:100px; resize:vertical; }
+  .form-field input:focus, .form-field textarea:focus{ border-color:var(--green); box-shadow:0 0 0 3px rgba(0,132,61,.1); }
+
+  .primary-action-button{
+    min-height:46px; margin-top:18px; padding:0 21px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    border:none; border-radius:10px; background:var(--green); color:#fff; font-size:13px; font-weight:800; cursor:pointer;
+    transition:background .15s, opacity .15s;
+  }
+  .primary-action-button svg{ width:16px; height:16px; }
+  .primary-action-button:hover{ background:var(--green-dark); }
+  .primary-action-button:disabled{ opacity:.65; cursor:wait; }
+
+  .request-success, .request-error{ margin-top:18px; padding:15px; border-radius:10px; font-size:13px; }
+  .request-success{ background:#ecfdf3; border:1px solid #abefc6; color:#067647; }
+  .request-error{ background:var(--red-light); border:1px solid #fecdca; color:#b42318; }
+
+  footer{ margin-top:25px; padding:50px 6% 20px; background:var(--navy); color:#cbd5e1; }
+  .footer-content{ width:min(1100px,100%); margin:0 auto 35px; display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:35px; }
+  .footer-content h2{ margin-bottom:10px; color:#fff; }
+  .footer-content h2 strong{ color:#4ade80; }
+  .footer-content h3{ margin-bottom:12px; color:#fff; font-size:14px; }
+  .footer-content p{ color:#cbd5e1; font-size:12px; line-height:1.7; }
+  .footer-contact{ display:flex; align-items:center; gap:8px; margin:0 0 9px; }
+  .footer-contact svg{ width:15px; height:15px; color:#4ade80; flex-shrink:0; }
+  .footer-links a{ display:block; margin-bottom:6px; color:#cbd5e1; font-size:12px; }
+  .footer-links a:hover{ color:#fff; }
+  .copyright{ width:min(1100px,100%); margin:auto; padding-top:16px; border-top:1px solid rgba(255,255,255,.1); color:#94a3b8; font-size:11px; text-align:center; }
+
+  @media (max-width:900px){
+    .property-content-layout{ grid-template-columns:1fr; }
+    .property-sidebar{ order:-1; }
+    .property-quick-facts{ grid-template-columns:repeat(2,1fr); }
+    .property-fact:nth-child(2){ border-right:none; }
+  }
+  @media (max-width:650px){
+    .property-navbar{ padding:0 18px; }
+    .property-logo{ margin-right:auto; }
+    .professional-property-page{ width:94%; padding-top:18px; }
+    .property-main-image{ height:300px; }
+    .property-summary{ padding:23px 20px; }
+    .property-summary-top{ flex-direction:column; }
+    .property-rent-box{ text-align:left; }
+    .property-main-column{ padding:22px 18px; }
+    .amenities-list, .transport-grid, .nearby-grid, .form-grid{ grid-template-columns:1fr; }
+    .form-field.full, .transport-card.full{ grid-column:auto; }
+    .property-quick-facts{ grid-template-columns:1fr 1fr; }
+    .footer-content{ grid-template-columns:1fr; }
+  }
+</style>
 </head>
-
-
 <body>
 
-
-<!-- =====================================================
-     NAVIGATION
-===================================================== -->
-
+<!-- NAVIGATION -->
 <header class="property-navbar">
+  <a href="index.html" class="property-logo">
+    <span class="mark">
+      <svg class="icon" viewBox="0 0 24 24" fill="none"><path d="M4 11L12 4L20 11V20H14V14H10V20H4V11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+    </span>
+    NichoLink <strong>254</strong>
+  </a>
 
+  <nav class="property-nav-links">
+    <a href="index.html">Home</a>
+    <a href="properties.html" class="active">Properties</a>
+    <a href="index.html#how-it-works">How It Works</a>
+    <a href="trust-center.html">Trust Center</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="adverts.html">Adverts</a>
+  </nav>
 
-    <a
-        href="index.html"
-        class="property-logo"
-    >
-        NichoLink
-        <strong>254</strong>
-    </a>
+  <div class="property-nav-actions">
+    <a href="register.html" class="register-btn">Register</a>
+    <a href="login.html" class="login-btn">Login</a>
+  </div>
 
-
-    <nav class="property-nav-links">
-
-
-        <a href="index.html">
-            Home
-        </a>
-
-
-        <a
-            href="properties.html"
-            class="active"
-        >
-            Properties
-        </a>
-
-
-        <a href="index.html#how-it-works">
-            How It Works
-        </a>
-
-
-        <a href="index.html#contact">
-            Contact
-        </a>
-
-
-    </nav>
-
-
-    <a
-        href="properties.html"
-        class="property-nav-action"
-    >
-        Find a Property
-    </a>
-
-
+  <button type="button" class="menu-button" id="menuButton" aria-label="Open menu" aria-expanded="false">☰</button>
 </header>
 
+<!-- MOBILE MENU -->
+<nav class="mobile-menu" id="mobileMenu">
+  <a href="register.html" class="mobile-register">Register</a>
+  <a href="login.html" class="mobile-login">Login</a>
+  <a href="index.html">Home</a>
+  <a href="properties.html" class="active">Properties</a>
+  <a href="index.html#how-it-works">How It Works</a>
+  <a href="trust-center.html">Trust &amp; Information Center</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="adverts.html">Adverts</a>
+</nav>
 
-
-<!-- =====================================================
-     MAIN
-===================================================== -->
-
+<!-- MAIN -->
 <main class="professional-property-page">
 
-
-    <div class="property-breadcrumb">
-
-        <a href="properties.html">
-            Properties
-        </a>
-
-        <span>›</span>
-
-        <span>
-            Property Details
-        </span>
-
-    </div>
-
-
-
-    <!-- LOADING -->
-
-    <div
-        id="loading-property"
-        class="property-loading"
-    >
-
-        <h2>
-            Loading property...
-        </h2>
-
-        <p>
-            Please wait while we retrieve the property details.
-        </p>
-
-    </div>
-
-
-
-    <!-- ERROR -->
-
-    <div
-        id="property-error"
-        class="property-error"
-    >
-
-        <h2>
-            Property Not Found
-        </h2>
-
-        <p>
-            We couldn't find the property you're looking for.
-        </p>
-
-
-        <a
-            href="properties.html"
-            class="primary-action-button"
-            style="margin-top:18px;"
-        >
-            Browse Properties
-        </a>
-
-    </div>
-
-
-
-    <!-- =================================================
-         PROPERTY CONTENT
-    ================================================= -->
-
-    <section
-        id="property-content"
-        style="display:none;"
-    >
-
-
-        <!-- MAIN IMAGE -->
-
-        <div class="property-hero-card">
-
-
-            <div class="property-main-image">
-
-                <img
-                    id="property-image"
-                    src=""
-                    alt="Property image"
-                >
-
-
-                <div
-                    id="property-image-placeholder"
-                    class="property-image-placeholder"
-                    style="display:none;"
-                >
-                    🏠
-                </div>
-
-
-                <span
-                    id="property-status"
-                    class="property-status"
-                >
-                    Available
-                </span>
-
-            </div>
-
-
-
-            <!-- GALLERY -->
-
-            <div
-                id="property-gallery"
-                class="property-gallery-thumbnails"
-            ></div>
-
-
-
-            <!-- SUMMARY -->
-
-            <div class="property-summary">
-
-
-                <div class="property-summary-top">
-
-
-                    <div>
-
-                        <p class="property-label">
-                            PROPERTY FOR RENT
-                        </p>
-
-
-                        <h1 id="property-title">
-                            Property
-                        </h1>
-
-
-                        <p
-                            id="property-location"
-                            class="property-location"
-                        ></p>
-
-                    </div>
-
-
-                    <div class="property-rent-box">
-
-                        <strong id="property-rent">
-                            KSh 0
-                        </strong>
-
-                        <span>
-                            per month
-                        </span>
-
-                    </div>
-
-
-                </div>
-
-
-
-                <!-- QUICK FACTS -->
-
-                <div class="property-quick-facts">
-
-
-                    <div class="property-fact">
-
-                        <strong id="property-bedrooms">
-                            0
-                        </strong>
-
-                        <span>
-                            Bedrooms
-                        </span>
-
-                    </div>
-
-
-                    <div class="property-fact">
-
-                        <strong id="property-bathrooms">
-                            0
-                        </strong>
-
-                        <span>
-                            Bathrooms
-                        </span>
-
-                    </div>
-
-
-                    <div class="property-fact">
-
-                        <strong>
-                            ✓
-                        </strong>
-
-                        <span>
-                            Verified Listing
-                        </span>
-
-                    </div>
-
-
-                    <div class="property-fact">
-
-                        <strong>
-                            🇰🇪
-                        </strong>
-
-                        <span>
-                            Kenya
-                        </span>
-
-                    </div>
-
-
-                </div>
-
-
-            </div>
-
-
+  <div class="property-breadcrumb">
+    <a href="properties.html">Properties</a>
+    <span>›</span>
+    <span>Property Details</span>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading-property" class="property-loading">
+    <h2>Loading property...</h2>
+    <p>Please wait while we retrieve the property details.</p>
+  </div>
+
+  <!-- ERROR -->
+  <div id="property-error" class="property-error">
+    <h2>Property Not Found</h2>
+    <p>We couldn't find the property you're looking for.</p>
+    <a href="properties.html" class="primary-action-button" style="margin-top:18px;">Browse Properties</a>
+  </div>
+
+  <!-- PROPERTY CONTENT -->
+  <section id="property-content" style="display:none;">
+
+    <div class="property-hero-card">
+
+      <div class="property-main-image">
+        <img id="property-image" src="" alt="Property image">
+        <div id="property-image-placeholder" class="property-image-placeholder" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 11L12 4L20 11V20H14V14H10V20H4V11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        </div>
+        <span id="property-status" class="property-status">Available</span>
+      </div>
+
+      <div id="property-gallery" class="property-gallery-thumbnails"></div>
+
+      <div class="property-summary">
+        <div class="property-summary-top">
+          <div>
+            <p class="property-label">Property For Rent</p>
+            <h1 id="property-title">Property</h1>
+            <p id="property-location" class="property-location"></p>
+          </div>
+          <div class="property-rent-box">
+            <strong id="property-rent">KSh 0</strong>
+            <span>per month</span>
+          </div>
         </div>
 
-
-
-        <!-- =================================================
-             CONTENT + SIDEBAR
-        ================================================= -->
-
-        <div class="property-content-layout">
-
-
-            <!-- MAIN -->
-
-            <div class="property-main-column">
-
-
-                <!-- DESCRIPTION -->
-
-                <section class="property-section">
-
-                    <h2>
-                        About this Property
-                    </h2>
-
-
-                    <p id="property-description">
-                        No description available.
-                    </p>
-
-                </section>
-
-
-
-                <!-- VIDEO -->
-
-                <section class="property-section">
-
-                    <h2>
-                        🎥 Property Video
-                    </h2>
-
-
-                    <div
-                        id="property-video-container"
-                        class="property-video-container"
-                    >
-
-                        <video
-                            id="property-video"
-                            controls
-                            playsinline
-                        ></video>
-
-                    </div>
-
-
-                    <div
-                        id="no-property-video"
-                        class="no-video"
-                        style="display:none;"
-                    >
-                        No property video has been uploaded.
-                    </div>
-
-                </section>
-
-
-
-                <!-- AMENITIES -->
-
-                <section class="property-section">
-
-                    <h2>
-                        Amenities & Features
-                    </h2>
-
-
-                    <div
-                        id="property-amenities"
-                        class="amenities-list"
-                    ></div>
-
-                </section>
-
-
-
-                <!-- TRANSPORT -->
-
-                <section class="property-section">
-
-                    <h2>
-                        🚌 Transport Information
-                    </h2>
-
-
-                    <p>
-                        Transport information provided
-                        for this property.
-                    </p>
-
-
-                    <div
-                        id="transport-information"
-                        class="transport-grid"
-                    ></div>
-
-
-                </section>
-
-
-
-                <!-- NEARBY -->
-
-                <section class="property-section">
-
-                    <h2>
-                        📍 Nearby Amenities
-                    </h2>
-
-
-                    <p>
-                        Important services and places
-                        close to this property.
-                    </p>
-
-
-                    <div
-                        id="nearby-amenities"
-                        class="nearby-grid"
-                    ></div>
-
-                </section>
-
-
-
-                <!-- MAP -->
-
-                <section class="property-section">
-
-                    <h2>
-                        🗺️ Location & Directions
-                    </h2>
-
-
-                    <p>
-                        This property location will be
-                        connected to Google Maps here.
-                    </p>
-
-
-                    <div class="map-ready-box">
-
-                        <strong>
-                            Google Maps Integration Ready
-                        </strong>
-
-
-                        <span>
-                            The property location and nearby
-                            places will be shown here when
-                            Google Maps is connected.
-                        </span>
-
-                    </div>
-
-                </section>
-
-
-
-                <!-- SAVE -->
-
-                <section class="property-section">
-
-                    <h2>
-                        Save this Property
-                    </h2>
-
-
-                    <p>
-                        Save this listing so you can easily
-                        find it again later.
-                    </p>
-
-
-                    <button
-                        type="button"
-                        id="save-property-button"
-                        class="property-save-button"
-                        onclick="toggleSavedProperty()"
-                    >
-                        ❤️ Save Property
-                    </button>
-
-                </section>
-
-
-
-                <!-- REQUEST VIEWING -->
-
-                <section class="property-section">
-
-                    <h2>
-                        Request a Viewing
-                    </h2>
-
-
-                    <p>
-                        Interested in seeing this property?
-                        Send a viewing request to the landlord.
-                    </p>
-
-
-                    <form
-                        id="viewing-request-form"
-                        class="viewing-form"
-                    >
-
-
-                        <div class="form-grid">
-
-
-                            <div class="form-field">
-
-                                <label for="tenant-name">
-                                    Full Name
-                                </label>
-
-
-                                <input
-                                    type="text"
-                                    id="tenant-name"
-                                    placeholder="Enter your full name"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-field">
-
-                                <label for="tenant-phone">
-                                    Phone Number
-                                </label>
-
-
-                                <input
-                                    type="tel"
-                                    id="tenant-phone"
-                                    placeholder="e.g. 0795629436"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-field">
-
-                                <label for="viewing-date">
-                                    Preferred Viewing Date
-                                </label>
-
-
-                                <input
-                                    type="date"
-                                    id="viewing-date"
-                                >
-
-                            </div>
-
-
-                            <div class="form-field full">
-
-                                <label for="viewing-message">
-                                    Message
-                                </label>
-
-
-                                <textarea
-                                    id="viewing-message"
-                                    placeholder="Add an optional message..."
-                                ></textarea>
-
-                            </div>
-
-
-                        </div>
-
-
-                        <button
-                            type="submit"
-                            class="primary-action-button"
-                        >
-                            📅 Request Viewing
-                        </button>
-
-
-                    </form>
-
-
-                    <div
-                        id="viewing-success"
-                        class="request-success"
-                        style="display:none;"
-                    >
-                        <strong>
-                            ✓ Viewing Request Sent
-                        </strong>
-                        <br>
-                        Your request has been submitted successfully.
-                    </div>
-
-
-                    <div
-                        id="viewing-error"
-                        class="request-error"
-                        style="display:none;"
-                    ></div>
-
-
-                </section>
-
-
-
-                <!-- SAFETY -->
-
-                <section class="property-section">
-
-                    <h2>
-                        Stay Safe
-                    </h2>
-
-
-                    <p>
-                        Always view a property before making
-                        a payment. Confirm the property details
-                        and communicate through trusted channels.
-                        Never send money simply because someone
-                        asks you to reserve a property.
-                    </p>
-
-                </section>
-
-
+        <div class="property-quick-facts">
+          <div class="property-fact">
+            <strong id="property-bedrooms">0</strong>
+            <span>Bedrooms</span>
+          </div>
+          <div class="property-fact">
+            <strong id="property-bathrooms">0</strong>
+            <span>Bathrooms</span>
+          </div>
+          <div class="property-fact">
+            <strong><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Verified</strong>
+            <span>Verified Listing</span>
+          </div>
+          <div class="property-fact">
+            <strong><svg viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 19 15 19 10A7 7 0 0 0 5 10C5 15 12 21 12 21Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg> Kenya</strong>
+            <span>Location</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="property-content-layout">
+
+      <div class="property-main-column">
+
+        <section class="property-section">
+          <h2>About this Property</h2>
+          <p id="property-description">No description available.</p>
+        </section>
+
+        <section class="property-section">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="13" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 10L21 7V17L16 14" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Property Video
+          </h2>
+          <div id="property-video-container" class="property-video-container">
+            <video id="property-video" controls playsinline></video>
+          </div>
+          <div id="no-property-video" class="no-video" style="display:none;">No property video has been uploaded.</div>
+        </section>
+
+        <section class="property-section">
+          <h2>Amenities &amp; Features</h2>
+          <div id="property-amenities" class="amenities-list"></div>
+        </section>
+
+        <section class="property-section">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="9" width="18" height="9" rx="2" stroke="currentColor" stroke-width="1.8"/><circle cx="7.5" cy="18" r="1.6" fill="currentColor"/><circle cx="16.5" cy="18" r="1.6" fill="currentColor"/><path d="M3 13H21M6 9V6C6 5 6.5 4.5 7.5 4.5H16.5C17.5 4.5 18 5 18 6V9" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Transport Information
+          </h2>
+          <p>Transport information provided for this property.</p>
+          <div id="transport-information" class="transport-grid"></div>
+        </section>
+
+        <section class="property-section">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 19 15 19 10A7 7 0 0 0 5 10C5 15 12 21 12 21Z" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.8"/></svg>
+            Nearby Amenities
+          </h2>
+          <p>Important services and places close to this property.</p>
+          <div id="nearby-amenities" class="nearby-grid"></div>
+        </section>
+
+        <section class="property-section">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M9 4L3 6.5V20L9 17.5L15 20L21 17.5V4L15 6.5L9 4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 4V17.5M15 6.5V20" stroke="currentColor" stroke-width="1.8"/></svg>
+            Location &amp; Directions
+          </h2>
+          <p>This property location will be connected to Google Maps here.</p>
+          <div class="map-ready-box">
+            <strong>Google Maps Integration Ready</strong>
+            <span>The property location and nearby places will be shown here when Google Maps is connected.</span>
+          </div>
+        </section>
+
+        <section class="property-section">
+          <h2>Save this Property</h2>
+          <p>Save this listing so you can easily find it again later.</p>
+          <button type="button" id="save-property-button" class="property-save-button" onclick="toggleSavedProperty()">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 20C12 20 4 15 4 9.5A4.5 4.5 0 0 1 12 6.5A4.5 4.5 0 0 1 20 9.5C20 15 12 20 12 20Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            Save Property
+          </button>
+        </section>
+
+        <section class="property-section">
+          <h2>Request a Viewing</h2>
+          <p>Interested in seeing this property? Send a viewing request to the landlord.</p>
+
+          <form id="viewing-request-form" class="viewing-form">
+            <div class="form-grid">
+              <div class="form-field">
+                <label for="tenant-name">Full Name</label>
+                <input type="text" id="tenant-name" placeholder="Enter your full name" required>
+              </div>
+              <div class="form-field">
+                <label for="tenant-phone">Phone Number</label>
+                <input type="tel" id="tenant-phone" placeholder="e.g. 0795629436" required>
+              </div>
+              <div class="form-field">
+                <label for="viewing-date">Preferred Viewing Date</label>
+                <input type="date" id="viewing-date">
+              </div>
+              <div class="form-field full">
+                <label for="viewing-message">Message</label>
+                <textarea id="viewing-message" placeholder="Add an optional message..."></textarea>
+              </div>
             </div>
 
+            <button type="submit" class="primary-action-button">
+              <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M3 9H21M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              Request Viewing
+            </button>
+          </form>
 
+          <div id="viewing-success" class="request-success" style="display:none;">
+            <strong>✓ Viewing Request Sent</strong><br>
+            Your request has been submitted successfully.
+          </div>
+          <div id="viewing-error" class="request-error" style="display:none;"></div>
+        </section>
 
-            <!-- SIDEBAR -->
+        <section class="property-section">
+          <h2>Stay Safe</h2>
+          <p>Always view a property before making a payment. Confirm the property details and communicate through trusted channels. Never send money simply because someone asks you to reserve a property.</p>
+        </section>
 
-            <aside class="property-sidebar">
+      </div>
 
-
-                <div class="property-sidebar-card">
-
-
-                    <h2>
-                        Interested in this Property?
-                    </h2>
-
-
-                    <p>
-                        Contact the landlord to ask questions,
-                        arrange a viewing or learn more.
-                    </p>
-
-
-                    <div class="contact-buttons">
-
-
-                        <button
-                            type="button"
-                            class="contact-button"
-                            onclick="contactLandlord()"
-                        >
-                            💬 Message Landlord
-                        </button>
-
-
-                        <a
-                            id="whatsapp-button"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="whatsapp-button"
-                        >
-                            💬 WhatsApp Landlord
-                        </a>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <div class="trust-card">
-
-
-                    <h2>
-                        🛡️ NichoLink Trust & Safety
-                    </h2>
-
-
-                    <p>
-                        Your safety matters when searching
-                        for a property.
-                    </p>
-
-
-                    <ul class="trust-list">
-
-
-                        <li>
-                            ✓ Inspect the property before paying.
-                        </li>
-
-
-                        <li>
-                            ✓ Confirm who you are dealing with.
-                        </li>
-
-
-                        <li>
-                            ✓ Avoid suspicious payment requests.
-                        </li>
-
-
-                        <li>
-                            ✓ Report suspicious listings.
-                        </li>
-
-
-                    </ul>
-
-
-                </div>
-
-
-            </aside>
-
-
+      <aside class="property-sidebar">
+        <div class="property-sidebar-card">
+          <h2>Interested in this Property?</h2>
+          <p>Contact the landlord to ask questions, arrange a viewing or learn more.</p>
+          <div class="contact-buttons">
+            <button type="button" class="contact-button" onclick="contactLandlord()">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 19V6C4 5 4.9 4 6 4H18C19.1 4 20 5 20 6V15C20 16 19.1 17 18 17H8L4 19Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+              Message Landlord
+            </button>
+            <a id="whatsapp-button" href="#" target="_blank" rel="noopener noreferrer" class="whatsapp-button">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 20L5.3 16.1C4.5 14.8 4 13.3 4 11.6C4 6.9 8 3 12.5 3S21 6.9 21 11.6 17 20.2 12.5 20.2C11 20.2 9.6 19.8 8.4 19.1L4 20Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+              WhatsApp Landlord
+            </a>
+          </div>
         </div>
 
+        <div class="trust-card">
+          <h2>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3L19 6V11C19 15.4 16 19.3 12 21C8 19.3 5 15.4 5 11V6L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            NichoLink Trust &amp; Safety
+          </h2>
+          <p>Your safety matters when searching for a property.</p>
+          <ul class="trust-list">
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Inspect the property before paying.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Confirm who you are dealing with.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Avoid suspicious payment requests.</li>
+            <li><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> Report suspicious listings.</li>
+          </ul>
+        </div>
+      </aside>
 
-    </section>
-
-
+    </div>
+  </section>
 </main>
 
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
-
+<!-- FOOTER -->
 <footer id="contact">
-
-
-    <div class="footer-content">
-
-
-        <div>
-
-            <h2>
-                NichoLink
-                <strong>254</strong>
-            </h2>
-
-
-            <p>
-                Connecting tenants with properties
-                across Kenya.
-            </p>
-
-        </div>
-
-
-        <div>
-
-            <h3>
-                Quick Links
-            </h3>
-
-
-            <a href="index.html">
-                Home
-            </a>
-
-
-            <a href="properties.html">
-                Properties
-            </a>
-
-
-            <a href="index.html#how-it-works">
-                How It Works
-            </a>
-
-
-            <a href="trust-center.html">
-                Trust & Information Center
-            </a>
-
-        </div>
-
-
-        <div>
-
-            <h3>
-                Contact
-            </h3>
-
-
-            <p>
-                📞 0795629436
-            </p>
-
-
-            <p>
-                💬 WhatsApp: 0795629436
-            </p>
-
-
-            <p>
-                ✉️ nicholink254@gmail.com
-            </p>
-
-        </div>
-
-
+  <div class="footer-content">
+    <div>
+      <h2>NichoLink <strong>254</strong></h2>
+      <p>Connecting tenants with properties across Kenya.</p>
     </div>
-
-
-    <div class="copyright">
-
-        © 2026 NichoLink 254.
-        All Rights Reserved.
-
+    <div>
+      <h3>Quick Links</h3>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="properties.html">Properties</a>
+        <a href="index.html#how-it-works">How It Works</a>
+        <a href="trust-center.html">Trust &amp; Information Center</a>
+      </div>
     </div>
-
-
+    <div>
+      <h3>Contact</h3>
+      <p class="footer-contact">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 5C4 4.4 4.4 4 5 4H8L10 9L7.5 10.5C8.5 12.9 10.1 14.5 12.5 15.5L14 13L19 15V18C19 18.6 18.6 19 18 19C10.3 19 4 12.7 4 5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        0795 629 436
+      </p>
+      <p class="footer-contact">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M4 20L5.3 16.1C4.5 14.8 4 13.3 4 11.6C4 6.9 8 3 12.5 3S21 6.9 21 11.6 17 20.2 12.5 20.2C11 20.2 9.6 19.8 8.4 19.1L4 20Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        WhatsApp: 0795 629 436
+      </p>
+      <p class="footer-contact">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M3 6L12 13L21 6" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+        nicholink254@gmail.com
+      </p>
+    </div>
+  </div>
+  <div class="copyright">© 2026 NichoLink 254. All Rights Reserved.</div>
 </footer>
 
-
-
 <script src="supabase.js"></script>
-
-
-
 <script>
+  let currentProperty = null;
+  let currentUser = null;
+  let isPropertySaved = false;
 
-let currentProperty = null;
+  const urlParams = new URLSearchParams(window.location.search);
+  const propertyId = urlParams.get("id");
 
-let currentUser = null;
+  const houseIconSvg = '<svg viewBox="0 0 24 24" fill="none"><path d="M4 11L12 4L20 11V20H14V14H10V20H4V11Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>';
+  const checkIconSvg = '<svg class="icon-sm" viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const pinIconSvg = '<svg class="icon-sm" viewBox="0 0 24 24" fill="none"><path d="M12 21C12 21 19 15 19 10A7 7 0 0 0 5 10C5 15 12 21 12 21Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="10" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg>';
 
-let isPropertySaved = false;
+  /* ===================== MOBILE MENU ===================== */
+  document.addEventListener("DOMContentLoaded", function () {
+    const menuButton = document.getElementById("menuButton");
+    const mobileMenu = document.getElementById("mobileMenu");
 
+    if (menuButton && mobileMenu) {
+      menuButton.addEventListener("click", function (event) {
+        event.stopPropagation();
+        const isOpen = mobileMenu.classList.toggle("open");
+        menuButton.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        menuButton.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+        menuButton.textContent = isOpen ? "✕" : "☰";
+      });
 
+      mobileMenu.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", function () {
+          mobileMenu.classList.remove("open");
+          menuButton.setAttribute("aria-expanded", "false");
+          menuButton.setAttribute("aria-label", "Open menu");
+          menuButton.textContent = "☰";
+        });
+      });
 
-/* =====================================================
-   PROPERTY ID
-===================================================== */
-
-const urlParams =
-    new URLSearchParams(
-        window.location.search
-    );
-
-
-const propertyId =
-    urlParams.get("id");
-
-
-
-/* =====================================================
-   LOAD CURRENT USER
-===================================================== */
-
-async function loadCurrentUser() {
-
-    try {
-
-        const {
-            data: {
-                session
-            },
-            error
-        } =
-            await supabaseClient
-                .auth
-                .getSession();
-
-
-        if (error) {
-            throw error;
+      document.addEventListener("click", function (event) {
+        if (!mobileMenu.contains(event.target) && !menuButton.contains(event.target)) {
+          mobileMenu.classList.remove("open");
+          menuButton.setAttribute("aria-expanded", "false");
+          menuButton.setAttribute("aria-label", "Open menu");
+          menuButton.textContent = "☰";
         }
-
-
-        currentUser =
-            session?.user ||
-            null;
-
+      });
     }
+  });
 
-    catch (error) {
-
-        console.error(
-            "Session error:",
-            error
-        );
-
-        currentUser =
-            null;
-
+  /* ===================== CURRENT USER ===================== */
+  async function loadCurrentUser() {
+    try {
+      const { data: { session }, error } = await supabaseClient.auth.getSession();
+      if (error) throw error;
+      currentUser = session?.user || null;
+    } catch (error) {
+      console.error("Session error:", error);
+      currentUser = null;
     }
+  }
 
-}
-
-
-
-/* =====================================================
-   LOAD PROPERTY
-===================================================== */
-
-async function loadProperty() {
-
-    const loading =
-        document.getElementById(
-            "loading-property"
-        );
-
-
-    const errorBox =
-        document.getElementById(
-            "property-error"
-        );
-
-
-    const content =
-        document.getElementById(
-            "property-content"
-        );
-
+  /* ===================== LOAD PROPERTY ===================== */
+  async function loadProperty() {
+    const loading = document.getElementById("loading-property");
+    const errorBox = document.getElementById("property-error");
+    const content = document.getElementById("property-content");
 
     if (!propertyId) {
-
-        loading.style.display =
-            "none";
-
-        errorBox.style.display =
-            "block";
-
-        return;
-
+      loading.style.display = "none";
+      errorBox.style.display = "block";
+      return;
     }
-
 
     try {
+      const { data: property, error } = await supabaseClient
+        .from("properties")
+        .select("*")
+        .eq("id", propertyId)
+        .single();
 
-        const {
-            data: property,
-            error
-        } =
-            await supabaseClient
-                .from("properties")
-                .select("*")
-                .eq(
-                    "id",
-                    propertyId
-                )
-                .single();
+      if (error) throw error;
+      if (!property) throw new Error("Property not found.");
 
+      currentProperty = property;
+      loading.style.display = "none";
+      content.style.display = "block";
 
-        if (error) {
-            throw error;
-        }
+      document.getElementById("property-title").textContent = property.title || "Property";
+      document.getElementById("property-location").innerHTML = pinIconSvg + " " + escapeHtml(property.location || "Location not specified");
+      document.getElementById("property-rent").textContent = "KSh " + Number(property.rent || 0).toLocaleString();
+      document.getElementById("property-bedrooms").textContent = property.bedrooms || 0;
+      document.getElementById("property-bathrooms").textContent = property.bathrooms || 0;
+      document.getElementById("property-description").textContent = property.description || "No description available.";
+      document.getElementById("property-status").textContent = property.status || "Available";
 
+      loadMainImage(property);
+      loadAmenities(property);
+      loadTransport(property);
+      loadNearbyAmenities(property);
+      loadPropertyVideo(property);
+      setupWhatsApp(property);
 
-        if (!property) {
+      await loadPropertyGallery();
+      await checkSavedStatus();
 
-            throw new Error(
-                "Property not found."
-            );
-
-        }
-
-
-        currentProperty =
-            property;
-
-
-        loading.style.display =
-            "none";
-
-
-        content.style.display =
-            "block";
-
-
-        document.getElementById(
-            "property-title"
-        ).textContent =
-            property.title ||
-            "Property";
-
-
-        document.getElementById(
-            "property-location"
-        ).textContent =
-            "📍 " +
-            (
-                property.location ||
-                "Location not specified"
-            );
-
-
-        document.getElementById(
-            "property-rent"
-        ).textContent =
-            "KSh " +
-            Number(
-                property.rent || 0
-            ).toLocaleString();
-
-
-        document.getElementById(
-            "property-bedrooms"
-        ).textContent =
-            property.bedrooms ||
-            0;
-
-
-        document.getElementById(
-            "property-bathrooms"
-        ).textContent =
-            property.bathrooms ||
-            0;
-
-
-        document.getElementById(
-            "property-description"
-        ).textContent =
-            property.description ||
-            "No description available.";
-
-
-        document.getElementById(
-            "property-status"
-        ).textContent =
-            property.status ||
-            "Available";
-
-
-        loadMainImage(
-            property
-        );
-
-
-        loadAmenities(
-            property
-        );
-
-
-        loadTransport(
-            property
-        );
-
-
-        loadNearbyAmenities(
-            property
-        );
-
-
-        loadPropertyVideo(
-            property
-        );
-
-
-        setupWhatsApp(
-            property
-        );
-
-
-        await loadPropertyGallery();
-
-
-        await checkSavedStatus();
-
+    } catch (error) {
+      console.error("Property loading error:", error);
+      loading.style.display = "none";
+      errorBox.style.display = "block";
     }
+  }
 
+  /* ===================== MAIN IMAGE ===================== */
+  function loadMainImage(property) {
+    const image = document.getElementById("property-image");
+    const placeholder = document.getElementById("property-image-placeholder");
 
-    catch (error) {
-
-        console.error(
-            "Property loading error:",
-            error
-        );
-
-
-        loading.style.display =
-            "none";
-
-
-        errorBox.style.display =
-            "block";
-
+    if (property.image_url) {
+      image.src = property.image_url;
+      image.alt = property.title || "Property image";
+      image.style.display = "block";
+      placeholder.style.display = "none";
+    } else {
+      image.style.display = "none";
+      placeholder.style.display = "flex";
     }
+  }
 
-}
+  /* ===================== VIDEO ===================== */
+  function loadPropertyVideo(property) {
+    const container = document.getElementById("property-video-container");
+    const video = document.getElementById("property-video");
+    const empty = document.getElementById("no-property-video");
 
-
-
-/* =====================================================
-   MAIN IMAGE
-===================================================== */
-
-function loadMainImage(
-    property
-) {
-
-    const image =
-        document.getElementById(
-            "property-image"
-        );
-
-
-    const placeholder =
-        document.getElementById(
-            "property-image-placeholder"
-        );
-
-
-    if (
-        property.image_url
-    ) {
-
-        image.src =
-            property.image_url;
-
-
-        image.alt =
-            property.title ||
-            "Property image";
-
-
-        image.style.display =
-            "block";
-
-
-        placeholder.style.display =
-            "none";
-
+    if (property.video_url) {
+      video.src = property.video_url;
+      container.style.display = "block";
+      empty.style.display = "none";
+    } else {
+      container.style.display = "none";
+      empty.style.display = "block";
     }
+  }
 
-    else {
+  /* ===================== GALLERY ===================== */
+  async function loadPropertyGallery() {
+    const gallery = document.getElementById("property-gallery");
+    const mainImage = document.getElementById("property-image");
 
-        image.style.display =
-            "none";
-
-
-        placeholder.style.display =
-            "flex";
-
-    }
-
-}
-
-
-
-/* =====================================================
-   PROPERTY VIDEO
-===================================================== */
-
-function loadPropertyVideo(
-    property
-) {
-
-    const container =
-        document.getElementById(
-            "property-video-container"
-        );
-
-
-    const video =
-        document.getElementById(
-            "property-video"
-        );
-
-
-    const empty =
-        document.getElementById(
-            "no-property-video"
-        );
-
-
-    if (
-        property.video_url
-    ) {
-
-        video.src =
-            property.video_url;
-
-
-        container.style.display =
-            "block";
-
-
-        empty.style.display =
-            "none";
-
-    }
-
-    else {
-
-        container.style.display =
-            "none";
-
-
-        empty.style.display =
-            "block";
-
-    }
-
-}
-
-
-
-/* =====================================================
-   PROPERTY GALLERY
-===================================================== */
-
-async function loadPropertyGallery() {
-
-    const gallery =
-        document.getElementById(
-            "property-gallery"
-        );
-
-
-    const mainImage =
-        document.getElementById(
-            "property-image"
-        );
-
-
-    const {
-        data: images,
-        error
-    } =
-        await supabaseClient
-            .from("property_images")
-            .select("*")
-            .eq(
-                "property_id",
-                propertyId
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:
-                        true
-                }
-            );
-
+    const { data: images, error } = await supabaseClient
+      .from("property_images")
+      .select("*")
+      .eq("property_id", propertyId)
+      .order("created_at", { ascending: true });
 
     if (error) {
-
-        console.error(
-            "Gallery error:",
-            error
-        );
-
-        return;
-
+      console.error("Gallery error:", error);
+      return;
     }
 
+    gallery.innerHTML = "";
+    if (!images || images.length === 0) return;
 
-    gallery.innerHTML =
-        "";
+    images.forEach(function (image, index) {
+      const thumbnail = document.createElement("img");
+      thumbnail.src = image.image_url;
+      thumbnail.alt = "Property photo " + (index + 1);
+      thumbnail.className = "gallery-thumbnail";
+      if (index === 0) thumbnail.classList.add("active");
 
+      thumbnail.addEventListener("click", function () {
+        mainImage.src = image.image_url;
+        document.querySelectorAll(".gallery-thumbnail").forEach(thumb => thumb.classList.remove("active"));
+        thumbnail.classList.add("active");
+      });
 
-    if (
-        !images ||
-        images.length === 0
-    ) {
+      gallery.appendChild(thumbnail);
+    });
+  }
 
-        return;
+  /* ===================== AMENITIES ===================== */
+  function loadAmenities(property) {
+    const box = document.getElementById("property-amenities");
+    box.innerHTML = "";
 
+    let amenities = property.amenities;
+    if (typeof amenities === "string") {
+      amenities = amenities.split(",").map(item => item.trim()).filter(item => item.length > 0);
     }
 
-
-    images.forEach(
-        function(image,index) {
-
-            const thumbnail =
-                document.createElement(
-                    "img"
-                );
-
-
-            thumbnail.src =
-                image.image_url;
-
-
-            thumbnail.alt =
-                "Property photo " +
-                (index + 1);
-
-
-            thumbnail.className =
-                "gallery-thumbnail";
-
-
-            if (
-                index === 0
-            ) {
-
-                thumbnail.classList.add(
-                    "active"
-                );
-
-            }
-
-
-            thumbnail.addEventListener(
-                "click",
-                function() {
-
-                    mainImage.src =
-                        image.image_url;
-
-
-                    document
-                        .querySelectorAll(
-                            ".gallery-thumbnail"
-                        )
-                        .forEach(
-                            thumb =>
-                                thumb.classList.remove(
-                                    "active"
-                                )
-                        );
-
-
-                    thumbnail.classList.add(
-                        "active"
-                    );
-
-                }
-            );
-
-
-            gallery.appendChild(
-                thumbnail
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =====================================================
-   AMENITIES
-===================================================== */
-
-function loadAmenities(
-    property
-) {
-
-    const box =
-        document.getElementById(
-            "property-amenities"
-        );
-
-
-    box.innerHTML =
-        "";
-
-
-    let amenities =
-        property.amenities;
-
-
-    if (
-        typeof amenities ===
-        "string"
-    ) {
-
-        amenities =
-            amenities
-                .split(",")
-                .map(
-                    item =>
-                        item.trim()
-                )
-                .filter(
-                    item =>
-                        item.length > 0
-                );
-
+    if (Array.isArray(amenities) && amenities.length) {
+      amenities.forEach(function (amenity) {
+        const item = document.createElement("span");
+        item.className = "amenity-item";
+        item.innerHTML = checkIconSvg + " " + escapeHtml(amenity);
+        box.appendChild(item);
+      });
     }
 
-
-    if (
-        Array.isArray(
-            amenities
-        ) &&
-        amenities.length
-    ) {
-
-        amenities.forEach(
-            function(amenity) {
-
-                const item =
-                    document.createElement(
-                        "span"
-                    );
-
-
-                item.className =
-                    "amenity-item";
-
-
-                item.textContent =
-                    "✓ " +
-                    amenity;
-
-
-                box.appendChild(
-                    item
-                );
-
-            }
-        );
-
+    if (box.children.length === 0) {
+      box.innerHTML = '<span class="amenity-item">No amenities listed.</span>';
     }
+  }
 
-
-    if (
-        box.children.length ===
-        0
-    ) {
-
-        box.innerHTML = `
-
-            <span class="amenity-item">
-                No amenities listed.
-            </span>
-
-        `;
-
-    }
-
-}
-
-
-
-/* =====================================================
-   TRANSPORT
-===================================================== */
-
-function loadTransport(
-    property
-) {
-
-    const box =
-        document.getElementById(
-            "transport-information"
-        );
-
-
-    box.innerHTML =
-        "";
-
+  /* ===================== TRANSPORT ===================== */
+  function loadTransport(property) {
+    const box = document.getElementById("transport-information");
+    box.innerHTML = "";
 
     const transportItems = [
-
-        {
-            icon: "🚌",
-            title: "Nearest Matatu Stage",
-            value:
-                property.nearest_matatu_stage
-        },
-
-        {
-            icon: "📍",
-            title: "Distance",
-            value:
-                property.transport_distance
-        },
-
-        {
-            icon: "🗺️",
-            title: "Routes / Destinations",
-            value:
-                property.transport_route
-        },
-
-        {
-            icon: "ℹ️",
-            title: "Transport Notes",
-            value:
-                property.transport_notes
-        }
-
+      { icon: "🚌", title: "Nearest Matatu Stage", value: property.nearest_matatu_stage },
+      { icon: "📏", title: "Distance", value: property.transport_distance },
+      { icon: "🗺️", title: "Routes / Destinations", value: property.transport_route },
+      { icon: "ℹ️", title: "Transport Notes", value: property.transport_notes }
     ];
 
+    const available = transportItems.filter(item => item.value && String(item.value).trim());
 
-    const available =
-        transportItems.filter(
-            item =>
-                item.value &&
-                String(
-                    item.value
-                ).trim()
-        );
-
-
-    if (
-        available.length === 0
-    ) {
-
-        box.innerHTML = `
-
-            <div class="empty-nearby">
-                No transport information has been
-                added for this property yet.
-            </div>
-
-        `;
-
-        return;
-
+    if (available.length === 0) {
+      box.innerHTML = '<div class="empty-nearby">No transport information has been added for this property yet.</div>';
+      return;
     }
 
+    available.forEach(function (item) {
+      const card = document.createElement("div");
+      card.className = "transport-card";
+      if (item.title === "Routes / Destinations" || item.title === "Transport Notes") {
+        card.classList.add("full");
+      }
+      card.innerHTML = `
+        <div class="icon-emoji">${item.icon}</div>
+        <strong>${escapeHtml(item.title)}</strong>
+        <span>${escapeHtml(item.value)}</span>`;
+      box.appendChild(card);
+    });
+  }
 
-    available.forEach(
-        function(item) {
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "transport-card";
-
-
-            if (
-                item.title ===
-                    "Routes / Destinations" ||
-                item.title ===
-                    "Transport Notes"
-            ) {
-
-                card.classList.add(
-                    "full"
-                );
-
-            }
-
-
-            card.innerHTML = `
-
-                <div class="icon">
-                    ${item.icon}
-                </div>
-
-                <strong>
-                    ${escapeHtml(
-                        item.title
-                    )}
-                </strong>
-
-                <span>
-                    ${escapeHtml(
-                        item.value
-                    )}
-                </span>
-
-            `;
-
-
-            box.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =====================================================
-   NEARBY AMENITIES
-===================================================== */
-
-function loadNearbyAmenities(
-    property
-) {
-
-    const box =
-        document.getElementById(
-            "nearby-amenities"
-        );
-
-
-    box.innerHTML =
-        "";
-
+  /* ===================== NEARBY AMENITIES ===================== */
+  function loadNearbyAmenities(property) {
+    const box = document.getElementById("nearby-amenities");
+    box.innerHTML = "";
 
     const nearbyItems = [
-
-        {
-            icon: "🏥",
-            title: "Hospital / Clinic",
-            value:
-                property.nearby_hospital
-        },
-
-        {
-            icon: "🏫",
-            title: "School / College",
-            value:
-                property.nearby_school
-        },
-
-        {
-            icon: "🛒",
-            title: "Supermarket / Shop",
-            value:
-                property.nearby_supermarket
-        },
-
-        {
-            icon: "🏦",
-            title: "Bank / ATM",
-            value:
-                property.nearby_bank_atm
-        },
-
-        {
-            icon: "⛽",
-            title: "Petrol Station",
-            value:
-                property.nearby_petrol_station
-        },
-
-        {
-            icon: "🍽️",
-            title: "Restaurant",
-            value:
-                property.nearby_restaurant
-        },
-
-        {
-            icon: "🏪",
-            title: "Market / Shopping Centre",
-            value:
-                property.nearby_market
-        }
-
+      { icon: "🏥", title: "Hospital / Clinic", value: property.nearby_hospital },
+      { icon: "🏫", title: "School / College", value: property.nearby_school },
+      { icon: "🛒", title: "Supermarket / Shop", value: property.nearby_supermarket },
+      { icon: "🏦", title: "Bank / ATM", value: property.nearby_bank_atm },
+      { icon: "⛽", title: "Petrol Station", value: property.nearby_petrol_station },
+      { icon: "🍽️", title: "Restaurant", value: property.nearby_restaurant },
+      { icon: "🏪", title: "Market / Shopping Centre", value: property.nearby_market }
     ];
 
+    const available = nearbyItems.filter(item => item.value && String(item.value).trim());
 
-    const available =
-        nearbyItems.filter(
-            item =>
-                item.value &&
-                String(
-                    item.value
-                ).trim()
-        );
-
-
-    if (
-        available.length === 0
-    ) {
-
-        box.innerHTML = `
-
-            <div class="empty-nearby">
-                No nearby amenities have been
-                added for this property yet.
-            </div>
-
-        `;
-
-        return;
-
+    if (available.length === 0) {
+      box.innerHTML = '<div class="empty-nearby">No nearby amenities have been added for this property yet.</div>';
+      return;
     }
 
+    available.forEach(function (item) {
+      const card = document.createElement("div");
+      card.className = "nearby-card";
+      card.innerHTML = `
+        <div class="nearby-icon">${item.icon}</div>
+        <div>
+          <strong>${escapeHtml(item.title)}</strong>
+          <span>${escapeHtml(item.value)}</span>
+        </div>`;
+      box.appendChild(card);
+    });
+  }
 
-    available.forEach(
-        function(item) {
+  /* ===================== WHATSAPP ===================== */
+  function setupWhatsApp(property) {
+    const whatsapp = document.getElementById("whatsapp-button");
+    if (!whatsapp) return;
 
-            const card =
-                document.createElement(
-                    "div"
-                );
+    let phone = property.landlord_phone || property.phone || "0795629436";
+    let cleanPhone = String(phone).replace(/[^0-9]/g, "");
+    if (cleanPhone.startsWith("0")) cleanPhone = "254" + cleanPhone.substring(1);
 
-
-            card.className =
-                "nearby-card";
-
-
-            card.innerHTML = `
-
-                <div class="nearby-icon">
-                    ${item.icon}
-                </div>
-
-
-                <div>
-
-                    <strong>
-                        ${escapeHtml(
-                            item.title
-                        )}
-                    </strong>
-
-
-                    <span>
-                        ${escapeHtml(
-                            item.value
-                        )}
-                    </span>
-
-                </div>
-
-            `;
-
-
-            box.appendChild(
-                card
-            );
-
-        }
+    whatsapp.href = "https://wa.me/" + cleanPhone + "?text=" + encodeURIComponent(
+      "Hello, I am interested in the property: " + (property.title || "Property") + " in " + (property.location || "")
     );
+  }
 
-}
-
-
-
-/* =====================================================
-   WHATSAPP
-===================================================== */
-
-function setupWhatsApp(
-    property
-) {
-
-    const whatsapp =
-        document.getElementById(
-            "whatsapp-button"
-        );
-
-
-    if (!whatsapp) {
-        return;
+  /* ===================== SAVED PROPERTY ===================== */
+  async function checkSavedStatus() {
+    if (!currentUser || !propertyId) {
+      updateSaveButton(false);
+      return;
     }
 
-
-    let phone =
-        property.landlord_phone ||
-        property.phone ||
-        "0795629436";
-
-
-    let cleanPhone =
-        String(phone)
-            .replace(
-                /[^0-9]/g,
-                ""
-            );
-
-
-    if (
-        cleanPhone.startsWith("0")
-    ) {
-
-        cleanPhone =
-            "254" +
-            cleanPhone.substring(1);
-
-    }
-
-
-    whatsapp.href =
-        "https://wa.me/" +
-        cleanPhone +
-        "?text=" +
-        encodeURIComponent(
-            "Hello, I am interested in the property: " +
-            (
-                property.title ||
-                "Property"
-            ) +
-            " in " +
-            (
-                property.location ||
-                ""
-            )
-        );
-
-}
-
-
-
-/* =====================================================
-   SAVED PROPERTY
-===================================================== */
-
-async function checkSavedStatus() {
-
-    if (
-        !currentUser ||
-        !propertyId
-    ) {
-
-        updateSaveButton(
-            false
-        );
-
-        return;
-
-    }
-
-
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("saved_properties")
-            .select("id")
-            .eq(
-                "user_id",
-                currentUser.id
-            )
-            .eq(
-                "property_id",
-                propertyId
-            )
-            .maybeSingle();
-
+    const { data, error } = await supabaseClient
+      .from("saved_properties")
+      .select("id")
+      .eq("user_id", currentUser.id)
+      .eq("property_id", propertyId)
+      .maybeSingle();
 
     if (error) {
-
-        console.error(
-            "Saved status error:",
-            error
-        );
-
-        return;
-
+      console.error("Saved status error:", error);
+      return;
     }
 
+    isPropertySaved = !!data;
+    updateSaveButton(isPropertySaved);
+  }
 
-    isPropertySaved =
-        !!data;
+  function updateSaveButton(saved) {
+    const button = document.getElementById("save-property-button");
+    if (!button) return;
 
+    button.classList.toggle("saved", saved);
+    button.innerHTML = saved
+      ? '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20C12 20 4 15 4 9.5A4.5 4.5 0 0 1 12 6.5A4.5 4.5 0 0 1 20 9.5C20 15 12 20 12 20Z"/></svg> Saved — Remove'
+      : '<svg viewBox="0 0 24 24" fill="none"><path d="M12 20C12 20 4 15 4 9.5A4.5 4.5 0 0 1 12 6.5A4.5 4.5 0 0 1 20 9.5C20 15 12 20 12 20Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Save Property';
+  }
 
-    updateSaveButton(
-        isPropertySaved
-    );
-
-}
-
-
-
-function updateSaveButton(
-    saved
-) {
-
-    const button =
-        document.getElementById(
-            "save-property-button"
-        );
-
-
-    if (!button) {
-        return;
-    }
-
-
-    button.classList.toggle(
-        "saved",
-        saved
-    );
-
-
-    button.textContent =
-        saved
-            ? "💚 Saved Property — Remove"
-            : "❤️ Save Property";
-
-}
-
-
-
-async function toggleSavedProperty() {
-
-    const button =
-        document.getElementById(
-            "save-property-button"
-        );
-
-
-    if (
-        !button ||
-        !propertyId
-    ) {
-
-        return;
-
-    }
-
+  async function toggleSavedProperty() {
+    const button = document.getElementById("save-property-button");
+    if (!button || !propertyId) return;
 
     if (!currentUser) {
+      window.location.href = "login.html";
+      return;
+    }
 
-        window.location.href =
-            "login.html";
+    button.disabled = true;
+    button.classList.add("loading");
 
+    try {
+      if (isPropertySaved) {
+        const { error } = await supabaseClient
+          .from("saved_properties")
+          .delete()
+          .eq("user_id", currentUser.id)
+          .eq("property_id", propertyId);
+
+        if (error) throw error;
+        isPropertySaved = false;
+        updateSaveButton(false);
+      } else {
+        const { error } = await supabaseClient
+          .from("saved_properties")
+          .insert({ user_id: currentUser.id, property_id: propertyId });
+
+        if (error) throw error;
+        isPropertySaved = true;
+        updateSaveButton(true);
+      }
+    } catch (error) {
+      console.error("Save property error:", error);
+      alert("Unable to update saved property.\n\n" + (error.message || "Unknown error"));
+    } finally {
+      button.disabled = false;
+      button.classList.remove("loading");
+    }
+  }
+
+  /* ===================== CONTACT LANDLORD ===================== */
+  async function contactLandlord() {
+    try {
+      if (!currentProperty) throw new Error("Property information is not available.");
+      if (!currentProperty.landlord_id) throw new Error("This property is not connected to a landlord.");
+
+      if (!currentUser) {
+        window.location.href = "login.html";
         return;
+      }
 
+      if (currentUser.id === currentProperty.landlord_id) {
+        alert("You cannot message yourself about your own property.");
+        return;
+      }
+
+      const participant1 = currentUser.id < currentProperty.landlord_id ? currentUser.id : currentProperty.landlord_id;
+      const participant2 = currentUser.id < currentProperty.landlord_id ? currentProperty.landlord_id : currentUser.id;
+
+      const { data: existingConversation, error: existingError } = await supabaseClient
+        .from("conversations")
+        .select("id")
+        .eq("participant_1", participant1)
+        .eq("participant_2", participant2)
+        .eq("property_id", currentProperty.id)
+        .maybeSingle();
+
+      if (existingError) throw existingError;
+
+      let conversationId;
+
+      if (existingConversation) {
+        conversationId = existingConversation.id;
+      } else {
+        const { data: newConversation, error: createError } = await supabaseClient
+          .from("conversations")
+          .insert({ participant_1: participant1, participant_2: participant2, property_id: currentProperty.id })
+          .select("id")
+          .single();
+
+        if (createError) throw createError;
+        conversationId = newConversation.id;
+      }
+
+      window.location.href = "messages.html?conversation_id=" + encodeURIComponent(conversationId);
+
+    } catch (error) {
+      console.error("Contact landlord error:", error);
+      alert("Unable to open the conversation.\n\n" + (error.message || "Unknown error"));
     }
+  }
 
+  /* ===================== VIEWING REQUEST ===================== */
+  document.getElementById("viewing-request-form").addEventListener("submit", submitViewingRequest);
 
-    button.disabled =
-        true;
-
-
-    button.classList.add(
-        "loading"
-    );
-
-
-    try {
-
-        if (isPropertySaved) {
-
-            const {
-                error
-            } =
-                await supabaseClient
-                    .from("saved_properties")
-                    .delete()
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    )
-                    .eq(
-                        "property_id",
-                        propertyId
-                    );
-
-
-            if (error) {
-                throw error;
-            }
-
-
-            isPropertySaved =
-                false;
-
-
-            updateSaveButton(
-                false
-            );
-
-        }
-
-        else {
-
-            const {
-                error
-            } =
-                await supabaseClient
-                    .from("saved_properties")
-                    .insert({
-
-                        user_id:
-                            currentUser.id,
-
-                        property_id:
-                            propertyId
-
-                    });
-
-
-            if (error) {
-                throw error;
-            }
-
-
-            isPropertySaved =
-                true;
-
-
-            updateSaveButton(
-                true
-            );
-
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Save property error:",
-            error
-        );
-
-
-        alert(
-            "Unable to update saved property.\n\n" +
-            (
-                error.message ||
-                "Unknown error"
-            )
-        );
-
-    }
-
-    finally {
-
-        button.disabled =
-            false;
-
-
-        button.classList.remove(
-            "loading"
-        );
-
-    }
-
-}
-
-
-
-/* =====================================================
-   CONTACT LANDLORD
-===================================================== */
-
-async function contactLandlord() {
-
-    try {
-
-        if (
-            !currentProperty
-        ) {
-
-            throw new Error(
-                "Property information is not available."
-            );
-
-        }
-
-
-        if (
-            !currentProperty.landlord_id
-        ) {
-
-            throw new Error(
-                "This property is not connected to a landlord."
-            );
-
-        }
-
-
-        if (!currentUser) {
-
-            window.location.href =
-                "login.html";
-
-            return;
-
-        }
-
-
-        if (
-            currentUser.id ===
-            currentProperty.landlord_id
-        ) {
-
-            alert(
-                "You cannot message yourself about your own property."
-            );
-
-            return;
-
-        }
-
-
-        const participant1 =
-            currentUser.id <
-            currentProperty.landlord_id
-
-                ?
-
-            currentUser.id
-
-                :
-
-            currentProperty.landlord_id;
-
-
-        const participant2 =
-            currentUser.id <
-            currentProperty.landlord_id
-
-                ?
-
-            currentProperty.landlord_id
-
-                :
-
-            currentUser.id;
-
-
-        const {
-            data:
-                existingConversation,
-            error:
-                existingError
-        } =
-            await supabaseClient
-                .from(
-                    "conversations"
-                )
-                .select("id")
-                .eq(
-                    "participant_1",
-                    participant1
-                )
-                .eq(
-                    "participant_2",
-                    participant2
-                )
-                .eq(
-                    "property_id",
-                    currentProperty.id
-                )
-                .maybeSingle();
-
-
-        if (existingError) {
-            throw existingError;
-        }
-
-
-        let conversationId;
-
-
-        if (
-            existingConversation
-        ) {
-
-            conversationId =
-                existingConversation.id;
-
-        }
-
-        else {
-
-            const {
-                data:
-                    newConversation,
-                error:
-                    createError
-            } =
-                await supabaseClient
-                    .from(
-                        "conversations"
-                    )
-                    .insert({
-
-                        participant_1:
-                            participant1,
-
-                        participant_2:
-                            participant2,
-
-                        property_id:
-                            currentProperty.id
-
-                    })
-                    .select("id")
-                    .single();
-
-
-            if (createError) {
-                throw createError;
-            }
-
-
-            conversationId =
-                newConversation.id;
-
-        }
-
-
-        window.location.href =
-            "messages.html?conversation_id=" +
-            encodeURIComponent(
-                conversationId
-            );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Contact landlord error:",
-            error
-        );
-
-
-        alert(
-            "Unable to open the conversation.\n\n" +
-            (
-                error.message ||
-                "Unknown error"
-            )
-        );
-
-    }
-
-}
-
-
-
-/* =====================================================
-   VIEWING REQUEST
-===================================================== */
-
-document
-    .getElementById(
-        "viewing-request-form"
-    )
-    .addEventListener(
-        "submit",
-        submitViewingRequest
-    );
-
-
-
-async function submitViewingRequest(
-    event
-) {
-
+  async function submitViewingRequest(event) {
     event.preventDefault();
 
+    const successBox = document.getElementById("viewing-success");
+    const errorBox = document.getElementById("viewing-error");
+    const submitButton = event.target.querySelector('button[type="submit"]');
+    const originalButtonHtml = submitButton.innerHTML;
 
-    const form =
-        document.getElementById(
-            "viewing-request-form"
-        );
+    successBox.style.display = "none";
+    errorBox.style.display = "none";
 
+    const name = document.getElementById("tenant-name").value.trim();
+    const phone = document.getElementById("tenant-phone").value.trim();
+    const viewingDate = document.getElementById("viewing-date").value;
+    const message = document.getElementById("viewing-message").value.trim();
 
-    const success =
-        document.getElementById(
-            "viewing-success"
-        );
+    try {
+      if (!name) throw new Error("Please enter your full name.");
+      if (name.length < 2 || name.length > 100) throw new Error("Full name must be between 2 and 100 characters.");
+      if (!/^[A-Za-zÀ-ÿ\s.'-]+$/.test(name)) throw new Error("Please enter a valid name.");
 
+      if (!phone) throw new Error("Please enter your phone number.");
+      if (!/^(?:\+254|0)7\d{8}$/.test(phone)) throw new Error("Please enter a valid Kenyan phone number, e.g. 0712345678.");
 
-    const errorBox =
-        document.getElementById(
-            "viewing-error"
-        );
+      if (viewingDate) {
+        const selectedDate = new Date(viewingDate + "T00:00:00");
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        if (selectedDate < today) throw new Error("Viewing date cannot be in the past.");
+      }
 
+      if (message.length > 1000) throw new Error("Message is too long. Maximum 1000 characters.");
+      if (!propertyId) throw new Error("This property could not be identified.");
 
-    const name =
-        document.getElementById(
-            "tenant-name"
-        ).value.trim();
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
 
+      const { error } = await supabaseClient.from("viewing_requests").insert({
+        property_id: propertyId,
+        tenant_name: name,
+        tenant_phone: phone,
+        viewing_date: viewingDate || null,
+        message: message || null,
+        user_id: currentUser ? currentUser.id : null
+      });
 
-    const phone =
-        document.getElementById(
-            "tenant-phone"
-        ).value.trim();
+      if (error) throw error;
 
+      successBox.style.display = "block";
+      event.target.reset();
 
-    const viewingDate =
-        document.getElementById(
-            "viewing-date"
-        ).value;
-if (!viewingDate) {
+    } catch (error) {
+      console.error("Viewing request error:", error);
+      errorBox.textContent = error.message || "Something went wrong. Please try again.";
+      errorBox.style.display = "block";
+    } finally {
+      submitButton.disabled = false;
+      submitButton.innerHTML = originalButtonHtml;
+    }
+  }
 
-    throw new Error(
-        "Please select a viewing date."
-    );
+  /* ===================== ESCAPE HTML ===================== */
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
 
-}
-
-
-const selectedDate =
-    new Date(
-        viewingDate + "T00:00:00"
-    );
-
-
-const today =
-    new Date();
-
-today.setHours(
-    0, 0, 0, 0
-);
-
-
-if (selectedDate < today) {
-
-    throw new Error(
-        "Viewing date cannot be in the past."
-    );
-
-}
-
-    const message =
-        document.getElementById(
-            "viewing-message"
-        ).value.trim();
-if (message.length > 1000) {
-
-    throw new Error(
-        "Viewing message is too long. Maximum 1000 characters."
-    );
-
-}
-
-    success.style.display =
-        "none";
-
-
-    errorBox.style.display =
-        "none";
-
-
-    if (!name) {
-    throw new Error(
-        "Please enter your full name."
-    );
-}
-
-if (name.length < 2 || name.length > 100) {
-    throw new Error(
-        "Full name must be between 2 and 100 characters."
-    );
-}
-
-if (!/^[A-Za-zÀ-ÿ\s.'-]+$/.test(name)) {
-    throw new Error(
-        "Please enter a valid name."
-    );
-}
-
-if (!phone) {
-    throw new Error(
-        "Please enter your phone number."
-    );
-}
-if (!/^(?:\+254|0)\d{9}$/.test(phone)) {
-
-    throw new Error(
-        "Please enter a valid Kenyan phone number."
-    );
-
-}
-if (!/^(?:\+254|0)7\d{8}$/.test(phone)) {
-    throw new Error(
-        "Please enter a valid Kenyan phone number."
-    );
-}
-
-if (!viewingDate) {
-    throw new Error(
-        "Please select a viewing date."
-    );
-}
-
-const selectedDate =
-    new Date(viewingDate + "T00:00:00");
-
-const today =
-    new Date();
-
-today.setHours(
-    0, 0, 0, 0
-);
-
-if (selectedDate < today) {
-    throw new Error(
-        "Viewing date cannot be in the past."
-    );
-}
-
-if (message.length > 1000) {
-    throw new Error(
-        "Message is too long. Maximum 1000 characters."
-    );
-}
-
-
-
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
-
-function escapeHtml(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-
-        .replace(
-            /</g,
-            "&lt;"
-        )
-
-        .replace(
-            />/g,
-            "&gt;"
-        )
-
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
-}
-
-
-
-/* =====================================================
-   START
-===================================================== */
-
-async function initializePropertyPage() {
-
+  /* ===================== START ===================== */
+  async function initializePropertyPage() {
     await loadCurrentUser();
-
     await loadProperty();
+  }
 
-}
-
-
-initializePropertyPage();
-
+  initializePropertyPage();
 </script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
-
 </html>

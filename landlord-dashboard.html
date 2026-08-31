@@ -1,2750 +1,1013 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Landlord Dashboard | NichoLink 254</title>
-
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
-
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
-
         :root {
-            --navy: #172033;
-            --blue: #2563eb;
-            --green: #00843d;
-            --green-dark: #006b31;
-            --red: #dc2626;
-            --orange: #f59e0b;
-            --text: #263244;
-            --muted: #718096;
-            --bg: #f5f7fa;
-            --white: #ffffff;
-            --border: #e5e7eb;
-            --shadow: 0 10px 30px rgba(15,23,42,.07);
-            --radius: 18px;
+            --navy:#172033;
+            --blue:#2563eb;
+            --green:#00843d;
+            --green-dark:#006b31;
+            --red:#dc2626;
+            --orange:#f59e0b;
+            --text:#263244;
+            --muted:#718096;
+            --bg:#f5f7fa;
+            --white:#fff;
+            --border:#e5e7eb;
+            --shadow:0 10px 30px rgba(15,23,42,.07);
+            --radius:18px;
         }
 
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-
+        * { box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
         body {
-            margin: 0;
-            font-family:
-                Inter,
-                Arial,
-                Helvetica,
-                sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            margin:0;
+            font-family:Inter,Arial,Helvetica,sans-serif;
+            background:var(--bg);
+            color:var(--text);
         }
+        a { color:inherit; }
+        button,input,select,textarea { font:inherit; }
 
-
-        a {
-            color: inherit;
-        }
-
-
-        button,
-        input,
-        select,
-        textarea {
-            font: inherit;
-        }
-
-
-        /* =========================================
-           TOP NAVIGATION
-        ========================================= */
-
+        /* TOP NAVIGATION */
         .landlord-topbar {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-
-            min-height: 72px;
-
-            display: flex;
-            align-items: center;
-
-            gap: 24px;
-
-            padding:
-                12px
-                30px;
-
-            background:
-                rgba(255,255,255,.97);
-
-            border-bottom:
-                1px solid var(--border);
-
-            box-shadow:
-                0 4px 20px rgba(15,23,42,.05);
-
-            backdrop-filter:
-                blur(12px);
+            position:sticky;
+            top:0;
+            z-index:1000;
+            min-height:72px;
+            display:flex;
+            align-items:center;
+            gap:24px;
+            padding:12px 30px;
+            background:rgba(255,255,255,.97);
+            border-bottom:1px solid var(--border);
+            box-shadow:0 4px 20px rgba(15,23,42,.05);
+            backdrop-filter:blur(12px);
         }
-
-
         .landlord-brand {
-            flex-shrink: 0;
-
-            color: var(--navy);
-
-            font-size: 23px;
-            font-weight: 900;
-
-            white-space: nowrap;
+            flex-shrink:0;
+            color:var(--navy);
+            font-size:23px;
+            font-weight:900;
+            white-space:nowrap;
         }
-
-
-        .landlord-brand strong {
-            color: var(--green);
-        }
-
-
+        .landlord-brand strong { color:var(--green); }
         .landlord-navigation {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex: 1;
+            display:flex;
+            align-items:center;
+            gap:5px;
+            flex:1;
         }
-
-
         .landlord-navigation a {
-            padding: 10px 13px;
-
-            border-radius: 9px;
-
-            color: #64748b;
-
-            text-decoration: none;
-
-            font-size: 14px;
-            font-weight: 700;
-
-            transition:
-                .2s ease;
+            padding:10px 13px;
+            border-radius:9px;
+            color:#64748b;
+            text-decoration:none;
+            font-size:14px;
+            font-weight:700;
+            transition:.2s ease;
         }
-
-
         .landlord-navigation a:hover,
         .landlord-navigation a.active {
-            background: #eef7f1;
-            color: var(--green);
+            background:#eef7f1;
+            color:var(--green);
         }
-
-
         .landlord-user-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display:flex;
+            align-items:center;
+            gap:12px;
         }
-
-
         .landlord-user-mini {
-            display: flex;
-            align-items: center;
-            gap: 9px;
+            display:flex;
+            align-items:center;
+            gap:9px;
         }
-
-
         .landlord-user-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+            display:flex;
+            flex-direction:column;
+            gap:2px;
         }
-
-
         .landlord-user-info strong {
-            max-width: 150px;
-
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-
-            font-size: 14px;
-            color: var(--navy);
+            max-width:150px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+            font-size:14px;
+            color:var(--navy);
         }
+        .landlord-user-info span { color:var(--muted); font-size:11px; }
 
-
-        .landlord-user-info span {
-            color: var(--muted);
-            font-size: 11px;
+        .landlord-avatar,.account-avatar {
+            flex-shrink:0;
+            border-radius:50%;
+            overflow:hidden;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:#eaf6ee;
+            color:var(--green);
+            font-weight:900;
+            box-shadow:0 5px 18px rgba(0,0,0,.12);
         }
-
-
-        .landlord-avatar,
-        .account-avatar {
-            flex-shrink: 0;
-
-            border-radius: 50%;
-            overflow: hidden;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: #eaf6ee;
-            color: var(--green);
-
-            font-weight: 900;
-
-            box-shadow:
-                0 5px 18px rgba(0,0,0,.12);
-        }
-
-
         .landlord-avatar {
-            width: 44px;
-            height: 44px;
-            font-size: 17px;
-            border: 2px solid #ffffff;
+            width:44px;height:44px;font-size:17px;border:2px solid #fff;
         }
-
-
         .account-avatar {
-            width: 96px;
-            height: 96px;
-            font-size: 28px;
-            border: 4px solid #ffffff;
+            width:96px;height:96px;font-size:28px;border:4px solid #fff;
         }
-
-
-        .landlord-avatar img,
-        .account-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
+        .landlord-avatar img,.account-avatar img {
+            width:100%;height:100%;object-fit:cover;display:block;
         }
-
-
         .logout-button {
-            border: none;
-
-            padding:
-                10px 14px;
-
-            border-radius: 10px;
-
-            background: #fee2e2;
-
-            color: #b91c1c;
-
-            font-size: 13px;
-            font-weight: 800;
-
-            cursor: pointer;
+            border:0;
+            padding:10px 14px;
+            border-radius:10px;
+            background:#fee2e2;
+            color:#b91c1c;
+            font-size:13px;
+            font-weight:800;
+            cursor:pointer;
         }
+        .logout-button:hover { background:#fecaca; }
 
-
-        .logout-button:hover {
-            background: #fecaca;
-        }
-
-
-        /* =========================================
-           MAIN
-        ========================================= */
-
+        /* MAIN */
         .landlord-dashboard {
-            width:
-                min(1400px, 100%);
-
-            margin: auto;
-
-            padding:
-                30px;
+            width:min(1400px,100%);
+            margin:auto;
+            padding:30px;
         }
 
-
-        /* =========================================
-           ACCOUNT
-        ========================================= */
-
+        /* ACCOUNT */
         .account-overview {
-            display: grid;
-
-            grid-template-columns:
-                minmax(400px, 1fr)
-                minmax(420px, 1.5fr);
-
-            gap: 20px;
-
-            margin-bottom: 24px;
+            display:grid;
+            grid-template-columns:minmax(400px,1fr) minmax(420px,1.5fr);
+            gap:20px;
+            margin-bottom:24px;
         }
-
-
-        .account-card {
-            background: var(--white);
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            padding: 24px;
-
-            box-shadow:
-                var(--shadow);
+        .account-card,.dashboard-section {
+            background:var(--white);
+            border:1px solid var(--border);
+            border-radius:var(--radius);
+            box-shadow:var(--shadow);
         }
-
-
-        .account-card-label {
-            display: block;
-
-            margin-bottom: 14px;
-
-            color: var(--blue);
-
-            font-size: 11px;
-
-            font-weight: 900;
-
-            letter-spacing:
-                .12em;
+        .account-card { padding:24px; }
+        .account-card-label,.section-header-label {
+            display:block;
+            margin-bottom:14px;
+            color:var(--blue);
+            font-size:11px;
+            font-weight:900;
+            letter-spacing:.12em;
         }
-
-
         .account-main {
-            display: flex;
-            align-items: center;
-
-            gap: 17px;
+            display:flex;
+            align-items:center;
+            gap:17px;
         }
-
-
-        .account-main-info {
-            min-width: 0;
-        }
-
-
+        .account-main-info { min-width:0; }
         .account-name {
-            margin: 0 0 6px;
-
-            color: var(--navy);
-
-            font-size: 21px;
-            line-height: 1.2;
+            margin:0 0 6px;
+            color:var(--navy);
+            font-size:21px;
+            line-height:1.2;
         }
-
-
         .account-role {
-            display: inline-flex;
-
-            padding: 5px 9px;
-
-            border-radius: 999px;
-
-            background: #eef7f1;
-
-            color: var(--green);
-
-            font-size: 11px;
-
-            font-weight: 800;
+            display:inline-flex;
+            padding:5px 9px;
+            border-radius:999px;
+            background:#eef7f1;
+            color:var(--green);
+            font-size:11px;
+            font-weight:800;
         }
-
-
         .account-photo-controls {
-            display: flex;
-
-            flex-direction: column;
-
-            gap: 8px;
-
-            margin-left: auto;
+            display:flex;
+            flex-direction:column;
+            gap:8px;
+            margin-left:auto;
         }
-
-
         .account-photo-controls button {
-            border: none;
-
-            padding:
-                9px 12px;
-
-            border-radius: 9px;
-
-            cursor: pointer;
-
-            font-size: 12px;
-
-            font-weight: 800;
-
-            white-space: nowrap;
+            border:0;
+            padding:9px 12px;
+            border-radius:9px;
+            cursor:pointer;
+            font-size:12px;
+            font-weight:800;
+            white-space:nowrap;
         }
-
-
-        .choose-photo-button,
-        .upload-photo-button {
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-        }
-
-
-        .choose-photo-button:hover,
-        .upload-photo-button:hover {
-            background:
-                var(--green-dark);
-        }
-
-
-        .remove-photo-button {
-            background:
-                #fee2e2;
-
-            color:
-                var(--red);
-        }
-
-
-        .remove-photo-button:hover {
-            background:
-                #fecaca;
-        }
-
-
-        .account-photo-controls button:disabled {
-            opacity: .55;
-            cursor: not-allowed;
-        }
-
-
-        #profile-picture-input {
-            display: none;
-        }
-
-
-        .profile-message {
-            min-height: 18px;
-
-            margin-top: 10px;
-
-            font-size: 12px;
-
-            font-weight: 700;
-        }
-
-
+        .choose-photo-button,.upload-photo-button { background:var(--green);color:#fff; }
+        .choose-photo-button:hover,.upload-photo-button:hover { background:var(--green-dark); }
+        .remove-photo-button { background:#fee2e2;color:var(--red); }
+        .remove-photo-button:hover { background:#fecaca; }
+        .account-photo-controls button:disabled { opacity:.55;cursor:not-allowed; }
+        #profile-picture-input { display:none; }
+        .profile-message { min-height:18px;margin-top:10px;font-size:12px;font-weight:700; }
         .account-details {
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0,1fr));
-
-            gap: 14px;
-
-            height: 100%;
-
-            align-content: center;
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:14px;
+            height:100%;
+            align-content:center;
         }
-
-
         .account-detail {
-            padding: 14px;
-
-            background:
-                #f8fafc;
-
-            border-radius: 12px;
+            padding:14px;
+            background:#f8fafc;
+            border-radius:12px;
         }
-
-
         .account-detail span {
-            display: block;
-
-            margin-bottom: 5px;
-
-            color:
-                var(--blue);
-
-            font-size: 11px;
-
-            font-weight: 700;
+            display:block;
+            margin-bottom:5px;
+            color:var(--blue);
+            font-size:11px;
+            font-weight:700;
         }
+        .account-detail strong { color:var(--navy);font-size:14px;word-break:break-word; }
 
-
-        .account-detail strong {
-            color: var(--navy);
-
-            font-size: 14px;
-
-            word-break: break-word;
-        }
-
-
-        /* =========================================
-           WELCOME
-        ========================================= */
-
+        /* WELCOME */
         .landlord-welcome {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 25px;
-
-            margin-bottom: 24px;
-
-            padding: 30px;
-
-            border-radius: 22px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #172033 0%,
-                    #24344e 100%
-                );
-
-            color:
-                #ffffff;
-
-            box-shadow:
-                0 15px 35px
-                rgba(23,32,51,.16);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:25px;
+            margin-bottom:24px;
+            padding:30px;
+            border-radius:22px;
+            background:linear-gradient(135deg,#172033 0%,#24344e 100%);
+            color:#fff;
+            box-shadow:0 15px 35px rgba(23,32,51,.16);
         }
-
-
         .dashboard-label {
-            display: inline-block;
-
-            margin-bottom: 8px;
-
-            color:
-                #93c5fd;
-
-            font-size: 11px;
-
-            font-weight: 900;
-
-            letter-spacing: .14em;
+            display:inline-block;
+            margin-bottom:8px;
+            color:#93c5fd;
+            font-size:11px;
+            font-weight:900;
+            letter-spacing:.14em;
         }
-
-
-        .landlord-welcome h1 {
-            margin: 0 0 8px;
-
-            color: #ffffff;
-
-            font-size:
-                clamp(25px,4vw,34px);
-        }
-
-
-        .landlord-welcome p {
-            max-width: 680px;
-
-            margin: 0;
-
-            color: #cbd5e1;
-
-            line-height: 1.6;
-        }
-
-
+        .landlord-welcome h1 { margin:0 0 8px;color:#fff;font-size:clamp(25px,4vw,34px); }
+        .landlord-welcome p { max-width:680px;margin:0;color:#cbd5e1;line-height:1.6; }
         .add-property-button {
-            display: inline-flex;
-
-            align-items: center;
-            justify-content: center;
-
-            gap: 7px;
-
-            min-height: 46px;
-
-            padding:
-                0 18px;
-
-            border-radius: 11px;
-
-            background:
-                var(--green);
-
-            color:
-                #ffffff;
-
-            text-decoration: none;
-
-            font-size: 14px;
-
-            font-weight: 800;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            gap:7px;
+            min-height:46px;
+            padding:0 18px;
+            border-radius:11px;
+            background:var(--green);
+            color:#fff;
+            text-decoration:none;
+            font-size:14px;
+            font-weight:800;
         }
+        .add-property-button:hover { background:var(--green-dark); }
 
-
-        .add-property-button:hover {
-            background:
-                var(--green-dark);
-        }
-
-
-        /* =========================================
-           STATISTICS
-        ========================================= */
-
+        /* STATISTICS */
         .landlord-stat-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(4, minmax(0,1fr));
-
-            gap: 18px;
-
-            margin-bottom: 30px;
+            display:grid;
+            grid-template-columns:repeat(4,minmax(0,1fr));
+            gap:18px;
+            margin-bottom:30px;
         }
-
-
         .landlord-stat-card {
-            background:
-                #ffffff;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                16px;
-
-            padding: 20px;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 14px;
-
-            box-shadow:
-                var(--shadow);
+            background:#fff;
+            border:1px solid var(--border);
+            border-radius:16px;
+            padding:20px;
+            display:flex;
+            align-items:center;
+            gap:14px;
+            box-shadow:var(--shadow);
         }
-
-
         .stat-icon {
-            width: 46px;
-            height: 46px;
-
-            flex-shrink: 0;
-
-            border-radius: 13px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-size: 21px;
+            width:46px;height:46px;flex-shrink:0;
+            border-radius:13px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:21px;
         }
-
-
-        .stat-green .stat-icon {
-            background:
-                #dcfce7;
-
-            color:
-                var(--green);
-        }
-
-
-        .stat-blue .stat-icon {
-            background:
-                #dbeafe;
-
-            color:
-                var(--blue);
-        }
-
-
-        .stat-orange .stat-icon {
-            background:
-                #fef3c7;
-
-            color:
-                #d97706;
-        }
-
-
-        .stat-red .stat-icon {
-            background:
-                #fee2e2;
-
-            color:
-                var(--red);
-        }
-
-
+        .stat-green .stat-icon { background:#dcfce7;color:var(--green); }
+        .stat-blue .stat-icon { background:#dbeafe;color:var(--blue); }
+        .stat-orange .stat-icon { background:#fef3c7;color:#d97706; }
+        .stat-red .stat-icon { background:#fee2e2;color:var(--red); }
         .landlord-stat-card span {
-            display: block;
-
-            margin-bottom: 4px;
-
-            color:
-                var(--blue);
-
-            font-size: 12px;
-
-            font-weight: 700;
+            display:block;margin-bottom:4px;color:var(--blue);font-size:12px;font-weight:700;
         }
+        .landlord-stat-card strong { display:block;color:var(--navy);font-size:25px; }
 
-
-        .landlord-stat-card strong {
-            display: block;
-
-            color:
-                var(--navy);
-
-            font-size: 25px;
-        }
-
-
-        /* =========================================
-           SECTION
-        ========================================= */
-
-        .dashboard-section {
-            overflow: hidden;
-
-            margin-bottom: 25px;
-
-            background:
-                #ffffff;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                var(--radius);
-
-            box-shadow:
-                var(--shadow);
-        }
-
-
+        /* SECTIONS */
+        .dashboard-section { overflow:hidden;margin-bottom:25px; }
         .section-header {
-            display: flex;
-
-            align-items: center;
-            justify-content: space-between;
-
-            gap: 15px;
-
-            padding:
-                23px 24px;
-
-            border-bottom:
-                1px solid var(--border);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:15px;
+            padding:23px 24px;
+            border-bottom:1px solid var(--border);
         }
-
-
-        .section-header-label {
-            display: block;
-
-            margin-bottom: 5px;
-
-            color:
-                var(--blue);
-
-            font-size: 10px;
-
-            font-weight: 900;
-
-            letter-spacing:
-                .13em;
-        }
-
-
-        .section-header h2 {
-            margin: 0 0 5px;
-
-            color:
-                var(--navy);
-
-            font-size: 21px;
-        }
-
-
-        .section-header p {
-            margin: 0;
-
-            color:
-                var(--muted);
-
-            font-size: 13px;
-
-            line-height: 1.5;
-        }
-
-
+        .section-header-label { margin-bottom:5px;font-size:10px; }
+        .section-header h2 { margin:0 0 5px;color:var(--navy);font-size:21px; }
+        .section-header p { margin:0;color:var(--muted);font-size:13px;line-height:1.5; }
         .small-button {
-            display: inline-flex;
-
-            align-items: center;
-            justify-content: center;
-
-            min-height: 40px;
-
-            padding:
-                0 14px;
-
-            border: none;
-
-            border-radius:
-                10px;
-
-            background:
-                #eef7f1;
-
-            color:
-                var(--green);
-
-            text-decoration:
-                none;
-
-            font-size: 12px;
-
-            font-weight: 800;
-
-            cursor: pointer;
+            display:inline-flex;
+            align-items:center;
+            justify-content:center;
+            min-height:40px;
+            padding:0 14px;
+            border:0;
+            border-radius:10px;
+            background:#eef7f1;
+            color:var(--green);
+            text-decoration:none;
+            font-size:12px;
+            font-weight:800;
+            cursor:pointer;
         }
+        .small-button:hover { background:#dcefe4; }
 
-
-        .small-button:hover {
-            background:
-                #dcefe4;
+        /* CALENDAR */
+        .calendar-wrapper { padding:24px; }
+        .calendar-toolbar {
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:15px;
+            margin-bottom:20px;
         }
+        .calendar-toolbar h3 {
+            margin:0;
+            color:var(--navy);
+            font-size:20px;
+            text-align:center;
+        }
+        .calendar-nav-button {
+            width:40px;height:40px;
+            border:0;border-radius:10px;
+            background:#eef7f1;color:var(--green);
+            font-size:24px;font-weight:900;cursor:pointer;
+        }
+        .calendar-nav-button:hover { background:#dcefe4; }
+        .calendar-weekdays {
+            display:grid;
+            grid-template-columns:repeat(7,minmax(0,1fr));
+            border:1px solid var(--border);
+            border-bottom:0;
+            background:#f8fafc;
+        }
+        .calendar-weekdays div {
+            padding:12px 5px;
+            text-align:center;
+            color:var(--muted);
+            font-size:11px;
+            font-weight:900;
+            text-transform:uppercase;
+        }
+        .landlord-calendar {
+            display:grid;
+            grid-template-columns:repeat(7,minmax(0,1fr));
+            border-left:1px solid var(--border);
+        }
+        .calendar-day {
+            min-height:125px;
+            padding:8px;
+            background:#fff;
+            border-right:1px solid var(--border);
+            border-bottom:1px solid var(--border);
+            position:relative;
+            overflow:hidden;
+        }
+        .calendar-day.other-month { background:#f8fafc; }
+        .calendar-day-number {
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            width:28px;height:28px;
+            margin-bottom:5px;
+            border-radius:50%;
+            color:var(--navy);
+            font-size:12px;
+            font-weight:800;
+        }
+        .calendar-day.today .calendar-day-number { background:var(--green);color:#fff; }
+        .calendar-event {
+            display:block;
+            width:100%;
+            margin-top:5px;
+            padding:6px 7px;
+            border-radius:7px;
+            font-size:10px;
+            line-height:1.35;
+            cursor:pointer;
+            overflow:hidden;
+        }
+        .calendar-event strong { display:block;margin-bottom:2px;font-size:10px; }
+        .calendar-event.pending { background:#fef3c7;color:#92400e; }
+        .calendar-event.approved { background:#dcfce7;color:#166534; }
+        .calendar-event.rejected { background:#fee2e2;color:#991b1b; }
+        .calendar-legend {
+            display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+            margin-top:18px;color:var(--muted);font-size:12px;font-weight:700;
+        }
+        .calendar-legend span { display:inline-flex;align-items:center;gap:6px; }
+        .legend-dot { width:10px;height:10px;display:inline-block;border-radius:50%; }
+        .legend-dot.pending { background:#f59e0b; }
+        .legend-dot.approved { background:#16a34a; }
+        .legend-dot.rejected { background:#dc2626; }
 
-
-        /* =========================================
-           PROPERTY GRID
-        ========================================= */
-
+        /* PROPERTIES */
         .property-grid {
-            display: grid;
-
-            grid-template-columns:
-                repeat(
-                    3,
-                    minmax(0,1fr)
-                );
-
-            gap: 20px;
-
-            padding: 24px;
+            display:grid;
+            grid-template-columns:repeat(3,minmax(0,1fr));
+            gap:20px;
+            padding:24px;
         }
-
-
         .property-card {
-            overflow: hidden;
-
-            background: #ffffff;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                16px;
-
-            transition:
-                transform .2s ease,
-                box-shadow .2s ease;
+            overflow:hidden;background:#fff;
+            border:1px solid var(--border);border-radius:16px;
+            transition:transform .2s ease,box-shadow .2s ease;
         }
-
-
-        .property-card:hover {
-            transform:
-                translateY(-3px);
-
-            box-shadow:
-                0 12px 28px
-                rgba(15,23,42,.09);
+        .property-card:hover { transform:translateY(-3px);box-shadow:0 12px 28px rgba(15,23,42,.09); }
+        .property-image,.property-placeholder {
+            width:100%;height:185px;display:block;object-fit:cover;background:#eef2f7;
         }
-
-
-        .property-image {
-            width: 100%;
-            height: 185px;
-
-            display: block;
-
-            object-fit: cover;
-
-            background:
-                #eef2f7;
-        }
-
-
         .property-placeholder {
-            width: 100%;
-            height: 185px;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            background:
-                #eef2f7;
-
-            color:
-                #94a3b8;
-
-            font-size: 40px;
+            display:flex;align-items:center;justify-content:center;
+            color:#94a3b8;font-size:40px;
         }
-
-
-        .property-body {
-            padding: 17px;
-        }
-
-
-        .property-body h3 {
-            margin:
-                0 0 7px;
-
-            color:
-                var(--navy);
-
-            font-size: 18px;
-        }
-
-
-        .property-location {
-            margin:
-                0 0 10px;
-
-            color:
-                var(--muted);
-
-            font-size: 13px;
-        }
-
-
-        .property-rent {
-            margin:
-                0 0 12px;
-
-            color:
-                var(--navy);
-
-            font-size: 18px;
-
-            font-weight: 900;
-        }
-
-
+        .property-body { padding:17px; }
+        .property-body h3 { margin:0 0 7px;color:var(--navy);font-size:18px; }
+        .property-location { margin:0 0 10px;color:var(--muted);font-size:13px; }
+        .property-rent { margin:0 0 12px;color:var(--navy);font-size:18px;font-weight:900; }
         .property-meta {
-            display: flex;
-
-            gap: 12px;
-
-            flex-wrap: wrap;
-
-            margin-bottom:
-                14px;
-
-            color:
-                #64748b;
-
-            font-size: 12px;
+            display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px;
+            color:#64748b;font-size:12px;
         }
-
-
         .property-status {
-            display: inline-block;
-
-            margin-bottom:
-                14px;
-
-            padding:
-                5px 9px;
-
-            border-radius:
-                999px;
-
-            background:
-                #dcfce7;
-
-            color:
-                #15803d;
-
-            font-size:
-                11px;
-
-            font-weight:
-                800;
+            display:inline-block;margin-bottom:14px;padding:5px 9px;
+            border-radius:999px;background:#dcfce7;color:#15803d;
+            font-size:11px;font-weight:800;
         }
-
-
-        .property-actions {
-            display: flex;
-
-            align-items: center;
-
-            gap: 8px;
-
-            flex-wrap: wrap;
+        .property-actions { display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
+        .property-actions a,.property-actions button {
+            min-height:38px;padding:0 12px;border:0;border-radius:9px;
+            display:inline-flex;align-items:center;justify-content:center;
+            text-decoration:none;cursor:pointer;font-size:12px;font-weight:800;
         }
+        .view-property { background:var(--navy);color:#fff; }
+        .edit-property { background:#dbeafe;color:#1d4ed8; }
+        .delete-property { background:#fee2e2;color:var(--red); }
+        .view-property:hover { background:#24344e; }
+        .edit-property:hover { background:#bfdbfe; }
+        .delete-property:hover { background:#fecaca; }
 
-
-        .property-actions a,
-        .property-actions button {
-            min-height:
-                38px;
-
-            padding:
-                0 12px;
-
-            border: none;
-
-            border-radius:
-                9px;
-
-            display: inline-flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            text-decoration: none;
-
-            cursor: pointer;
-
-            font-size:
-                12px;
-
-            font-weight:
-                800;
-        }
-
-
-        .view-property {
-            background:
-                var(--navy);
-
-            color:
-                #ffffff;
-        }
-
-
-        .edit-property {
-            background:
-                #dbeafe;
-
-            color:
-                #1d4ed8;
-        }
-
-
-        .delete-property {
-            background:
-                #fee2e2;
-
-            color:
-                var(--red);
-        }
-
-
-        .view-property:hover {
-            background:
-                #24344e;
-        }
-
-
-        .edit-property:hover {
-            background:
-                #bfdbfe;
-        }
-
-
-        .delete-property:hover {
-            background:
-                #fecaca;
-        }
-
-
-        /* =========================================
-           REQUESTS
-        ========================================= */
-
-        .request-list {
-            padding: 24px;
-        }
-
-
+        /* REQUESTS */
+        .request-list { padding:24px; }
         .request-card {
-            display: grid;
-
-            grid-template-columns:
-                48px
-                minmax(0,1fr)
-                auto;
-
-            align-items: center;
-
-            gap: 15px;
-
-            padding: 16px;
-
-            margin-bottom: 12px;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                14px;
-
-            background:
-                #ffffff;
+            display:grid;
+            grid-template-columns:48px minmax(0,1fr) auto;
+            align-items:center;
+            gap:15px;
+            padding:16px;margin-bottom:12px;
+            border:1px solid var(--border);border-radius:14px;background:#fff;
         }
-
-
-        .request-card:last-child {
-            margin-bottom: 0;
-        }
-
-
+        .request-card:last-child { margin-bottom:0; }
         .request-icon {
-            width: 46px;
-            height: 46px;
-
-            display: flex;
-
-            align-items: center;
-            justify-content: center;
-
-            border-radius: 12px;
-
-            background:
-                #eef7f1;
-
-            font-size: 21px;
+            width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+            border-radius:12px;background:#eef7f1;font-size:21px;
         }
-
-
-        .request-information h3 {
-            margin:
-                0 0 5px;
-
-            color:
-                var(--navy);
-
-            font-size: 16px;
-        }
-
-
-        .request-information p {
-            margin:
-                3px 0;
-
-            color:
-                var(--muted);
-
-            font-size: 12px;
-        }
-
-
+        .request-information h3 { margin:0 0 5px;color:var(--navy);font-size:16px; }
+        .request-information p { margin:3px 0;color:var(--muted);font-size:12px; }
         .request-status {
-            padding:
-                7px 11px;
-
-            border-radius:
-                999px;
-
-            font-size:
-                11px;
-
-            font-weight:
-                900;
-
-            white-space:
-                nowrap;
+            padding:7px 11px;border-radius:999px;font-size:11px;font-weight:900;white-space:nowrap;
         }
-
-
-        .request-status.pending {
-            background:
-                #fef3c7;
-
-            color:
-                #b45309;
-        }
-
-
-        .request-status.approved {
-            background:
-                #dcfce7;
-
-            color:
-                #15803d;
-        }
-
-
-        .request-status.rejected {
-            background:
-                #fee2e2;
-
-            color:
-                #b91c1c;
-        }
-
-
-        .request-actions {
-            display: flex;
-
-            gap: 7px;
-
-            flex-wrap: wrap;
-
-            margin-top: 10px;
-        }
-
-
+        .request-status.pending { background:#fef3c7;color:#b45309; }
+        .request-status.approved { background:#dcfce7;color:#15803d; }
+        .request-status.rejected { background:#fee2e2;color:#b91c1c; }
+        .request-actions { display:flex;gap:7px;flex-wrap:wrap;margin-top:10px; }
         .request-actions button {
-            min-height:
-                34px;
-
-            padding:
-                0 10px;
-
-            border: none;
-
-            border-radius:
-                8px;
-
-            cursor: pointer;
-
-            font-size:
-                11px;
-
-            font-weight:
-                800;
+            min-height:34px;padding:0 10px;border:0;border-radius:8px;cursor:pointer;font-size:11px;font-weight:800;
         }
+        .approve-button { background:#dcfce7;color:#15803d; }
+        .reject-button { background:#fee2e2;color:#b91c1c; }
 
-
-        .approve-button {
-            background:
-                #dcfce7;
-
-            color:
-                #15803d;
-        }
-
-
-        .reject-button {
-            background:
-                #fee2e2;
-
-            color:
-                #b91c1c;
-        }
-
-
-        /* =========================================
-           EMPTY STATE
-        ========================================= */
-
-        .empty-state {
-            padding:
-                45px 25px;
-
-            text-align:
-                center;
-
-            color:
-                var(--muted);
-        }
-
-
+        /* EMPTY STATE */
+        .empty-state { padding:45px 25px;text-align:center;color:var(--muted); }
         .empty-state-icon {
-            width: 58px;
-            height: 58px;
-
-            margin:
-                0 auto 14px;
-
-            border-radius:
-                16px;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            background:
-                #eef7f1;
-
-            font-size:
-                26px;
+            width:58px;height:58px;margin:0 auto 14px;border-radius:16px;
+            display:flex;align-items:center;justify-content:center;background:#eef7f1;font-size:26px;
         }
+        .empty-state h3 { margin:0 0 7px;color:var(--navy); }
+        .empty-state p { margin:0 0 15px; }
 
-
-        .empty-state h3 {
-            margin:
-                0 0 7px;
-
-            color:
-                var(--navy);
-        }
-
-
-        .empty-state p {
-            margin:
-                0 0 15px;
-        }
-
-
-        /* =========================================
-           FOOTER
-        ========================================= */
-
+        /* FOOTER */
         .landlord-footer {
-            display: flex;
-
-            justify-content:
-                space-between;
-
-            align-items:
-                center;
-
-            gap:
-                20px;
-
-            padding:
-                25px 5px;
-
-            color:
-                var(--muted);
-
-            font-size:
-                12px;
+            display:flex;justify-content:space-between;align-items:center;gap:20px;
+            padding:25px 5px;color:var(--muted);font-size:12px;
         }
+        .landlord-footer strong { color:var(--navy);font-size:16px; }
+        .landlord-footer strong span { color:var(--green); }
+        .landlord-footer p { margin:5px 0; }
 
-
-        .landlord-footer strong {
-            color:
-                var(--navy);
-
-            font-size:
-                16px;
+        /* RESPONSIVE */
+        @media (max-width:1100px) {
+            .account-overview { grid-template-columns:1fr; }
+            .landlord-stat-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+            .property-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
         }
-
-
-        .landlord-footer strong span {
-            color:
-                var(--green);
+        @media (max-width:750px) {
+            .landlord-topbar { position:relative;flex-wrap:wrap;padding:12px 17px; }
+            .landlord-navigation { order:3;width:100%;overflow-x:auto; }
+            .landlord-user-info { display:none; }
+            .landlord-dashboard { padding:18px 13px; }
+            .landlord-welcome { align-items:flex-start;flex-direction:column;padding:23px; }
+            .add-property-button { width:100%; }
+            .section-header { align-items:flex-start;flex-direction:column; }
+            .property-grid { grid-template-columns:1fr;padding:17px; }
+            .request-list { padding:17px; }
+            .request-card { grid-template-columns:42px minmax(0,1fr); }
+            .request-status,.request-actions { grid-column:2; }
+            .account-main { align-items:flex-start;flex-wrap:wrap; }
+            .account-photo-controls { width:100%;margin-left:0;flex-direction:row;flex-wrap:wrap; }
+            .account-details { grid-template-columns:1fr; }
+            .landlord-footer { flex-direction:column;align-items:flex-start; }
+            .calendar-wrapper { padding:14px; }
+            .calendar-day { min-height:85px;padding:5px; }
+            .calendar-day-number { width:24px;height:24px;font-size:10px; }
+            .calendar-event { padding:4px;font-size:8px; }
+            .calendar-event strong { font-size:8px; }
+            .calendar-weekdays div { font-size:9px; }
         }
-
-
-        .landlord-footer p {
-            margin:
-                5px 0;
+        @media (max-width:480px) {
+            .landlord-stat-grid { grid-template-columns:1fr; }
+            .account-avatar { width:80px;height:80px; }
+            .account-photo-controls button { flex:1; }
+            .property-actions { width:100%; }
+            .property-actions a,.property-actions button { flex:1; }
         }
-
-
-        /* =========================================
-           RESPONSIVE
-        ========================================= */
-
-        @media (max-width: 1100px) {
-
-            .account-overview {
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .landlord-stat-grid {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-            }
-
-
-            .property-grid {
-                grid-template-columns:
-                    repeat(
-                        2,
-                        minmax(0,1fr)
-                    );
-            }
-
-        }
-
-
-        @media (max-width: 750px) {
-
-            .landlord-topbar {
-                position: relative;
-
-                flex-wrap: wrap;
-
-                padding:
-                    12px 17px;
-            }
-
-
-            .landlord-navigation {
-                order: 3;
-
-                width: 100%;
-
-                overflow-x:
-                    auto;
-            }
-
-
-            .landlord-user-info {
-                display: none;
-            }
-
-
-            .landlord-dashboard {
-                padding:
-                    18px 13px;
-            }
-
-
-            .landlord-welcome {
-                align-items:
-                    flex-start;
-
-                flex-direction:
-                    column;
-
-                padding:
-                    23px;
-            }
-
-
-            .add-property-button {
-                width: 100%;
-            }
-
-
-            .section-header {
-                align-items:
-                    flex-start;
-
-                flex-direction:
-                    column;
-            }
-
-
-            .property-grid {
-                grid-template-columns:
-                    1fr;
-
-                padding:
-                    17px;
-            }
-
-
-            .request-list {
-                padding:
-                    17px;
-            }
-
-
-            .request-card {
-                grid-template-columns:
-                    42px
-                    minmax(0,1fr);
-            }
-
-
-            .request-status {
-                grid-column:
-                    2;
-            }
-
-
-            .request-actions {
-                grid-column:
-                    2;
-            }
-
-
-            .account-main {
-                align-items:
-                    flex-start;
-
-                flex-wrap:
-                    wrap;
-            }
-
-
-            .account-photo-controls {
-                width:
-                    100%;
-
-                margin-left:
-                    0;
-
-                flex-direction:
-                    row;
-
-                flex-wrap:
-                    wrap;
-            }
-
-
-            .account-details {
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .landlord-footer {
-                flex-direction:
-                    column;
-
-                align-items:
-                    flex-start;
-            }
-
-        }
-
-
-        @media (max-width: 480px) {
-
-            .landlord-stat-grid {
-                grid-template-columns:
-                    1fr;
-            }
-
-
-            .account-avatar {
-                width:
-                    80px;
-
-                height:
-                    80px;
-            }
-
-
-            .account-photo-controls button {
-                flex:
-                    1;
-            }
-
-
-            .property-actions {
-                width:
-                    100%;
-            }
-
-
-            .property-actions a,
-            .property-actions button {
-                flex:
-                    1;
-            }
-
-        }
-
     </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================================
-     TOP NAVIGATION
-========================================= -->
-
 <header class="landlord-topbar">
-
-
-    <div class="landlord-brand">
-
-        NichoLink
-        <strong>254</strong>
-
-    </div>
-
+    <div class="landlord-brand">NichoLink <strong>254</strong></div>
 
     <nav class="landlord-navigation">
-
-        <a href="index.html">
-            🏠 Home
-        </a>
-
-
-        <a href="properties.html">
-            🔎 Properties
-        </a>
-
-
-        <a
-            href="landlord-dashboard.html"
-            class="active"
-        >
-            📊 Dashboard
-        </a>
-
-
-        <a href="add-property.html">
-            ➕ Add Property
-        </a>
-
+        <a href="index.html">🏠 Home</a>
+        <a href="properties.html">🔎 Properties</a>
+        <a href="landlord-dashboard.html" class="active">📊 Dashboard</a>
+        <a href="add-property.html">➕ Add Property</a>
     </nav>
 
-
     <div class="landlord-user-area">
-
-
         <div class="landlord-user-mini">
-
-
-            <div
-                id="top-avatar"
-                class="landlord-avatar"
-            >
-                L
-            </div>
-
-
+            <div id="top-avatar" class="landlord-avatar">L</div>
             <div class="landlord-user-info">
-
-                <strong id="top-user-name">
-                    Landlord
-                </strong>
-
-                <span>
-                    Landlord
-                </span>
-
+                <strong id="top-user-name">Landlord</strong>
+                <span>Landlord</span>
             </div>
-
-
         </div>
-
-
-        <button
-            type="button"
-            class="logout-button"
-            onclick="logoutLandlord()"
-        >
-            Logout
-        </button>
-
-
+        <button type="button" class="logout-button" onclick="logoutLandlord()">Logout</button>
     </div>
-
-
 </header>
-
-
-
-<!-- =========================================
-     DASHBOARD
-========================================= -->
 
 <main class="landlord-dashboard">
 
-
-    <!-- =========================================
-         ACCOUNT INFORMATION
-    ========================================= -->
-
     <section class="account-overview">
-
-
         <div class="account-card">
-
-
-            <span class="account-card-label">
-                ACCOUNT INFORMATION
-            </span>
-
+            <span class="account-card-label">ACCOUNT INFORMATION</span>
 
             <div class="account-main">
-
-
-                <div
-                    id="account-avatar"
-                    class="account-avatar"
-                >
-                    L
-                </div>
-
+                <div id="account-avatar" class="account-avatar">L</div>
 
                 <div class="account-main-info">
-
-                    <h2
-                        id="account-name"
-                        class="account-name"
-                    >
-                        Landlord
-                    </h2>
-
-
-                    <span class="account-role">
-                        LANDLORD ACCOUNT
-                    </span>
-
+                    <h2 id="account-name" class="account-name">Landlord</h2>
+                    <span class="account-role">LANDLORD ACCOUNT</span>
                 </div>
 
+                <div class="account-photo-controls">
+                    <input type="file" id="profile-picture-input" accept="image/jpeg,image/png,image/webp">
 
-                <div
-                    class="account-photo-controls"
-                >
-
-
-                    <input
-                        type="file"
-                        id="profile-picture-input"
-                        accept="image/jpeg,image/png,image/webp"
-                    >
-
-
-                    <button
-                        type="button"
-                        class="choose-photo-button"
-                        id="choose-photo-button"
-                    >
+                    <button type="button" class="choose-photo-button" id="choose-photo-button">
                         📷 Choose Photo
                     </button>
 
-
-                    <button
-                        type="button"
-                        class="upload-photo-button"
-                        id="upload-photo-button"
-                    >
+                    <button type="button" class="upload-photo-button" id="upload-photo-button">
                         ⬆️ Upload Photo
                     </button>
 
-
-                    <button
-                        type="button"
-                        class="remove-photo-button"
-                        id="remove-photo-button"
-                    >
+                    <button type="button" class="remove-photo-button" id="remove-photo-button">
                         🗑️ Remove Photo
                     </button>
-
-
                 </div>
-
-
             </div>
 
-
-            <div
-                id="profile-message"
-                class="profile-message"
-            ></div>
-
-
+            <div id="profile-message" class="profile-message"></div>
         </div>
-
-
 
         <div class="account-card">
-
-
-            <span class="account-card-label">
-                ACCOUNT DETAILS
-            </span>
-
+            <span class="account-card-label">ACCOUNT DETAILS</span>
 
             <div class="account-details">
-
-
                 <div class="account-detail">
-
-                    <span>
-                        Email
-                    </span>
-
-                    <strong id="account-email">
-                        Loading...
-                    </strong>
-
+                    <span>Email</span>
+                    <strong id="account-email">Loading...</strong>
                 </div>
 
-
                 <div class="account-detail">
-
-                    <span>
-                        Phone
-                    </span>
-
-                    <strong id="account-phone">
-                        Loading...
-                    </strong>
-
+                    <span>Phone</span>
+                    <strong id="account-phone">Loading...</strong>
                 </div>
 
-
                 <div class="account-detail">
-
-                    <span>
-                        Account Type
-                    </span>
-
-                    <strong>
-                        Landlord
-                    </strong>
-
+                    <span>Account Type</span>
+                    <strong>Landlord</strong>
                 </div>
 
-
                 <div class="account-detail">
-
-                    <span>
-                        Status
-                    </span>
-
-                    <strong id="account-status">
-                        Active
-                    </strong>
-
+                    <span>Status</span>
+                    <strong id="account-status">Active</strong>
                 </div>
-
-
             </div>
-
         </div>
-
-
     </section>
-
-
-
-    <!-- =========================================
-         WELCOME
-    ========================================= -->
 
     <section class="landlord-welcome">
-
-
         <div>
-
-            <span class="dashboard-label">
-                LANDLORD PORTAL
-            </span>
-
-
-            <h1 id="welcome-name">
-                Welcome, Landlord 👋
-            </h1>
-
-
+            <span class="dashboard-label">LANDLORD PORTAL</span>
+            <h1 id="welcome-name">Welcome, Landlord 👋</h1>
             <p>
-                Manage your properties, respond to
-                viewing requests and keep your rental
-                business organized.
+                Manage your properties, respond to viewing requests and keep your rental business organized.
             </p>
-
         </div>
 
-
-        <a
-            href="add-property.html"
-            class="add-property-button"
-        >
-            ➕ Add Property
-        </a>
-
-
+        <a href="add-property.html" class="add-property-button">➕ Add Property</a>
     </section>
-
-
-
-    <!-- =========================================
-         STATISTICS
-    ========================================= -->
 
     <section class="landlord-stat-grid">
-
-
         <div class="landlord-stat-card stat-green">
-
-            <div class="stat-icon">
-                🏠
-            </div>
-
+            <div class="stat-icon">🏠</div>
             <div>
-
-                <span>
-                    My Properties
-                </span>
-
-                <strong id="my-properties">
-                    ...
-                </strong>
-
+                <span>My Properties</span>
+                <strong id="my-properties">...</strong>
             </div>
-
         </div>
-
 
         <div class="landlord-stat-card stat-blue">
-
-            <div class="stat-icon">
-                ✓
-            </div>
-
+            <div class="stat-icon">✓</div>
             <div>
-
-                <span>
-                    Available
-                </span>
-
-                <strong id="available-properties">
-                    ...
-                </strong>
-
+                <span>Available</span>
+                <strong id="available-properties">...</strong>
             </div>
-
         </div>
-
 
         <div class="landlord-stat-card stat-orange">
-
-            <div class="stat-icon">
-                📅
-            </div>
-
+            <div class="stat-icon">📅</div>
             <div>
-
-                <span>
-                    Viewing Requests
-                </span>
-
-                <strong id="viewing-requests">
-                    ...
-                </strong>
-
+                <span>Viewing Requests</span>
+                <strong id="viewing-requests">...</strong>
             </div>
-
         </div>
-
 
         <div class="landlord-stat-card stat-red">
-
-            <div class="stat-icon">
-                ⏳
-            </div>
-
+            <div class="stat-icon">⏳</div>
             <div>
-
-                <span>
-                    Pending Requests
-                </span>
-
-                <strong id="pending-requests">
-                    ...
-                </strong>
-
+                <span>Pending Requests</span>
+                <strong id="pending-requests">...</strong>
             </div>
-
         </div>
-
-
     </section>
 
-
-
-    <!-- =========================================
-         MY PROPERTIES
-    ========================================= -->
-
+    <!-- VIEWING CALENDAR -->
     <section class="dashboard-section">
-
-
         <div class="section-header">
-
-
             <div>
-
-                <span class="section-header-label">
-                    PROPERTY MANAGEMENT
-                </span>
-
-
-                <h2>
-                    My Properties
-                </h2>
-
-
+                <span class="section-header-label">VIEWING SCHEDULE</span>
+                <h2>Viewing Calendar</h2>
                 <p>
-                    Manage the rental properties you
-                    have listed on NichoLink 254.
+                    See all tenant viewing requests and scheduled property viewings on your calendar.
                 </p>
-
             </div>
-
-
-            <a
-                href="add-property.html"
-                class="small-button"
-            >
-                + Add Property
-            </a>
-
-
         </div>
 
+        <div class="calendar-wrapper">
+            <div class="calendar-toolbar">
+                <button type="button" class="calendar-nav-button" onclick="changeCalendarMonth(-1)">‹</button>
+                <h3 id="calendar-month-title">Loading...</h3>
+                <button type="button" class="calendar-nav-button" onclick="changeCalendarMonth(1)">›</button>
+            </div>
 
-        <div
-            id="property-list"
-            class="property-grid"
-        >
+            <div class="calendar-weekdays">
+                <div>Sun</div>
+                <div>Mon</div>
+                <div>Tue</div>
+                <div>Wed</div>
+                <div>Thu</div>
+                <div>Fri</div>
+                <div>Sat</div>
+            </div>
 
+            <div id="landlord-calendar" class="landlord-calendar"></div>
+
+            <div class="calendar-legend">
+                <span><i class="legend-dot pending"></i> Pending</span>
+                <span><i class="legend-dot approved"></i> Approved</span>
+                <span><i class="legend-dot rejected"></i> Rejected</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MY PROPERTIES -->
+    <section class="dashboard-section">
+        <div class="section-header">
+            <div>
+                <span class="section-header-label">PROPERTY MANAGEMENT</span>
+                <h2>My Properties</h2>
+                <p>Manage the rental properties you have listed on NichoLink 254.</p>
+            </div>
+            <a href="add-property.html" class="small-button">+ Add Property</a>
+        </div>
+
+        <div id="property-list" class="property-grid">
             <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    ⏳
-                </div>
-
-                <h3>
-                    Loading Properties
-                </h3>
-
-                <p>
-                    Please wait while your properties load.
-                </p>
-
+                <div class="empty-state-icon">⏳</div>
+                <h3>Loading Properties</h3>
+                <p>Please wait while your properties load.</p>
             </div>
-
         </div>
-
-
     </section>
 
-
-
-    <!-- =========================================
-         VIEWING REQUESTS
-    ========================================= -->
-
+    <!-- VIEWING REQUESTS -->
     <section class="dashboard-section">
-
-
         <div class="section-header">
-
-
             <div>
-
-                <span class="section-header-label">
-                    TENANT ACTIVITY
-                </span>
-
-
-                <h2>
-                    Viewing Requests
-                </h2>
-
-
-                <p>
-                    Review requests from tenants interested
-                    in your properties.
-                </p>
-
+                <span class="section-header-label">TENANT ACTIVITY</span>
+                <h2>Viewing Requests</h2>
+                <p>Review requests from tenants interested in your properties.</p>
             </div>
-
-
         </div>
 
-
-        <div
-            id="request-list"
-            class="request-list"
-        >
-
+        <div id="request-list" class="request-list">
             <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    ⏳
-                </div>
-
-                <h3>
-                    Loading Requests
-                </h3>
-
-                <p>
-                    Please wait.
-                </p>
-
+                <div class="empty-state-icon">⏳</div>
+                <h3>Loading Requests</h3>
+                <p>Please wait.</p>
             </div>
-
         </div>
-
-
     </section>
 
-
-
-    <!-- =========================================
-         MESSAGES
-    ========================================= -->
-
+    <!-- MESSAGES -->
     <section class="dashboard-section">
-
-
         <div class="section-header">
-
-
             <div>
-
-                <span class="section-header-label">
-                    COMMUNICATION
-                </span>
-
-
-                <h2>
-                    Messages
-                </h2>
-
-
-                <p>
-                    Communicate with tenants about your properties.
-                </p>
-
+                <span class="section-header-label">COMMUNICATION</span>
+                <h2>Messages</h2>
+                <p>Communicate with tenants about your properties.</p>
             </div>
-
-
-            <a
-                href="messages.html"
-                class="small-button"
-            >
-                💬 Open Messages
-            </a>
-
-
+            <a href="messages.html" class="small-button">💬 Open Messages</a>
         </div>
-
 
         <div class="empty-state">
-
-            <div class="empty-state-icon">
-                💬
-            </div>
-
-            <h3>
-                Messages
-            </h3>
-
-            <p>
-                Tenant conversations will appear here.
-            </p>
-
+            <div class="empty-state-icon">💬</div>
+            <h3>Messages</h3>
+            <p>Tenant conversations will appear here.</p>
         </div>
-
-
     </section>
 
-
-
-    <!-- =========================================
-         NOTIFICATIONS
-    ========================================= -->
-
+    <!-- NOTIFICATIONS -->
     <section class="dashboard-section">
-
-
         <div class="section-header">
-
-
             <div>
+                <span class="section-header-label">ACTIVITY</span>
+                <h2>Notifications</h2>
+                <p>View important updates about your account, properties and tenant activity.</p>
+            </div>
+            <a href="notifications.html" class="small-button">🔔 Notifications</a>
+        </div>
+    </section>
 
-                <span class="section-header-label">
-                    ACTIVITY
-                </span>
+    <!-- TRUST CENTER -->
+    <section class="dashboard-section">
+        <div class="section-header">
+            <div>
+                <span class="section-header-label">TRUST & SAFETY</span>
+                <h2>Trust & Information Center</h2>
+                <p>Access safety information, privacy, terms, help and listing reporting.</p>
+            </div>
+            <a href="trust-center.html" class="small-button">🛡️ Open Trust Center</a>
+        </div>
+    </section>
 
-
-                <h2>
-                    Notifications
-                </h2>
-
-
-                <p>
-                    View important updates about your account,
-                    properties and tenant activity.
-                </p>
-
+    <!-- SETTINGS -->
+    <section class="dashboard-section">
+        <div class="section-header">
+            <div>
+                <span class="section-header-label">ACCOUNT</span>
+                <h2>Settings</h2>
+                <p>Manage your NichoLink 254 account preferences.</p>
             </div>
 
-
-            <a
-                href="notifications.html"
-                class="small-button"
-            >
-                🔔 Notifications
+            <a href="settings.html" class="small-button">
+                ⚙️ Open Settings
             </a>
-
-
         </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================
-         TRUST CENTER
-    ========================================= -->
-
-    <section class="dashboard-section">
-
-
-        <div class="section-header">
-
-
-            <div>
-
-                <span class="section-header-label">
-                    TRUST & SAFETY
-                </span>
-
-
-                <h2>
-                    Trust & Information Center
-                </h2>
-
-
-                <p>
-                    Access safety information, privacy,
-                    terms, help and listing reporting.
-                </p>
-
-            </div>
-
-
-            <a
-                href="trust-center.html"
-                class="small-button"
-            >
-                🛡️ Open Trust Center
-            </a>
-
-
-        </div>
-
-
-    </section>
-
-
-
-    <!-- =========================================
-         SETTINGS
-    ========================================= -->
-
-    <section class="dashboard-section">
-
-
-        <div class="section-header">
-
-
-            <div>
-
-                <span class="section-header-label">
-                    ACCOUNT
-                </span>
-
-
-                <h2>
-                    Settings
-                </h2>
-
-
-                <p>
-                    Manage your NichoLink 254 account preferences.
-                </p>
-
-            </div>
-
-
-        </div>
-
 
         <div class="empty-state">
+            <div class="empty-state-icon">⚙️</div>
+            <h3>Account Settings</h3>
+            <p>Manage your profile, password, notifications and account preferences.</p>
 
-            <div class="empty-state-icon">
-                ⚙️
-            </div>
-
-            <h3>
-                Account Settings
-            </h3>
-
-            <p>
-                Additional account settings will appear here.
-            </p>
-
+            <a href="settings.html" class="small-button">
+                ⚙️ Manage Settings
+            </a>
         </div>
-
-
     </section>
-
-
-
-    <!-- =========================================
-         FOOTER
-    ========================================= -->
 
     <footer class="landlord-footer">
-
-
         <div>
-
-            <strong>
-                NichoLink
-                <span>254</span>
-            </strong>
-
-            <p>
-                Find. Connect. Grow.
-            </p>
-
+            <strong>NichoLink <span>254</span></strong>
+            <p>Find. Connect. Grow.</p>
         </div>
 
-
         <div>
-
-            <p>
-                © 2026 NichoLink 254.
-                All rights reserved.
-            </p>
-
-            <p>
-                Professional property management for landlords.
-            </p>
-
+            <p>© 2026 NichoLink 254. All rights reserved.</p>
+            <p>Professional property management for landlords.</p>
         </div>
-
-
     </footer>
-
 
 </main>
 
-
-
 <script src="supabase.js"></script>
 
-
 <script>
-
 let currentUser = null;
-
 let currentProfile = null;
-
 let selectedProfileFile = null;
-
 let landlordOwnershipColumn = null;
 
+/* Calendar state */
+let calendarDate = new Date();
+let calendarRequests = [];
+let calendarProperties = [];
 
-const profileInput =
-    document.getElementById(
-        "profile-picture-input"
-    );
+const profileInput = document.getElementById("profile-picture-input");
+const choosePhotoButton = document.getElementById("choose-photo-button");
+const uploadPhotoButton = document.getElementById("upload-photo-button");
+const removePhotoButton = document.getElementById("remove-photo-button");
+const profileMessage = document.getElementById("profile-message");
 
+document.addEventListener("DOMContentLoaded", loadLandlordDashboard);
 
-const choosePhotoButton =
-    document.getElementById(
-        "choose-photo-button"
-    );
-
-
-const uploadPhotoButton =
-    document.getElementById(
-        "upload-photo-button"
-    );
-
-
-const removePhotoButton =
-    document.getElementById(
-        "remove-photo-button"
-    );
-
-
-const profileMessage =
-    document.getElementById(
-        "profile-message"
-    );
-
-
-document.addEventListener(
-    "DOMContentLoaded",
-    loadLandlordDashboard
-);
-
-
-
-/* =========================================
-   LOAD LANDLORD DASHBOARD
-========================================= */
-
+/* LOAD DASHBOARD */
 async function loadLandlordDashboard() {
-
     try {
+        const { data:{ user }, error:authError } = await supabaseClient.auth.getUser();
 
-        const {
-            data: {
-                user
-            },
-            error: authError
-        } =
-            await supabaseClient
-                .auth
-                .getUser();
-
-
-        if (authError) {
-            throw authError;
-        }
-
+        if (authError) throw authError;
 
         if (!user) {
-
-            window.location.href =
-                "login.html";
-
+            window.location.href = "login.html";
             return;
         }
 
+        currentUser = user;
 
-        currentUser =
-            user;
+        const { data:profile, error:profileError } = await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                full_name,
+                phone,
+                email,
+                account_type,
+                is_active,
+                avatar_url,
+                created_at
+            `)
+            .eq("id", user.id)
+            .maybeSingle();
 
-
-
-        /* PROFILE */
-
-        const {
-            data: profile,
-            error: profileError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select(`
-                    id,
-                    full_name,
-                    phone,
-                    email,
-                    account_type,
-                    is_active,
-                    avatar_url,
-                    created_at
-                `)
-                .eq(
-                    "id",
-                    user.id
-                )
-                .maybeSingle();
-
-
-        if (profileError) {
-            throw profileError;
-        }
-
+        if (profileError) throw profileError;
 
         if (!profile) {
-
-            throw new Error(
-                "Your landlord profile could not be found."
-            );
-
+            throw new Error("Your landlord profile could not be found.");
         }
 
+        currentProfile = profile;
 
-        currentProfile =
-            profile;
+        const accountType = String(profile.account_type || "").trim().toLowerCase();
 
-
-        const accountType =
-            String(
-                profile.account_type || ""
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            accountType !== "landlord"
-        ) {
-
-            alert(
-                "This dashboard is for landlord accounts."
-            );
-
-            window.location.href =
-                "index.html";
-
+        if (accountType !== "landlord") {
+            alert("This dashboard is for landlord accounts.");
+            window.location.href = "index.html";
             return;
         }
 
-
-        if (
-            profile.is_active === false
-        ) {
-
-            await supabaseClient
-                .auth
-                .signOut();
-
-            window.location.href =
-                "login.html";
-
+        if (profile.is_active === false) {
+            await supabaseClient.auth.signOut();
+            window.location.href = "login.html";
             return;
         }
 
-
-        updateProfileUI(
-            profile
-        );
-
-
+        updateProfileUI(profile);
         await loadLandlordProperties();
 
-    }
+        /* Render an empty/current calendar immediately, then requests populate it. */
+        renderLandlordCalendar();
 
-    catch (error) {
+    } catch (error) {
+        console.error("Landlord dashboard error:", error);
 
-        console.error(
-            "Landlord dashboard error:",
-            error
-        );
-
-
-        const propertyList =
-            document.getElementById(
-                "property-list"
-            );
-
+        const propertyList = document.getElementById("property-list");
 
         if (propertyList) {
-
             propertyList.innerHTML = `
-
                 <div class="empty-state">
-
-                    <div class="empty-state-icon">
-                        ⚠️
-                    </div>
-
-                    <h3>
-                        Unable to Load Dashboard
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            error.message ||
-                            "Unknown error"
-                        )}
-                    </p>
-
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Unable to Load Dashboard</h3>
+                    <p>${escapeHtml(error.message || "Unknown error")}</p>
                 </div>
-
             `;
-
         }
-
     }
-
 }
 
+/* PROFILE UI */
+function updateProfileUI(profile) {
+    const name = profile.full_name || "Landlord";
+    const phone = profile.phone || "Not provided";
+    const email = profile.email || currentUser?.email || "Not provided";
 
+    document.getElementById("account-name").textContent = name;
+    document.getElementById("top-user-name").textContent = name;
+    document.getElementById("welcome-name").textContent = "Welcome, " + name + " 👋";
+    document.getElementById("account-email").textContent = email;
+    document.getElementById("account-phone").textContent = phone;
+    document.getElementById("account-status").textContent =
+        profile.is_active === false ? "Inactive" : "Active";
 
-/* =========================================
-   PROFILE UI
-========================================= */
-
-function updateProfileUI(
-    profile
-) {
-
-    const name =
-        profile.full_name ||
-        "Landlord";
-
-
-    const phone =
-        profile.phone ||
-        "Not provided";
-
-
-    const email =
-        profile.email ||
-        currentUser?.email ||
-        "Not provided";
-
-
-    document.getElementById(
-        "account-name"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "top-user-name"
-    ).textContent =
-        name;
-
-
-    document.getElementById(
-        "welcome-name"
-    ).textContent =
-        "Welcome, " +
-        name +
-        " 👋";
-
-
-    document.getElementById(
-        "account-email"
-    ).textContent =
-        email;
-
-
-    document.getElementById(
-        "account-phone"
-    ).textContent =
-        phone;
-
-
-    document.getElementById(
-        "account-status"
-    ).textContent =
-        profile.is_active === false
-            ? "Inactive"
-            : "Active";
-
-
-    updateAvatar(
-        document.getElementById(
-            "top-avatar"
-        ),
-        profile
-    );
-
-
-    updateAvatar(
-        document.getElementById(
-            "account-avatar"
-        ),
-        profile
-    );
-
+    updateAvatar(document.getElementById("top-avatar"), profile);
+    updateAvatar(document.getElementById("account-avatar"), profile);
 }
 
+/* AVATAR */
+function updateAvatar(element, profile) {
+    if (!element) return;
 
+    const name = profile.full_name || "Landlord";
+    const initial = String(name).trim().charAt(0).toUpperCase() || "L";
 
-/* =========================================
-   AVATAR
-========================================= */
-
-function updateAvatar(
-    element,
-    profile
-) {
-
-    if (!element) {
-        return;
-    }
-
-
-    const name =
-        profile.full_name ||
-        "Landlord";
-
-
-    const initial =
-        String(name)
-            .trim()
-            .charAt(0)
-            .toUpperCase() ||
-        "L";
-
-
-    if (
-        profile.avatar_url
-    ) {
-
+    if (profile.avatar_url) {
         element.innerHTML = `
-
             <img
-                src="${escapeHtml(
-                    addCacheBuster(
-                        profile.avatar_url
-                    )
-                )}"
+                src="${escapeHtml(addCacheBuster(profile.avatar_url))}"
                 alt="Profile photo"
             >
-
         `;
-
+    } else {
+        element.textContent = initial;
     }
-    else {
-
-        element.textContent =
-            initial;
-
-    }
-
 }
 
-
-
-/* =========================================
-   LOAD PROPERTIES
-========================================= */
-
+/* LOAD PROPERTIES */
 async function loadLandlordProperties() {
-
-    const container =
-        document.getElementById(
-            "property-list"
-        );
-
+    const container = document.getElementById("property-list");
 
     try {
-
         let properties = null;
-
         let propertyError = null;
 
+        /* Try owner_id */
+        const firstQuery = await supabaseClient
+            .from("properties")
+            .select(`
+                id,
+                title,
+                location,
+                rent,
+                bedrooms,
+                bathrooms,
+                status,
+                image_url,
+                created_at,
+                owner_id
+            `)
+            .eq("owner_id", currentUser.id)
+            .order("created_at", { ascending:false });
 
+        properties = firstQuery.data;
+        propertyError = firstQuery.error;
 
-        /*
-         * Try owner_id first.
-         */
+        if (!propertyError) landlordOwnershipColumn = "owner_id";
 
-        const firstQuery =
-            await supabaseClient
+        /* Try landlord_id */
+        if (propertyError) {
+            const secondQuery = await supabaseClient
                 .from("properties")
                 .select(`
                     id,
@@ -2756,1298 +1019,470 @@ async function loadLandlordProperties() {
                     status,
                     image_url,
                     created_at,
-                    owner_id
+                    landlord_id
                 `)
-                .eq(
-                    "owner_id",
-                    currentUser.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
+                .eq("landlord_id", currentUser.id)
+                .order("created_at", { ascending:false });
 
+            properties = secondQuery.data;
+            propertyError = secondQuery.error;
 
-        properties =
-            firstQuery.data;
-
-        propertyError =
-            firstQuery.error;
-
-
-        if (
-            !propertyError
-        ) {
-
-            landlordOwnershipColumn =
-                "owner_id";
-
+            if (!propertyError) landlordOwnershipColumn = "landlord_id";
         }
 
-
-
-        /*
-         * Try landlord_id.
-         */
-
-        if (
-            propertyError
-        ) {
-
-            const secondQuery =
-                await supabaseClient
-                    .from("properties")
-                    .select(`
-                        id,
-                        title,
-                        location,
-                        rent,
-                        bedrooms,
-                        bathrooms,
-                        status,
-                        image_url,
-                        created_at,
-                        landlord_id
-                    `)
-                    .eq(
-                        "landlord_id",
-                        currentUser.id
-                    )
-                    .order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    );
-
-
-            properties =
-                secondQuery.data;
-
-            propertyError =
-                secondQuery.error;
-
-
-            if (
-                !propertyError
-            ) {
-
-                landlordOwnershipColumn =
-                    "landlord_id";
-
-            }
-
-        }
-
-
-
-        /*
-         * Try user_id.
-         */
-
-        if (
-            propertyError
-        ) {
-
-            const thirdQuery =
-                await supabaseClient
-                    .from("properties")
-                    .select(`
-                        id,
-                        title,
-                        location,
-                        rent,
-                        bedrooms,
-                        bathrooms,
-                        status,
-                        image_url,
-                        created_at,
-                        user_id
-                    `)
-                    .eq(
-                        "user_id",
-                        currentUser.id
-                    )
-                    .order(
-                        "created_at",
-                        {
-                            ascending: false
-                        }
-                    );
-
-
-            properties =
-                thirdQuery.data;
-
-            propertyError =
-                thirdQuery.error;
-
-
-            if (
-                !propertyError
-            ) {
-
-                landlordOwnershipColumn =
-                    "user_id";
-
-            }
-
-        }
-
-
+        /* Try user_id */
         if (propertyError) {
-
-            throw propertyError;
-
-        }
-
-
-        if (
-            !landlordOwnershipColumn
-        ) {
-
-            throw new Error(
-                "No supported property ownership column was found."
-            );
-
-        }
-
-
-        properties =
-            Array.isArray(properties)
-                ? properties
-                : [];
-
-
-        /*
-         * Statistics
-         */
-
-        document.getElementById(
-            "my-properties"
-        ).textContent =
-            properties.length;
-
-
-        const available =
-            properties.filter(
-                property =>
-                    normalizeStatus(
-                        property.status ||
-                        "available"
-                    ) ===
-                    "available"
-            ).length;
-
-
-        document.getElementById(
-            "available-properties"
-        ).textContent =
-            available;
-
-
-        displayProperties(
-            properties
-        );
-
-
-        await loadViewingRequests(
-            properties
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Property loading error:",
-            error
-        );
-
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    ⚠️
-                </div>
-
-                <h3>
-                    Unable to Load Properties
-                </h3>
-
-                <p>
-                    ${escapeHtml(
-                        error.message ||
-                        "Unable to load your properties."
-                    )}
-                </p>
-
-                <a
-                    href="add-property.html"
-                    class="small-button"
-                >
-                    Add Property
-                </a>
-
-            </div>
-
-        `;
-
-    }
-
-}
-
-
-
-/* =========================================
-   DISPLAY PROPERTIES
-========================================= */
-
-function displayProperties(
-    properties
-) {
-
-    const container =
-        document.getElementById(
-            "property-list"
-        );
-
-
-    container.innerHTML =
-        "";
-
-
-    if (
-        !properties.length
-    ) {
-
-        container.innerHTML = `
-
-            <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    🏠
-                </div>
-
-                <h3>
-                    No Properties Yet
-                </h3>
-
-                <p>
-                    Add your first rental property
-                    to start receiving tenant enquiries.
-                </p>
-
-                <a
-                    href="add-property.html"
-                    class="small-button"
-                >
-                    + Add Property
-                </a>
-
-            </div>
-
-        `;
-
-        return;
-    }
-
-
-    properties.forEach(
-        property => {
-
-            const card =
-                document.createElement(
-                    "article"
-                );
-
-
-            card.className =
-                "property-card";
-
-
-            const image =
-                property.image_url
-                    ? String(
-                        property.image_url
-                    ).trim()
-                    : "";
-
-
-            const status =
-                property.status ||
-                "Available";
-
-
-            const normalized =
-                normalizeStatus(
-                    status
-                );
-
-
-            const imageMarkup =
-                image
-
-                ?
-
-                `
-
-                    <img
-                        src="${escapeHtml(image)}"
-                        alt="${escapeHtml(
-                            property.title ||
-                            "Property"
-                        )}"
-                        class="property-image"
-                    >
-
-                `
-
-                :
-
-                `
-
-                    <div class="property-placeholder">
-                        🏠
-                    </div>
-
-                `;
-
-
-            card.innerHTML = `
-
-                ${imageMarkup}
-
-
-                <div class="property-body">
-
-
-                    <h3>
-
-                        ${escapeHtml(
-                            property.title ||
-                            "Untitled Property"
-                        )}
-
-                    </h3>
-
-
-                    <p class="property-location">
-
-                        📍
-                        ${escapeHtml(
-                            property.location ||
-                            "Location not specified"
-                        )}
-
-                    </p>
-
-
-                    <p class="property-rent">
-
-                        KSh
-                        ${Number(
-                            property.rent || 0
-                        ).toLocaleString()}
-
-                        <span
-                            style="
-                                font-size:12px;
-                                font-weight:400;
-                                color:#718096;
-                            "
-                        >
-                            / month
-                        </span>
-
-                    </p>
-
-
-                    <div class="property-meta">
-
-                        <span>
-                            🛏
-                            ${Number(
-                                property.bedrooms || 0
-                            )}
-                            bedrooms
-                        </span>
-
-
-                        <span>
-                            🚿
-                            ${Number(
-                                property.bathrooms || 0
-                            )}
-                            bathrooms
-                        </span>
-
-                    </div>
-
-
-                    <span class="property-status">
-
-                        ${escapeHtml(
-                            normalized === "available"
-                                ? "Available"
-                                : status
-                        )}
-
-                    </span>
-
-
-                    <div class="property-actions">
-
-
-                        <a
-                            href="property-details.html?id=${encodeURIComponent(
-                                property.id
-                            )}"
-                            class="view-property"
-                        >
-                            View
-                        </a>
-
-
-                        <button
-                            type="button"
-                            class="edit-property"
-                            onclick="editProperty(
-                                '${escapeHtml(
-                                    property.id
-                                )}'
-                            )"
-                        >
-                            Edit
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="delete-property"
-                            onclick="deleteProperty(
-                                '${escapeHtml(
-                                    property.id
-                                )}'
-                            )"
-                        >
-                            Delete
-                        </button>
-
-
-                    </div>
-
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                card
-            );
-
-        }
-    );
-
-}
-
-
-
-/* =========================================
-   EDIT PROPERTY
-========================================= */
-
-function editProperty(
-    propertyId
-) {
-
-    if (!propertyId) {
-
-        alert(
-            "Property ID is missing."
-        );
-
-        return;
-
-    }
-
-
-    window.location.href =
-        "add-property.html?id=" +
-        encodeURIComponent(
-            String(propertyId)
-        );
-
-}
-
-
-
-/* =========================================
-   DELETE PROPERTY
-========================================= */
-
-async function deleteProperty(
-    propertyId
-) {
-
-    if (!propertyId) {
-
-        alert(
-            "Property ID is missing."
-        );
-
-        return;
-
-    }
-
-
-    if (!currentUser) {
-
-        alert(
-            "Your login session has expired. Please log in again."
-        );
-
-        window.location.href =
-            "login.html";
-
-        return;
-
-    }
-
-
-    if (
-        !landlordOwnershipColumn
-    ) {
-
-        alert(
-            "The property ownership configuration could not be detected."
-        );
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-            "Are you sure you want to delete this property?\n\nThis action cannot be undone."
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
-    try {
-
-
-        /*
-         * Confirm the property belongs
-         * to the logged-in landlord.
-         */
-
-        const {
-            data: property,
-            error: ownershipError
-        } =
-            await supabaseClient
+            const thirdQuery = await supabaseClient
                 .from("properties")
                 .select(`
                     id,
-                    title
+                    title,
+                    location,
+                    rent,
+                    bedrooms,
+                    bathrooms,
+                    status,
+                    image_url,
+                    created_at,
+                    user_id
                 `)
-                .eq(
-                    "id",
-                    propertyId
-                )
-                .eq(
-                    landlordOwnershipColumn,
-                    currentUser.id
-                )
-                .maybeSingle();
+                .eq("user_id", currentUser.id)
+                .order("created_at", { ascending:false });
 
+            properties = thirdQuery.data;
+            propertyError = thirdQuery.error;
 
-        if (ownershipError) {
-            throw ownershipError;
+            if (!propertyError) landlordOwnershipColumn = "user_id";
         }
 
+        if (propertyError) throw propertyError;
+
+        if (!landlordOwnershipColumn) {
+            throw new Error("No supported property ownership column was found.");
+        }
+
+        properties = Array.isArray(properties) ? properties : [];
+
+        document.getElementById("my-properties").textContent = properties.length;
+
+        const available = properties.filter(property =>
+            normalizeStatus(property.status || "available") === "available"
+        ).length;
+
+        document.getElementById("available-properties").textContent = available;
+
+        displayProperties(properties);
+        await loadViewingRequests(properties);
+
+    } catch (error) {
+        console.error("Property loading error:", error);
+
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">⚠️</div>
+                <h3>Unable to Load Properties</h3>
+                <p>${escapeHtml(error.message || "Unable to load your properties.")}</p>
+                <a href="add-property.html" class="small-button">Add Property</a>
+            </div>
+        `;
+    }
+}
+
+/* DISPLAY PROPERTIES */
+function displayProperties(properties) {
+    const container = document.getElementById("property-list");
+    container.innerHTML = "";
+
+    if (!properties.length) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <div class="empty-state-icon">🏠</div>
+                <h3>No Properties Yet</h3>
+                <p>Add your first rental property to start receiving tenant enquiries.</p>
+                <a href="add-property.html" class="small-button">+ Add Property</a>
+            </div>
+        `;
+        return;
+    }
+
+    properties.forEach(property => {
+        const card = document.createElement("article");
+        card.className = "property-card";
+
+        const image = property.image_url ? String(property.image_url).trim() : "";
+        const status = property.status || "Available";
+        const normalized = normalizeStatus(status);
+
+        const imageMarkup = image
+            ? `
+                <img
+                    src="${escapeHtml(image)}"
+                    alt="${escapeHtml(property.title || "Property")}"
+                    class="property-image"
+                >
+            `
+            : `<div class="property-placeholder">🏠</div>`;
+
+        card.innerHTML = `
+            ${imageMarkup}
+
+            <div class="property-body">
+                <h3>${escapeHtml(property.title || "Untitled Property")}</h3>
+
+                <p class="property-location">
+                    📍 ${escapeHtml(property.location || "Location not specified")}
+                </p>
+
+                <p class="property-rent">
+                    KSh ${Number(property.rent || 0).toLocaleString()}
+                    <span style="font-size:12px;font-weight:400;color:#718096;">/ month</span>
+                </p>
+
+                <div class="property-meta">
+                    <span>🛏 ${Number(property.bedrooms || 0)} bedrooms</span>
+                    <span>🚿 ${Number(property.bathrooms || 0)} bathrooms</span>
+                </div>
+
+                <span class="property-status">
+                    ${escapeHtml(normalized === "available" ? "Available" : status)}
+                </span>
+
+                <div class="property-actions">
+                    <a
+                        href="property-details.html?id=${encodeURIComponent(property.id)}"
+                        class="view-property"
+                    >View</a>
+
+                    <button
+                        type="button"
+                        class="edit-property"
+                        onclick="editProperty('${escapeHtml(property.id)}')"
+                    >Edit</button>
+
+                    <button
+                        type="button"
+                        class="delete-property"
+                        onclick="deleteProperty('${escapeHtml(property.id)}')"
+                    >Delete</button>
+                </div>
+            </div>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+/* EDIT PROPERTY */
+function editProperty(propertyId) {
+    if (!propertyId) {
+        alert("Property ID is missing.");
+        return;
+    }
+
+    window.location.href =
+        "add-property.html?id=" + encodeURIComponent(String(propertyId));
+}
+
+/* DELETE PROPERTY */
+async function deleteProperty(propertyId) {
+    if (!propertyId) {
+        alert("Property ID is missing.");
+        return;
+    }
+
+    if (!currentUser) {
+        alert("Your login session has expired. Please log in again.");
+        window.location.href = "login.html";
+        return;
+    }
+
+    if (!landlordOwnershipColumn) {
+        alert("The property ownership configuration could not be detected.");
+        return;
+    }
+
+    const confirmed = confirm(
+        "Are you sure you want to delete this property?\n\nThis action cannot be undone."
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const { data:property, error:ownershipError } = await supabaseClient
+            .from("properties")
+            .select("id,title")
+            .eq("id", propertyId)
+            .eq(landlordOwnershipColumn, currentUser.id)
+            .maybeSingle();
+
+        if (ownershipError) throw ownershipError;
 
         if (!property) {
-
             throw new Error(
                 "You are not authorized to delete this property or the property no longer exists."
             );
-
         }
 
-
-
-        /*
-         * Remove saved-property references.
-         * This is optional cleanup.
-         */
-
-        const {
-            error: savedError
-        } =
-            await supabaseClient
-                .from("saved_properties")
-                .delete()
-                .eq(
-                    "property_id",
-                    propertyId
-                );
-
+        const { error:savedError } = await supabaseClient
+            .from("saved_properties")
+            .delete()
+            .eq("property_id", propertyId);
 
         if (savedError) {
-
-            console.warn(
-                "Saved property cleanup warning:",
-                savedError
-            );
-
+            console.warn("Saved property cleanup warning:", savedError);
         }
 
-
-
-        /*
-         * Remove property image records.
-         */
-
-        const {
-            error: imageError
-        } =
-            await supabaseClient
-                .from("property_images")
-                .delete()
-                .eq(
-                    "property_id",
-                    propertyId
-                );
-
+        const { error:imageError } = await supabaseClient
+            .from("property_images")
+            .delete()
+            .eq("property_id", propertyId);
 
         if (imageError) {
-
             throw new Error(
-                "Unable to remove property photo records: " +
-                imageError.message
+                "Unable to remove property photo records: " + imageError.message
             );
-
         }
 
-
-
-        /*
-         * Delete the property itself.
-         */
-
-        const {
-            data: deletedRows,
-            error: deleteError
-        } =
-            await supabaseClient
-                .from("properties")
-                .delete()
-                .eq(
-                    "id",
-                    propertyId
-                )
-                .eq(
-                    landlordOwnershipColumn,
-                    currentUser.id
-                )
-                .select("id");
-
+        const { data:deletedRows, error:deleteError } = await supabaseClient
+            .from("properties")
+            .delete()
+            .eq("id", propertyId)
+            .eq(landlordOwnershipColumn, currentUser.id)
+            .select("id");
 
         if (deleteError) {
-
-            throw new Error(
-                "Unable to delete property: " +
-                deleteError.message
-            );
-
+            throw new Error("Unable to delete property: " + deleteError.message);
         }
 
-
-        if (
-            !deletedRows ||
-            deletedRows.length === 0
-        ) {
-
+        if (!deletedRows || deletedRows.length === 0) {
             throw new Error(
                 "The property was not deleted. Check your Supabase DELETE policy."
             );
-
         }
 
-
-        alert(
-            "Property deleted successfully."
-        );
-
-
+        alert("Property deleted successfully.");
         await loadLandlordProperties();
 
+    } catch (error) {
+        console.error("Delete property error:", error);
+        alert(error.message || "Unable to delete property.");
     }
-
-    catch (error) {
-
-        console.error(
-            "Delete property error:",
-            error
-        );
-
-
-        alert(
-            error.message ||
-            "Unable to delete property."
-        );
-
-    }
-
 }
 
-
-
-/* =========================================
-   VIEWING REQUESTS
-========================================= */
-
-async function loadViewingRequests(
-    properties
-) {
-
-    const container =
-        document.getElementById(
-            "request-list"
-        );
-
+/* VIEWING REQUESTS */
+async function loadViewingRequests(properties) {
+    const container = document.getElementById("request-list");
 
     try {
+        if (!properties.length) {
+            document.getElementById("viewing-requests").textContent = "0";
+            document.getElementById("pending-requests").textContent = "0";
 
-        if (
-            !properties.length
-        ) {
-
-            document.getElementById(
-                "viewing-requests"
-            ).textContent =
-                "0";
-
-
-            document.getElementById(
-                "pending-requests"
-            ).textContent =
-                "0";
-
+            calendarRequests = [];
+            calendarProperties = [];
+            renderLandlordCalendar();
 
             container.innerHTML = `
-
                 <div class="empty-state">
-
-                    <div class="empty-state-icon">
-                        📅
-                    </div>
-
-                    <h3>
-                        No Viewing Requests
-                    </h3>
-
-                    <p>
-                        Viewing requests will appear
-                        when tenants request your properties.
-                    </p>
-
+                    <div class="empty-state-icon">📅</div>
+                    <h3>No Viewing Requests</h3>
+                    <p>Viewing requests will appear when tenants request your properties.</p>
                 </div>
-
             `;
-
             return;
         }
 
+        const propertyIds = properties.map(property => property.id);
 
-        const propertyIds =
-            properties.map(
-                property =>
-                    property.id
-            );
+        const { data:requests, error } = await supabaseClient
+            .from("viewing_requests")
+            .select(`
+                id,
+                property_id,
+                tenant_name,
+                tenant_phone,
+                viewing_date,
+                message,
+                status,
+                created_at
+            `)
+            .in("property_id", propertyIds)
+            .order("created_at", { ascending:false });
 
+        if (error) throw error;
 
-        const {
-            data: requests,
-            error
-        } =
-            await supabaseClient
-                .from("viewing_requests")
-                .select(`
-                    id,
-                    property_id,
-                    tenant_name,
-                    tenant_phone,
-                    viewing_date,
-                    message,
-                    status,
-                    created_at
-                `)
-                .in(
-                    "property_id",
-                    propertyIds
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
-                );
+        const requestList = Array.isArray(requests) ? requests : [];
 
+        const pending = requestList.filter(request =>
+            normalizeStatus(request.status) === "pending"
+        ).length;
 
-        if (error) {
-            throw error;
-        }
+        document.getElementById("viewing-requests").textContent = requestList.length;
+        document.getElementById("pending-requests").textContent = pending;
 
+        displayRequests(requestList, properties);
 
-        const requestList =
-            Array.isArray(requests)
-                ? requests
-                : [];
+        /* CALENDAR DATA */
+        calendarRequests = requestList;
+        calendarProperties = properties;
+        renderLandlordCalendar();
 
+    } catch (error) {
+        console.error("Viewing request error:", error);
 
-        const pending =
-            requestList.filter(
-                request =>
-                    normalizeStatus(
-                        request.status
-                    ) ===
-                    "pending"
-            ).length;
-
-
-        document.getElementById(
-            "viewing-requests"
-        ).textContent =
-            requestList.length;
-
-
-        document.getElementById(
-            "pending-requests"
-        ).textContent =
-            pending;
-
-
-        displayRequests(
-            requestList,
-            properties
-        );
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "Viewing request error:",
-            error
-        );
-
+        calendarRequests = [];
+        calendarProperties = [];
+        renderLandlordCalendar();
 
         container.innerHTML = `
-
             <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    ⚠️
-                </div>
-
-                <h3>
-                    Unable to Load Requests
-                </h3>
-
-                <p>
-                    ${escapeHtml(
-                        error.message ||
-                        "Unable to load viewing requests."
-                    )}
-                </p>
-
+                <div class="empty-state-icon">⚠️</div>
+                <h3>Unable to Load Requests</h3>
+                <p>${escapeHtml(error.message || "Unable to load viewing requests.")}</p>
             </div>
-
         `;
-
     }
-
 }
 
+/* DISPLAY REQUESTS */
+function displayRequests(requests, properties) {
+    const container = document.getElementById("request-list");
+    container.innerHTML = "";
 
-
-/* =========================================
-   DISPLAY REQUESTS
-========================================= */
-
-function displayRequests(
-    requests,
-    properties
-) {
-
-    const container =
-        document.getElementById(
-            "request-list"
-        );
-
-
-    container.innerHTML =
-        "";
-
-
-    if (
-        !requests.length
-    ) {
-
+    if (!requests.length) {
         container.innerHTML = `
-
             <div class="empty-state">
-
-                <div class="empty-state-icon">
-                    📅
-                </div>
-
-                <h3>
-                    No Viewing Requests Yet
-                </h3>
-
-                <p>
-                    Tenant viewing requests for your
-                    properties will appear here.
-                </p>
-
+                <div class="empty-state-icon">📅</div>
+                <h3>No Viewing Requests Yet</h3>
+                <p>Tenant viewing requests for your properties will appear here.</p>
             </div>
-
         `;
-
         return;
     }
 
+    requests.forEach(request => {
+        const property = properties.find(item =>
+            String(item.id) === String(request.property_id)
+        );
 
-    requests.forEach(
-        request => {
+        const propertyTitle = property?.title || "Property";
+        const status = normalizeStatus(request.status);
+        const statusClass =
+            status === "approved" ? "approved" :
+            status === "rejected" ? "rejected" : "pending";
 
-            const property =
-                properties.find(
-                    item =>
-                        String(
-                            item.id
-                        ) ===
-                        String(
-                            request.property_id
-                        )
-                );
+        const card = document.createElement("article");
+        card.className = "request-card";
 
+        card.innerHTML = `
+            <div class="request-icon">📅</div>
 
-            const propertyTitle =
-                property?.title ||
-                "Property";
+            <div class="request-information">
+                <h3>${escapeHtml(propertyTitle)}</h3>
 
+                <p>
+                    <strong>Tenant:</strong>
+                    ${escapeHtml(request.tenant_name || "Tenant")}
+                </p>
 
-            const status =
-                normalizeStatus(
-                    request.status
-                );
+                <p>
+                    <strong>Phone:</strong>
+                    ${escapeHtml(request.tenant_phone || "Not provided")}
+                </p>
 
+                <p>
+                    <strong>Viewing:</strong>
+                    ${escapeHtml(formatDate(request.viewing_date))}
+                </p>
 
-            const statusClass =
-                status === "approved"
-                    ? "approved"
-                    : status === "rejected"
-                        ? "rejected"
-                        : "pending";
+                <p>
+                    <strong>Message:</strong>
+                    ${escapeHtml(request.message || "No message")}
+                </p>
 
+                ${
+                    status === "pending"
+                    ? `
+                        <div class="request-actions">
+                            <button
+                                type="button"
+                                class="approve-button"
+                                onclick="updateViewingRequestStatus('${escapeHtml(request.id)}','approved')"
+                            >Approve</button>
 
-            const card =
-                document.createElement(
-                    "article"
-                );
+                            <button
+                                type="button"
+                                class="reject-button"
+                                onclick="updateViewingRequestStatus('${escapeHtml(request.id)}','rejected')"
+                            >Reject</button>
+                        </div>
+                    `
+                    : ""
+                }
+            </div>
 
+            <div class="request-status ${statusClass}">
+                ${escapeHtml(formatStatus(status))}
+            </div>
+        `;
 
-            card.className =
-                "request-card";
+        container.appendChild(card);
+    });
+}
 
+/* UPDATE VIEWING REQUEST */
+async function updateViewingRequestStatus(requestId, newStatus) {
+    if (!currentUser || !requestId || !newStatus || !landlordOwnershipColumn) {
+        return;
+    }
 
-            card.innerHTML = `
-
-                <div class="request-icon">
-                    📅
-                </div>
-
-
-                <div class="request-information">
-
-
-                    <h3>
-                        ${escapeHtml(
-                            propertyTitle
-                        )}
-                    </h3>
-
-
-                    <p>
-                        <strong>
-                            Tenant:
-                        </strong>
-
-                        ${escapeHtml(
-                            request.tenant_name ||
-                            "Tenant"
-                        )}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Phone:
-                        </strong>
-
-                        ${escapeHtml(
-                            request.tenant_phone ||
-                            "Not provided"
-                        )}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Viewing:
-                        </strong>
-
-                        ${escapeHtml(
-                            formatDate(
-                                request.viewing_date
-                            )
-                        )}
-                    </p>
-
-
-                    <p>
-                        <strong>
-                            Message:
-                        </strong>
-
-                        ${escapeHtml(
-                            request.message ||
-                            "No message"
-                        )}
-                    </p>
-
-
-                    ${
-                        status === "pending"
-
-                        ?
-
-                        `
-
-                            <div class="request-actions">
-
-                                <button
-                                    type="button"
-                                    class="approve-button"
-                                    onclick="updateViewingRequestStatus(
-                                        '${escapeHtml(
-                                            request.id
-                                        )}',
-                                        'approved'
-                                    )"
-                                >
-                                    Approve
-                                </button>
-
-
-                                <button
-                                    type="button"
-                                    class="reject-button"
-                                    onclick="updateViewingRequestStatus(
-                                        '${escapeHtml(
-                                            request.id
-                                        )}',
-                                        'rejected'
-                                    )"
-                                >
-                                    Reject
-                                </button>
-
-                            </div>
-
-                        `
-
-                        :
-
-                        ""
-
-                    }
-
-
-                </div>
-
-
-                <div
-                    class="request-status ${statusClass}"
-                >
-                    ${escapeHtml(
-                        formatStatus(
-                            status
-                        )
-                    )}
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                card
-            );
-
-        }
+    const confirmed = confirm(
+        "Change this viewing request to " + formatStatus(newStatus) + "?"
     );
 
-}
-
-
-
-/* =========================================
-   UPDATE VIEWING REQUEST
-========================================= */
-
-async function updateViewingRequestStatus(
-    requestId,
-    newStatus
-) {
-
-    if (
-        !currentUser ||
-        !requestId ||
-        !newStatus ||
-        !landlordOwnershipColumn
-    ) {
-
-        return;
-
-    }
-
-
-    const confirmed =
-        confirm(
-            "Change this viewing request to " +
-            formatStatus(newStatus) +
-            "?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
+    if (!confirmed) return;
 
     try {
+        const { data:request, error:requestError } = await supabaseClient
+            .from("viewing_requests")
+            .select("id,property_id")
+            .eq("id", requestId)
+            .maybeSingle();
 
-
-        const {
-            data: request,
-            error: requestError
-        } =
-            await supabaseClient
-                .from("viewing_requests")
-                .select(
-                    "id, property_id"
-                )
-                .eq(
-                    "id",
-                    requestId
-                )
-                .maybeSingle();
-
-
-        if (requestError) {
-            throw requestError;
-        }
-
+        if (requestError) throw requestError;
 
         if (!request) {
-
-            throw new Error(
-                "Viewing request not found."
-            );
-
+            throw new Error("Viewing request not found.");
         }
 
+        const { data:ownedProperty, error:ownershipError } = await supabaseClient
+            .from("properties")
+            .select("id")
+            .eq("id", request.property_id)
+            .eq(landlordOwnershipColumn, currentUser.id)
+            .maybeSingle();
 
-        const {
-            data: ownedProperty,
-            error: ownershipError
-        } =
-            await supabaseClient
-                .from("properties")
-                .select("id")
-                .eq(
-                    "id",
-                    request.property_id
-                )
-                .eq(
-                    landlordOwnershipColumn,
-                    currentUser.id
-                )
-                .maybeSingle();
-
-
-        if (ownershipError) {
-            throw ownershipError;
-        }
-
+        if (ownershipError) throw ownershipError;
 
         if (!ownedProperty) {
-
             throw new Error(
                 "You are not authorized to update this viewing request."
             );
-
         }
 
+        const { data,error } = await supabaseClient
+            .from("viewing_requests")
+            .update({ status:newStatus })
+            .eq("id", requestId)
+            .select("id");
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("viewing_requests")
-                .update({
-                    status:
-                        newStatus
-                })
-                .eq(
-                    "id",
-                    requestId
-                )
-                .select("id");
+        if (error) throw error;
 
-
-        if (error) {
-            throw error;
-        }
-
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
+        if (!data || data.length === 0) {
             throw new Error(
                 "The request was not updated. Check your Supabase UPDATE policy."
             );
-
         }
-
 
         alert(
             "Viewing request marked as " +
@@ -4055,249 +1490,107 @@ async function updateViewingRequestStatus(
             "."
         );
 
-
         await loadLandlordProperties();
 
-    }
-
-    catch (error) {
-
-        console.error(
-            "Viewing request update error:",
-            error
-        );
-
+    } catch (error) {
+        console.error("Viewing request update error:", error);
 
         alert(
             "Unable to update viewing request.\n\n" +
-            (
-                error.message ||
-                "Unknown error"
-            )
+            (error.message || "Unknown error")
         );
-
     }
-
 }
 
-
-
-/* =========================================
-   PROFILE PHOTO
-========================================= */
-
-if (
-    choosePhotoButton
-) {
-
-    choosePhotoButton.addEventListener(
-        "click",
-        () => {
-
-            if (profileInput) {
-                profileInput.click();
-            }
-
-        }
-    );
-
+/* PROFILE PHOTO */
+if (choosePhotoButton) {
+    choosePhotoButton.addEventListener("click", () => {
+        if (profileInput) profileInput.click();
+    });
 }
 
+if (profileInput) {
+    profileInput.addEventListener("change", event => {
+        const file = event.target.files && event.target.files[0];
 
-if (
-    profileInput
-) {
+        if (!file) return;
 
-    profileInput.addEventListener(
-        "change",
-        event => {
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
 
-            const file =
-                event.target.files &&
-                event.target.files[0];
-
-
-            if (!file) {
-                return;
-            }
-
-
-            const allowedTypes = [
-                "image/jpeg",
-                "image/png",
-                "image/webp"
-            ];
-
-
-            if (
-                !allowedTypes.includes(
-                    file.type
-                )
-            ) {
-
-                showProfileMessage(
-                    "Please choose a JPG, PNG or WEBP image.",
-                    "error"
-                );
-
-
-                profileInput.value =
-                    "";
-
-                selectedProfileFile =
-                    null;
-
-                return;
-            }
-
-
-            if (
-                file.size >
-                5 * 1024 * 1024
-            ) {
-
-                showProfileMessage(
-                    "Image must be 5 MB or smaller.",
-                    "error"
-                );
-
-
-                profileInput.value =
-                    "";
-
-                selectedProfileFile =
-                    null;
-
-                return;
-            }
-
-
-            selectedProfileFile =
-                file;
-
-
-            const previewUrl =
-                URL.createObjectURL(
-                    file
-                );
-
-
-            showSelectedPhotoPreview(
-                previewUrl
-            );
-
-
+        if (!allowedTypes.includes(file.type)) {
             showProfileMessage(
-                file.name +
-                " selected. Click Upload Photo.",
-                "info"
+                "Please choose a JPG, PNG or WEBP image.",
+                "error"
             );
 
+            profileInput.value = "";
+            selectedProfileFile = null;
+            return;
         }
-    );
 
+        if (file.size > 5 * 1024 * 1024) {
+            showProfileMessage(
+                "Image must be 5 MB or smaller.",
+                "error"
+            );
+
+            profileInput.value = "";
+            selectedProfileFile = null;
+            return;
+        }
+
+        selectedProfileFile = file;
+
+        const previewUrl = URL.createObjectURL(file);
+        showSelectedPhotoPreview(previewUrl);
+
+        showProfileMessage(
+            file.name + " selected. Click Upload Photo.",
+            "info"
+        );
+    });
 }
 
-
-function showSelectedPhotoPreview(
-    url
-) {
-
-    const accountAvatar =
-        document.getElementById(
-            "account-avatar"
-        );
-
-
-    const topAvatar =
-        document.getElementById(
-            "top-avatar"
-        );
-
+function showSelectedPhotoPreview(url) {
+    const accountAvatar = document.getElementById("account-avatar");
+    const topAvatar = document.getElementById("top-avatar");
 
     if (accountAvatar) {
-
         accountAvatar.innerHTML = `
-
-            <img
-                src="${escapeHtml(url)}"
-                alt="Selected profile photo"
-            >
-
+            <img src="${escapeHtml(url)}" alt="Selected profile photo">
         `;
-
     }
-
 
     if (topAvatar) {
-
         topAvatar.innerHTML = `
-
-            <img
-                src="${escapeHtml(url)}"
-                alt="Selected profile photo"
-            >
-
+            <img src="${escapeHtml(url)}" alt="Selected profile photo">
         `;
-
     }
-
 }
 
-
-
-if (
-    uploadPhotoButton
-) {
-
-    uploadPhotoButton.addEventListener(
-        "click",
-        uploadProfilePhoto
-    );
-
+if (uploadPhotoButton) {
+    uploadPhotoButton.addEventListener("click", uploadProfilePhoto);
 }
-
 
 async function uploadProfilePhoto() {
-
     if (!currentUser) {
-
-        showProfileMessage(
-            "Your login session has expired.",
-            "error"
-        );
-
+        showProfileMessage("Your login session has expired.", "error");
         return;
     }
-
 
     if (!selectedProfileFile) {
-
-        showProfileMessage(
-            "Choose a photo first.",
-            "error"
-        );
-
+        showProfileMessage("Choose a photo first.", "error");
         return;
     }
-
 
     setPhotoControls(true);
 
-
     try {
-
-
-        const extension =
-            getFileExtension(
-                selectedProfileFile.name
-            );
-
-
-        /*
-         * Unique file path prevents browser
-         * and CDN caching problems.
-         */
+        const extension = getFileExtension(selectedProfileFile.name);
 
         const storagePath =
             currentUser.id +
@@ -4306,320 +1599,156 @@ async function uploadProfilePhoto() {
             "." +
             extension;
 
+        const { error:uploadError } = await supabaseClient
+            .storage
+            .from("avatars")
+            .upload(
+                storagePath,
+                selectedProfileFile,
+                {
+                    upsert:false,
+                    cacheControl:"3600",
+                    contentType:selectedProfileFile.type
+                }
+            );
 
-        const {
-            error: uploadError
-        } =
-            await supabaseClient
-                .storage
-                .from("avatars")
-                .upload(
-                    storagePath,
-                    selectedProfileFile,
-                    {
-                        upsert:
-                            false,
+        if (uploadError) throw uploadError;
 
-                        cacheControl:
-                            "3600",
-
-                        contentType:
-                            selectedProfileFile.type
-                    }
-                );
-
-
-        if (uploadError) {
-            throw uploadError;
-        }
-
-
-        const {
-            data: publicData
-        } =
+        const { data:publicData } =
             supabaseClient
                 .storage
                 .from("avatars")
-                .getPublicUrl(
-                    storagePath
-                );
+                .getPublicUrl(storagePath);
 
-
-        const avatarUrl =
-            publicData?.publicUrl;
-
+        const avatarUrl = publicData?.publicUrl;
 
         if (!avatarUrl) {
-
-            throw new Error(
-                "Unable to create profile photo URL."
-            );
-
+            throw new Error("Unable to create profile photo URL.");
         }
 
+        const { error:updateError } = await supabaseClient
+            .from("profiles")
+            .update({ avatar_url:avatarUrl })
+            .eq("id", currentUser.id);
 
-        const {
-            error: updateError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .update({
-                    avatar_url:
-                        avatarUrl
-                })
-                .eq(
-                    "id",
-                    currentUser.id
-                );
-
-
-        if (updateError) {
-            throw updateError;
-        }
-
+        if (updateError) throw updateError;
 
         currentProfile = {
             ...currentProfile,
-            avatar_url:
-                avatarUrl
+            avatar_url:avatarUrl
         };
 
+        updateProfileUI(currentProfile);
 
-        updateProfileUI(
-            currentProfile
-        );
-
-
-        selectedProfileFile =
-            null;
-
-
-        profileInput.value =
-            "";
-
+        selectedProfileFile = null;
+        profileInput.value = "";
 
         showProfileMessage(
             "Profile photo uploaded successfully.",
             "success"
         );
 
-    }
+    } catch (error) {
+        console.error("Upload profile photo error:", error);
 
-    catch (error) {
-
-        console.error(
-            "Upload profile photo error:",
-            error
-        );
-
-
-        updateProfileUI(
-            currentProfile
-        );
-
+        updateProfileUI(currentProfile);
 
         showProfileMessage(
-            error.message ||
-            "Unable to upload profile photo.",
+            error.message || "Unable to upload profile photo.",
             "error"
         );
 
+    } finally {
+        setPhotoControls(false);
     }
-
-    finally {
-
-        setPhotoControls(
-            false
-        );
-
-    }
-
 }
 
-
-
-/* =========================================
-   REMOVE PROFILE PHOTO
-========================================= */
-
-if (
-    removePhotoButton
-) {
-
-    removePhotoButton.addEventListener(
-        "click",
-        removeProfilePhoto
-    );
-
+/* REMOVE PROFILE PHOTO */
+if (removePhotoButton) {
+    removePhotoButton.addEventListener("click", removeProfilePhoto);
 }
-
 
 async function removeProfilePhoto() {
-
-    if (
-        !currentProfile ||
-        !currentProfile.avatar_url
-    ) {
-
+    if (!currentProfile || !currentProfile.avatar_url) {
         showProfileMessage(
             "You do not currently have a profile photo.",
             "error"
         );
-
         return;
     }
 
+    const confirmed = confirm("Remove your profile photo?");
 
-    const confirmed =
-        confirm(
-            "Remove your profile photo?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
+    if (!confirmed) return;
 
     setPhotoControls(true);
 
-
     try {
-
-
-        const storagePath =
-            getAvatarStoragePath(
-                currentProfile.avatar_url
-            );
-
+        const storagePath = getAvatarStoragePath(
+            currentProfile.avatar_url
+        );
 
         if (storagePath) {
-
-            const {
-                error:
-                    storageError
-            } =
+            const { error:storageError } =
                 await supabaseClient
                     .storage
                     .from("avatars")
-                    .remove([
-                        storagePath
-                    ]);
-
+                    .remove([storagePath]);
 
             if (storageError) {
-
                 console.warn(
                     "Storage removal warning:",
                     storageError
                 );
-
             }
-
         }
 
+        const { error } = await supabaseClient
+            .from("profiles")
+            .update({ avatar_url:null })
+            .eq("id", currentUser.id);
 
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("profiles")
-                .update({
-                    avatar_url:
-                        null
-                })
-                .eq(
-                    "id",
-                    currentUser.id
-                );
-
-
-        if (error) {
-            throw error;
-        }
-
+        if (error) throw error;
 
         currentProfile = {
             ...currentProfile,
-            avatar_url:
-                null
+            avatar_url:null
         };
 
-
-        updateProfileUI(
-            currentProfile
-        );
-
+        updateProfileUI(currentProfile);
 
         showProfileMessage(
             "Profile photo removed.",
             "success"
         );
 
-    }
-
-    catch (error) {
-
-        console.error(
-            "Remove profile photo error:",
-            error
-        );
-
+    } catch (error) {
+        console.error("Remove profile photo error:", error);
 
         showProfileMessage(
-            error.message ||
-            "Unable to remove profile photo.",
+            error.message || "Unable to remove profile photo.",
             "error"
         );
 
+    } finally {
+        setPhotoControls(false);
     }
-
-    finally {
-
-        setPhotoControls(
-            false
-        );
-
-    }
-
 }
 
-
-function setPhotoControls(
-    disabled
-) {
-
+function setPhotoControls(disabled) {
     [
         choosePhotoButton,
         uploadPhotoButton,
         removePhotoButton
-    ].forEach(
-        button => {
-
-            if (button) {
-                button.disabled =
-                    disabled;
-            }
-
-        }
-    );
-
+    ].forEach(button => {
+        if (button) button.disabled = disabled;
+    });
 }
 
+function showProfileMessage(message,type) {
+    if (!profileMessage) return;
 
-function showProfileMessage(
-    message,
-    type
-) {
-
-    if (!profileMessage) {
-        return;
-    }
-
-
-    profileMessage.textContent =
-        message;
-
+    profileMessage.textContent = message;
 
     profileMessage.style.color =
         type === "success"
@@ -4627,38 +1756,235 @@ function showProfileMessage(
             : type === "error"
                 ? "#b91c1c"
                 : "#2563eb";
-
 }
 
-
-
 /* =========================================
-   HELPERS
+   LANDLORD CALENDAR
 ========================================= */
 
-function getAvatarStoragePath(
-    avatarUrl
-) {
+function renderLandlordCalendar() {
+    const calendar = document.getElementById("landlord-calendar");
+    const title = document.getElementById("calendar-month-title");
 
+    if (!calendar || !title) return;
+
+    const year = calendarDate.getFullYear();
+    const month = calendarDate.getMonth();
+
+    title.textContent = calendarDate.toLocaleDateString(
+        "en-KE",
+        {
+            month:"long",
+            year:"numeric"
+        }
+    );
+
+    calendar.innerHTML = "";
+
+    const firstDay = new Date(year,month,1).getDay();
+    const daysInMonth = new Date(year,month + 1,0).getDate();
+    const previousMonthDays = new Date(year,month,0).getDate();
+
+    /* Previous month */
+    for (let i = firstDay - 1; i >= 0; i--) {
+        calendar.appendChild(
+            createCalendarDay(
+                previousMonthDays - i,
+                true
+            )
+        );
+    }
+
+    /* Current month */
+    for (let day = 1; day <= daysInMonth; day++) {
+        calendar.appendChild(
+            createCalendarDay(day,false)
+        );
+    }
+
+    /* Next month */
+    const totalCells = calendar.children.length;
+    const remaining = totalCells % 7 === 0
+        ? 0
+        : 7 - (totalCells % 7);
+
+    for (let day = 1; day <= remaining; day++) {
+        calendar.appendChild(
+            createCalendarDay(day,true)
+        );
+    }
+}
+
+function createCalendarDay(dayNumber,otherMonth) {
+    const cell = document.createElement("div");
+    cell.className = "calendar-day";
+
+    if (otherMonth) {
+        cell.classList.add("other-month");
+    }
+
+    const number = document.createElement("div");
+    number.className = "calendar-day-number";
+    number.textContent = dayNumber;
+
+    if (!otherMonth) {
+        const today = new Date();
+
+        if (
+            today.getFullYear() === calendarDate.getFullYear() &&
+            today.getMonth() === calendarDate.getMonth() &&
+            today.getDate() === dayNumber
+        ) {
+            cell.classList.add("today");
+        }
+    }
+
+    cell.appendChild(number);
+
+    if (!otherMonth) {
+        const dateKey = createDateKey(
+            calendarDate.getFullYear(),
+            calendarDate.getMonth(),
+            dayNumber
+        );
+
+        const dayRequests = calendarRequests.filter(request =>
+            getRequestDateKey(request.viewing_date) === dateKey
+        );
+
+        dayRequests.forEach(request => {
+            const event = createCalendarEvent(request);
+            cell.appendChild(event);
+        });
+    }
+
+    return cell;
+}
+
+function createCalendarEvent(request) {
+    const event = document.createElement("div");
+
+    const status = normalizeStatus(request.status);
+
+    const safeStatus =
+        status === "approved" || status === "rejected"
+            ? status
+            : "pending";
+
+    event.className =
+        "calendar-event " + safeStatus;
+
+    const property = calendarProperties.find(item =>
+        String(item.id) === String(request.property_id)
+    );
+
+    const propertyTitle = property?.title || "Property";
+    const tenantName = request.tenant_name || "Tenant";
+
+    event.innerHTML = `
+        <strong>${escapeHtml(propertyTitle)}</strong>
+        <span>${escapeHtml(tenantName)}</span>
+    `;
+
+    event.title =
+        propertyTitle +
+        " — " +
+        tenantName +
+        " — " +
+        formatStatus(safeStatus);
+
+    event.addEventListener("click", eventClick => {
+        eventClick.stopPropagation();
+
+        showCalendarRequestDetails(
+            request,
+            property
+        );
+    });
+
+    return event;
+}
+
+function showCalendarRequestDetails(request,property) {
+    const propertyTitle = property?.title || "Property";
+    const status = formatStatus(request.status);
+
+    alert(
+        "VIEWING DETAILS\n\n" +
+        "Property: " +
+        propertyTitle +
+        "\n\n" +
+        "Tenant: " +
+        (request.tenant_name || "Not provided") +
+        "\n\n" +
+        "Phone: " +
+        (request.tenant_phone || "Not provided") +
+        "\n\n" +
+        "Viewing date: " +
+        formatDate(request.viewing_date) +
+        "\n\n" +
+        "Status: " +
+        status +
+        "\n\n" +
+        "Message: " +
+        (request.message || "No message")
+    );
+}
+
+function changeCalendarMonth(direction) {
+    calendarDate.setMonth(
+        calendarDate.getMonth() + direction
+    );
+
+    renderLandlordCalendar();
+}
+
+function createDateKey(year,month,day) {
+    return (
+        year +
+        "-" +
+        String(month + 1).padStart(2,"0") +
+        "-" +
+        String(day).padStart(2,"0")
+    );
+}
+
+function getRequestDateKey(value) {
+    if (!value) return null;
+
+    const stringValue = String(value);
+
+    /*
+     * Date-only values from Supabase are kept as local
+     * calendar dates so timezone conversion cannot move
+     * a viewing to the previous/next day.
+     */
+    if (/^\d{4}-\d{2}-\d{2}$/.test(stringValue)) {
+        return stringValue;
+    }
+
+    const date = new Date(stringValue);
+
+    if (Number.isNaN(date.getTime())) {
+        return null;
+    }
+
+    return createDateKey(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+    );
+}
+
+/* HELPERS */
+function getAvatarStoragePath(avatarUrl) {
     try {
-
         const marker =
             "/storage/v1/object/public/avatars/";
 
+        const index = avatarUrl.indexOf(marker);
 
-        const index =
-            avatarUrl.indexOf(
-                marker
-            );
-
-
-        if (
-            index === -1
-        ) {
-
-            return null;
-        }
-
+        if (index === -1) return null;
 
         return decodeURIComponent(
             avatarUrl.substring(
@@ -4666,212 +1992,90 @@ function getAvatarStoragePath(
             )
         );
 
-    }
-
-    catch (error) {
-
+    } catch (error) {
         return null;
-
     }
-
 }
 
-
-function addCacheBuster(
-    url
-) {
-
-    if (!url) {
-        return url;
-    }
-
+function addCacheBuster(url) {
+    if (!url) return url;
 
     return (
         url +
-        (
-            url.includes("?")
-                ? "&"
-                : "?"
-        ) +
+        (url.includes("?") ? "&" : "?") +
         "v=" +
         Date.now()
     );
-
 }
 
-
-function getFileExtension(
-    filename
-) {
-
-    const parts =
-        String(
-            filename
-        ).split(".");
-
+function getFileExtension(filename) {
+    const parts = String(filename).split(".");
 
     return (
         parts.length > 1
             ? parts.pop()
             : "jpg"
     )
-        .toLowerCase()
-        .replace(
-            /[^a-z0-9]/g,
-            ""
-        );
-
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g,"");
 }
 
-
-function normalizeStatus(
-    value
-) {
-
-    return String(
-        value ||
-        "pending"
-    )
+function normalizeStatus(value) {
+    return String(value || "pending")
         .trim()
         .toLowerCase();
-
 }
 
+function formatStatus(status) {
+    const normalized = normalizeStatus(status);
 
-function formatStatus(
-    status
-) {
-
-    const normalized =
-        normalizeStatus(
-            status
-        );
-
-
-    if (
-        normalized ===
-        "approved"
-    ) {
-        return "Approved";
-    }
-
-
-    if (
-        normalized ===
-        "rejected"
-    ) {
-        return "Rejected";
-    }
-
+    if (normalized === "approved") return "Approved";
+    if (normalized === "rejected") return "Rejected";
 
     return "Pending";
-
 }
 
+function formatDate(value) {
+    if (!value) return "Not specified";
 
-function formatDate(
-    value
-) {
+    const date = new Date(
+        String(value).includes("T")
+            ? value
+            : value + "T00:00:00"
+    );
 
-    if (!value) {
+    if (Number.isNaN(date.getTime())) {
         return "Not specified";
     }
-
-
-    const date =
-        new Date(
-            String(value).includes("T")
-                ? value
-                : value +
-                    "T00:00:00"
-        );
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "Not specified";
-    }
-
 
     return date.toLocaleDateString(
         "en-KE",
         {
-            day:
-                "numeric",
-
-            month:
-                "short",
-
-            year:
-                "numeric"
+            day:"numeric",
+            month:"short",
+            year:"numeric"
         }
     );
-
 }
 
-
-function escapeHtml(
-    value
-) {
-
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
-
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 }
 
-
-
-/* =========================================
-   LOGOUT
-========================================= */
-
+/* LOGOUT */
 async function logoutLandlord() {
-
     try {
-
-        await supabaseClient
-            .auth
-            .signOut();
-
+        await supabaseClient.auth.signOut();
+    } finally {
+        window.location.href = "login.html";
     }
-
-    finally {
-
-        window.location.href =
-            "login.html";
-
-    }
-
 }
-
 </script>
 
-
 </body>
-
 </html>

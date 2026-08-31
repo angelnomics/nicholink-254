@@ -28,30 +28,42 @@ const RATE_WINDOW_MINUTES = 10;
 
 
 // =====================================================
-// RESPONSE
+// RESPONSE + CORS
 // =====================================================
 
-function response(statusCode, body) {
+function response(statusCode, body, origin) {
+
+    const allowedOrigins = [
+        "https://nicholink254.netlify.app",
+        "http://127.0.0.1:5500",
+        "http://localhost:5500"
+    ];
+
+    const headers = {
+        "Content-Type":
+            "application/json",
+
+        "Access-Control-Allow-Headers":
+            "Content-Type, Authorization, apikey",
+
+        "Access-Control-Allow-Methods":
+            "POST, OPTIONS"
+    };
+
+    if (
+        allowedOrigins.includes(origin)
+    ) {
+
+        headers["Access-Control-Allow-Origin"] =
+            origin;
+
+    }
 
     return {
 
         statusCode,
 
-        headers: {
-
-            "Content-Type":
-                "application/json",
-
-            "Access-Control-Allow-Origin":
-                "https://nicholink254.netlify.app",
-
-            "Access-Control-Allow-Headers":
-                "Content-Type, Authorization, apikey",
-
-            "Access-Control-Allow-Methods":
-                "POST, OPTIONS"
-
-        },
+        headers,
 
         body:
             JSON.stringify(body)
@@ -334,7 +346,7 @@ async function checkRateLimit({
                 allowed: false,
 
                 message:
-                    "Too many M-Pesa requests for this phone number. Please wait a few minutes."
+                    "Too many M-Pesa requests from this phone number. Please wait a few minutes."
 
             };
         }
@@ -838,6 +850,12 @@ async function createPaymentRecord(data) {
 exports.handler =
 async function(event) {
 
+    const origin =
+        event.headers?.origin ||
+        event.headers?.Origin ||
+        "";
+
+
     try {
 
         // -------------------------------------------------
@@ -851,7 +869,8 @@ async function(event) {
 
             return response(
                 204,
-                {}
+                {},
+                origin
             );
         }
 
@@ -871,7 +890,8 @@ async function(event) {
                     success: false,
                     message:
                         "Method not allowed."
-                }
+                },
+                origin
             );
         }
 
@@ -892,7 +912,8 @@ async function(event) {
                     success: false,
                     message:
                         "Authentication required."
-                }
+                },
+                origin
             );
         }
 
@@ -922,7 +943,8 @@ async function(event) {
                     success: false,
                     message:
                         "Invalid request."
-                }
+                },
+                origin
             );
         }
 
@@ -949,7 +971,8 @@ async function(event) {
                     success: false,
                     message:
                         "Enter a valid Kenyan Safaricom phone number."
-                }
+                },
+                origin
             );
         }
 
@@ -989,7 +1012,8 @@ async function(event) {
                         success: false,
                         message:
                             "Property ID is required."
-                    }
+                    },
+                    origin
                 );
             }
 
@@ -1009,7 +1033,8 @@ async function(event) {
                         success: false,
                         message:
                             "You are not authorized to make a payment for this property."
-                    }
+                    },
+                    origin
                 );
             }
 
@@ -1044,7 +1069,8 @@ async function(event) {
                     success: false,
                     message:
                         rateLimit.message
-                }
+                },
+                origin
             );
         }
 
@@ -1134,7 +1160,8 @@ async function(event) {
                 merchant_request_id:
                     stk.MerchantRequestID
 
-            }
+            },
+            origin
         );
 
 
@@ -1152,7 +1179,8 @@ async function(event) {
                 success: false,
                 message:
                     "Unable to start M-Pesa payment. Please try again."
-            }
+            },
+            origin
         );
     }
 };
